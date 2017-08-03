@@ -9,7 +9,8 @@
     <link rel="stylesheet" href="{% static "css/storelocator.css" %}" />
     <div class="bh-sl-container">
       
-      <div id="bh-sl-map-container" class="bh-sl-map-container panel panel-default">
+      <div class="panel panel-default">
+      
         <div class="panel-heading">
           <div class="bh-sl-form-container">
             <form id="bh-sl-user-location" method="post" action="#">
@@ -46,8 +47,10 @@
             </div>
           </div>
         </div>
-        <div class="panel-body map">
+        <div class="panel-body" id="map">
+        <div id="bh-sl-map-container" class="bh-sl-map-container ">
           <div id="bh-sl-map" class="bh-sl-map" style="width:100%"></div>
+        </div>
         </div>
         <div class="panel-footer">
           <img src="{% static "assets/img/red-marker.png" %}">Restaurant

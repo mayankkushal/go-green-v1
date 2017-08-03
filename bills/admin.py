@@ -17,3 +17,4 @@ class BillAdmin(admin.ModelAdmin):
 	raw_id_fields = ('store', 'customer')
 	inlines = [ItemInline,]
 
+admin.site.register(Item)

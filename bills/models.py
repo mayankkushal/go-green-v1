@@ -16,6 +16,8 @@ class Bill(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	notified = models.BooleanField(default=False)
 	original = models.BooleanField(default=True)
+	sale_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+	tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	total = models.DecimalField(max_digits=10, decimal_places=2)
 
 	class Meta:
@@ -35,19 +37,40 @@ class Bill(models.Model):
 	def customer_name(self):
 		return self.customer.profile.get_full_name
 
-	def get_total(self):
+	def get_tax_amount(self):
 		"""
-		Calculates the overall total of the bill and returns the result
+			Calculate the total tax amount of the bill, by iterating over 
+			oll the items of the bill and calling `get_tax_amount()` of the
+			`Item` model
+		"""
+		tax_amount = 0.0
+		for item in self.items.all():
+			tax_amount = item.get_tax_amount()
+		return tax_amount
+
+	def get_sale_value(self):
+		"""
+		Calculates the sale value of the bill.
+		ie. the amount without adding the tax
 		"""
 		sum = 0
 		for item in self.items.all():
 			sum += item.get_total()
 		return sum
 
+	def get_total(self):
+		"""
+		Calculates the overall total of the bill by adding `sale_value` and `tax_amount`
+		"""
+		sum = 0
+		return self.sale_value + self.tax_amount
+
 	def get_absolute_url(self):
 		return reverse('bill_detail', kwargs={'pk': self.pk})
 
 	def save(self, *args, **kwargs):
+		self.sale_value = self.get_sale_value()
+		self.tax_amount = self.get_tax_amount()
 		self.total = self.get_total()
 		super(Bill, self).save(*args, **kwargs)
 
@@ -60,6 +83,8 @@ class Item(models.Model):
 	product = models.ForeignKey(Product, null=True)
 	sku = models.CharField(max_length=100, null=True)
 	quantity = models.PositiveIntegerField(default=0)
+	price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+	tax = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	total = models.DecimalField(max_digits=10, decimal_places=2)
 
 	def __str__(self):
@@ -67,10 +92,21 @@ class Item(models.Model):
 
 	def get_total(self):
 		"""
-		Calculates the total price of the item with quantity and returns the result
+		Calculates the total price of the item without tax, and returns the result
 		"""
 		return self.quantity * self.product.price
 
+	def get_tax_amount(self):
+		"""
+			Calculates the tax_amount if the product has tax
+		"""
+		tax_amount = 0.0
+		if self.product.tax is not 0:
+			tax_amount = self.product.price*(self.product.tax/100)
+		return tax_amount
+
 	def save(self, *args, **kwargs):
+		self.price = self.product.price
+		self.tax = self.product.tax
 		self.total = self.get_total()
 		super(Item, self).save(*args, **kwargs)

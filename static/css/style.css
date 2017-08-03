@@ -207,7 +207,7 @@ a.mdl-button {
 	text-decoration: none !important;
 }
 #map {
-    height: 400px;
+	padding: 0;
     width: 100%;
 }
 .list-card-square{
@@ -999,4 +999,19 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 }
 .bh-sl-filters{
 	margin: auto !important;
+}
+.invoice-title h2, .invoice-title h3 {
+    display: inline-block;
+}
+
+.table > tbody > tr > .no-line {
+    border-top: none;
+}
+
+.table > thead > tr > .no-line {
+    border-bottom: none;
+}
+
+.table > tbody > tr > .thick-line {
+    border-top: 2px solid;
 }
