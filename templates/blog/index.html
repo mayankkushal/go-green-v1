@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% block title_block %}
+  GoGreen | Blog
+{% endblock title_block %}
+{% block content %}
+  <!-- MAIN SECTION -->
+  <h1>Articles</h1>
+  <div class="row">
+    {% for article in article_list %}
+      <div class="col-sm-4">
+        <div class="sol-tile">
+          {% with article.images.all|first as image %}
+          <a href="{{ article.get_absolute_url }}"><img src="{{ image.picture.url }}" class="article-img">
+          {% endwith %}
+          <h2><a href="{{ article.get_absolute_url }}">{{ article.name }}</a></h2>{{ article.date_created }}
+          <p>{{ article.description }}</p>
+        </div>
+      </div>
+      {% if forloop.counter == 3 %}
+        <div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% include 'extra/pagination.html' with page_obj=article_list %}
+  </section>
+{% endblock %}

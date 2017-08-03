@@ -1,0 +1,103 @@
+{% extends "profile_base.html" %}
+{% load widget_tweaks %}
+{% block head %}
+  {{ filter.form.media }}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+{% endblock head %}
+{% block title_block %}
+  List of bills
+{% endblock title_block %}
+{% block content_wrapper %}
+  <div class="bill-container min-height">
+    {% if user.profile %}
+      <button data-toggle="collapse" data-target="#filter" class="btn btn-success"><i class="fa fa-filter" aria-hidden="true"></i> Filters</button>
+      <button class="btn btn-danger pull-right" id="clear-filter" style="display:none;">Clear filters</button>
+      <form method="get">
+        <div class="well collapse" id="filter" style="position:absolute; z-index:100; transition: all .2s ease-out">
+          <h4 style="margin-top: 0">Filter</h4>
+          <div class="row">
+            <div class="form-group col-sm-4 col-md-3">
+              {{ filter.form.bill_no.label_tag }}
+              {% render_field filter.form.bill_no class="form-control" %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-sm-4 col-md-3">
+              {{ filter.form.items__product__name.label_tag }}
+              {% render_field filter.form.items__product__name class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-3">
+              {{ filter.form.store.label_tag }}
+              {% render_field filter.form.store class="form-control" %}
+            </div>
+          </div>
+          <div class="row">
+            <input type="number" name="total__gte" id="id_total__gte" hidden>
+            <input type="number" name="total__lte" id="id_total__lte" hidden>
+            <div class="form-group col-sm-4 col-md-3">
+              <div>
+                <label for="amount">Price range( &#8377; ):</label>
+                <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+              </div>
+              <div id="slider-range"></div>
+            </div>
+            <div class="form-group col-sm-4 col-md-3">
+              {{ filter.form.date__gte.label_tag }}
+              {% render_field filter.form.date__gte class="form-control" %}
+            </div>
+            <div class="form-group col-sm-4 col-md-3">
+              {{ filter.form.date__lte.label_tag }}
+              {% render_field filter.form.date__lte class="form-control" %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-6 col-xs-6">
+              <button type="submit" class="btn btn-primary">Filter</button>
+            </div>
+          </div>
+        </div>
+      </form>
+    {% endif %}
+    <h2>Bills</h2>
+    <div class="row">
+      {% for bill in bill_list %}
+        <div class="col-lg-4 col-md-4 col-sm-6">
+          {% include "extra/bill_render.html" with bill=bill %}
+        </div>
+        {% empty %}
+        {% if user.profile %}
+          <p>You do not have any bills currently</p>
+        {% else %}
+          <p>The customer doesn't have any bills with you currently</p>
+        {% endif %}
+        {% if forloop.counter == 4 %}
+        </div>
+        <div class="row">
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% include 'extra/pagination.html' with page_obj=bill_list %}
+  </div>
+{% endblock%}
+{% block extra_scripts %}
+  <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+  <script>
+  $( function() {
+  $( "#slider-range" ).slider({
+  range: true,
+  min: {{ total_min }},
+  max: {{ total_max }},
+  values: [ {{ total_min }}, {{ total_max }} ],
+  slide: function( event, ui ) {
+  $( "#amount" ).val( " " + ui.values[ 0 ] + " - " + ui.values[ 1 ] );
+  },
+  change: function(event, ui){
+  $("#id_total__gte").val(ui.values[0]);
+  $("#id_total__lte").val(ui.values[1]);
+  }
+  });
+  $( "#amount" ).val( " " + $( "#slider-range" ).slider( "values", 0 ) +
+  " - " + $( "#slider-range" ).slider( "values", 1 ) );
+  } );
+  </script>
+{% endblock extra_scripts %}

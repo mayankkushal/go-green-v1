@@ -1,0 +1,35 @@
+{% extends "profile_base.html" %}
+
+{% block title_block %}Search Results{% endblock title_block %}
+
+{% block content_wrapper %}
+{% if bill_list %}
+<h3>Search Results</h3>
+	<ul class="nav nav-tabs nav-tabs-primary">
+    <li class="active"><a data-toggle="tab" href="#home">Stores <span class="badge"></span></a></li>
+    {% if bill_list %}
+    	<li><a data-toggle="tab" href="#menu1">Bills <span class="badge">{{ bill_count }}</span></a></li>
+    {% endif %}
+  </ul>
+
+  <div class="tab-content">
+    <div id="home" class="tab-pane fade in active">
+    {% if bill_list %}
+      <div id="menu1" class="tab-pane fade">
+      <h3>Bills</h3>
+      {% for bill in bill_list %}
+      	{% include "extra/bill_render.html" with bill=bill %}
+      {% endfor %}
+      <div class="row">
+      {% include 'extra/pagination.html' with page_obj=bill_list %}
+      </div>
+  	</div> 
+    {% endif %}
+</div>
+{% else %}
+	<h3>Sorry, we couldn't find what you were looking for.</h3>
+	<p>Please refine your search and try again.</p>
+{% endif %}
+     
+    
+{% endblock content_wrapper %}

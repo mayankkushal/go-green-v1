@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load social_widgets %}
+{% load instagram_client %}
+{% block content_wrapper %}
+  <div class="owl-carousel owl-theme" id="main-carousel">
+    {% for image in slider_image %}
+      <div class="owl-slide">
+        <img src="{{ image.image.url }}">
+      </div>
+    {% endfor %}
+  </div>
+  <div class="container">
+    <div class="row">
+      <h2>Have you checked out the latest Articles?</h2>
+      {% for article in article_list %}
+        <div class="col-lg-4 col-md-4">
+          <div class="sol-tile">
+            {% with article.images.all|first as image %}
+            <a href="{{ article.get_absolute_url }}"><img src="{{ image.picture.url }}" class="article-img">
+            {% endwith %}
+            <h2><a href="{{ article.get_absolute_url }}">{{ article.name }}</a></h2>
+            <p>{{ article.description }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+    
+    <div class="row">
+      <h3 align="center"><strong style="color:#76FF03">What's</strong> new</h3>
+      <div class="col-md-4 widget">
+      <h4 align="center">Like us on Facebook</h4>
+        {% social_widget_render 'facebook/likebox.html' href='https://www.facebook.com/FacebookDevelopers' %}
+      </div>
+      <div class="col-md-4 widget">
+      <h4 align="center">Instagram photos</h4>
+        {% instagram_user_recent_media one_n.only_mayank %}
+        <div class="owl-carousel owl-theme" id="insta-carousel">
+          {% for media in recent_media %}
+            <div class="owl-slide">
+              <a href="{{ media.display_src }}" target="_blank" title="{{ media.caption }}">
+                <img src="{{ media.thumbnail_src }}" style="height:auto;" />
+                <span>{{ media.caption }}</span>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="col-md-4 widget">
+        <h4 align="center">Twitter</h4>
+        <p align="center">Miss us? We are coming soon!</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

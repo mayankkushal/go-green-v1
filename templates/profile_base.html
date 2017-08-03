@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load qr_tags %}
+{% load staticfiles %}
+{% load notifications_tags %}
+
+{% block title_block %}{{ cur_user.first_name }}{% endblock %}
+
+{% block nav %}
+<hr>
+    <a class="mdl-navigation__link" href="#">Bills</a>
+{% endblock nav %}
+
+{% block content_wrapper %}
+
+{% block header_banner %}{% endblock header_banner %}
+
+{% endblock content_wrapper %}
+
+

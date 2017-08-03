@@ -1,0 +1,15 @@
+.landing-image{
+	height: 100vh;
+	background-image: url(../img/banner.jpeg);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+}
+.overlay{
+	height: inherit;
+	width: inherit;
+	background-color: rgba(0,0,0,.6); 
+}
+.navbar-inverse{
+	background-color: black;
+	color: grey;
+}

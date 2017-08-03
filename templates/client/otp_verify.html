@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title_block %}
+    Verify
+{% endblock title_block %}
+{% block content %}
+    <h3>Verify your phone number</h3>
+    <p>An OTP has been sent to {{ cur_number }}. <br> Please enter your OTP and registered phone number.<br>
+    OTP expires in <strong id="timer"></strong></p>
+    <p>Register with us gogreen.com using OTP {{ otp }}</p>
+    <form method="post">
+        {% csrf_token %}
+        {% for field in form %}
+            {% render_field field class="form-control" placeholder=field.label%}
+        {% endfor %}
+        <input type="submit" name="submit" class="btn btn-success">
+    </form>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <div id="resend-div" style="display:none;">
+        <p >Did not recieve your OTP? Time up?</p>
+        <button id="resend" class="btn btn-success">Resend</button>
+    </div>
+{% endblock content %}
+{% block extra_scripts %}
+    <script type="text/javascript">
+        timer(
+    1800000, // milliseconds
+    function(timeleft) { // called every step to update the visible countdown
+    document.getElementById('timer').innerHTML = Math.floor(timeleft/60) +" min(s) "+
+    ((timeleft%60))+" second(s)";
+    },
+    function() { // what to do after
+    alert("Time Up!! Resend OTP")
+    $.get('/clear_pin')
+    }
+        );
+    </script>
+    <script type="text/javascript">
+    $(function(){
+    timer(
+    60000, // milliseconds
+    function(timeleft) { // called every step to update the visible countdown
+    },
+    function() { // what to do after
+    $('#resend-div').show();
+    }
+    );
+    });
+    </script>
+{% endblock extra_scripts %}

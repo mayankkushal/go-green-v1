@@ -1,0 +1,40 @@
+<a href="{% url "bill_detail" bill.pk %}" class="a-color">
+	<div id="receiptWrapper" class="receiptWrapper col-sm-4">
+		<div class="receipt zig-zag zig-zag-top zig-zag-bottom">
+			<div class="receiptHeader">
+				{{ bill.store_name }}<br>----------------------------------------------<br>
+				#{{ bill.bill_no }}
+			</div>
+			<div class="receiptBody">
+				{{ bill.store.address }}<br>
+				{{ bill.date }}<br>
+				<table class="receiptTable">
+					<thead>
+						<tr>
+							<th>Name&nbsp</th>
+							<th>Price(&#8377;)&nbsp</th>
+							<th>Qty&nbsp</th>
+							<th>Total(&#8377;)&nbsp</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item in bill.items.all %}
+							<tr>
+								<td align="left">{{ item.product.name }}&nbsp</td>
+								<td align="centre">{{ item.product.price }}&nbsp</td>
+								<td>{{ item.quantity }}&nbsp</td>
+								<td align="right">{{ item.total }}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<br>
+				<p align="right">Total :&#8377; {{ bill.total }}</p>
+			</div>
+			<div class="receiptFooter">
+				Thank's for choosing {{ bill.store.name }}<br>
+				We hope to see again!!!
+			</div>
+		</div>
+	</div>
+</a>

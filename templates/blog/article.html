@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title_block %}{{ article.name }}{% endblock %}
+{% block content %}
+	<div class="container card card-2">
+		<div class="row">
+			<div class="col-md-4 card card-2">
+				{% with article.images.all|first as image %}
+				<img src="{{ image.picture.url }}" class="article-img">
+			{% endwith %}
+			<p>{{ article.date_created.date }}</p>
+		</div>
+		<div class="col-md-8">
+			<h3>{{ article.name }}</h3>
+			<h5>{{ article.description }}</h5>
+			<i class="fa fa-thumbs-up"></i> Likes  <strong id="count">{{ count }}</strong>
+		</div>
+	</div>
+	<div class="row card article-content ">
+		<p align="left"><strong>{</strong> {{ article.content|safe }} <strong>}</strong> </p>
+	</div>
+	{% if user.is_authenticated %}<button class="btn btn-info like" data-pid="{{ article.id }}"><i class="fa fa-thumbs-up">Like</i></button>
+	{% else %}
+		Login or Register to like
+	{% endif %}
+	<br>
+	<br>
+	<div class="card card-2 com">
+		{% if user.is_authenticated %}
+			<form id=comment-form action="{% url "blog:add_comment" %}" method="post">
+				{% csrf_token %}
+				<div class="form-group row">
+					<div class="col-sm-10">
+						<input type="text" name="comment" id="id_comment" class="form-control" placeholder="Whats on your mind?">
+						<input type="hidden" name="pid" value="{{article.id}}", id="pid">
+					</div>
+					<div class="col-sm-2">
+						<input type="submit"  value="Comment" class="btn btn-success">
+					</div>
+				</div>
+			</form>
+		{% else %}
+			<h4><a href="{% url 'auth_login' %}">Login</a> or <a href="{% url 'registration_register' %}">Register</a> to comment</h4>
+		{% endif %}
+		
+		<p>Comments <span class="badge comm-count"> {{ article.comments }}</span></p>
+		<ul id="show_comm">
+		</ul>
+		{% if not comment_list %}
+			<li id="no-comm">No comments. Be the first one!</li>
+		{% else %}
+			{% for comment in comment_list %}
+				<ul>
+					<li><strong>{% if comment.poster.profile.get_full_name%}{{comment.poster.profile.get_full_name }} {%else%}{{comment.poster.username }}{% endif %}</strong>
+				says: {{comment.comment}}</li>
+			</ul>
+		{% endfor %}
+	{% endif %}
+</div>
+</div>
+{% endblock %}
+{% block extra_scripts %}
+<script type="text/javascript">
+var likeURL = '/blog/like_article';
+var checkURL = '/blog/check_like';
+var commentURL = '/blog/add_comment';
+</script>
+{% endblock extra_scripts %}

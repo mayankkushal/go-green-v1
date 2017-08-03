@@ -1,0 +1,57 @@
+{% extends 'profile_base.html' %}
+{% load qr_tags %}
+{% load staticfiles %}
+{% block title_block %}Store | {{ store.name }}{% endblock %}
+{% block content %}
+	<div class="store-pro-top">
+		{% if store.picture  %}
+			<img src="{{ store.picture.url }}" class="img img-responsive img-circle store-pro-pic">
+		{% else %}
+			<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
+		{% endif %}
+		<div class="row">
+			<div class="col-sm-6">
+				<h2>{{ store.name }}</h2><a href="{% url "auth_logout" %}">(Logout)</a>
+			</div>
+			<div class="col-sm-6">
+				<h4><i class="fa fa-phone"></i><a href="tel:{{ store.phone_no }}"> {{ store.phone_no }}</a></h4>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<div class="col-sm-4 card-left">
+		{% qr_from_text store.slug "m" %}
+	</div>
+	<div class="col-sm-8 card-right">
+		<h5>About</h5>
+		<p>{{ store.description }}</p>
+		{% ifequal request.user store.store %}
+			<p>API key: {{ store.token }}</p>
+		{% endifequal %}
+	</div>
+	<div class="col-sm-8 card-right">
+		<div id="map">
+		</div>
+	</div>
+	<div class="col-sm-4 card-left">
+		<h4>Address</h4>
+		<p>{{ store.street }}, {{ store.city }}, <br>
+		{{ store.state }}, {{ store.postal }}</p>
+	</div>
+	<script>
+	function initMap() {
+	var uluru = {lat: {{ store.get_lat }}, lng: {{ store.get_long }}};
+	var map = new google.maps.Map(document.getElementById('map'), {
+	zoom: 15,
+	center: uluru
+	});
+	var marker = new google.maps.Marker({
+	position: uluru,
+	map: map
+	});
+	}
+	</script>
+	<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAUNx_eCDfwvfIm-CkW951UpKbO8VW-34I&callback=initMap">
+	</script>
+{% endblock %}

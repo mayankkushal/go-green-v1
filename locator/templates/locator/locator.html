@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load locator_tags %}
+{% block title_block %}
+  Find a Store
+{% endblock title_block %}
+{% block content_wrapper %}
+  <div class="locator-container">
+    <link rel="stylesheet" href="{% static "css/storelocator.css" %}" />
+    <div class="bh-sl-container">
+      
+      <div id="bh-sl-map-container" class="bh-sl-map-container panel panel-default">
+        <div class="panel-heading">
+          <div class="bh-sl-form-container">
+            <form id="bh-sl-user-location" method="post" action="#">
+              {% csrf_token %}
+              <div class="form-input">
+                <input type="text" id="bh-sl-address" name="bh-sl-address" placeholder="Enter Adress or Pin" />
+              </div>
+              <button id="bh-sl-submit" type="submit" class=" btn-success">Submit</button>
+            </form>
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle pull-right" type="button" data-toggle="dropdown">Filter
+              <span class="caret"></span></button>
+              <div class="bh-sl-filters-container dropdown-menu pull-right">
+                
+                <div id="category-filters-container1" class="bh-sl-filters">
+                  <h3>Categories</h3>
+                  
+                  <label  class="checkbox-inline">
+                    <input type="checkbox" name="category" value="Restaurant"> Restaurant
+                  </label>
+                  
+                  <label  class="checkbox-inline">
+                    <input type="checkbox" name="category" value="Bar"> Bar
+                  </label>
+                  
+                  <label  class="checkbox-inline">
+                    <input type="checkbox" name="category" value="Cafe"> Cafe
+                  </label>
+                  <label  class="checkbox-inline">
+                    <input type="checkbox" name="category" value="Coffee"> Coffee
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel-body map">
+          <div id="bh-sl-map" class="bh-sl-map" style="width:100%"></div>
+        </div>
+        <div class="panel-footer">
+          <img src="{% static "assets/img/red-marker.png" %}">Restaurant
+          <img src="{% static "assets/img/blue-marker.png" %}">Cafe
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+{% block extra_scripts %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.10/handlebars.min.js"></script>
+  <script src="//maps.google.com/maps/api/js?libraries=places&key=AIzaSyAUNx_eCDfwvfIm-CkW951UpKbO8VW-34I"></script>
+  <script src="{% static "js/jquery.storelocator.js" %}"></script>
+  <script>
+  $(function() {
+  $('#bh-sl-map-container').storeLocator({
+  'dataType': 'json',
+  'dataLocation': '{% url "locator:locations" %}',
+  catMarkers : {
+  'Restaurant' : ['{% static "assets/img/red-marker.png" %}', 32, 32],
+  'Cafe' : ['{% static "assets/img/blue-marker.png" %}', 32, 32]
+  },
+  'taxonomyFilters' : {
+  'category' : 'category-filters-container1',
+  }
+  });
+  });
+  </script>
+{% endblock %}

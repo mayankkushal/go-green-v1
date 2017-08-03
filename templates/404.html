@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title_block %}
+    404 | Page Not Found
+{% endblock title_block %}	
+
+{% block content %}
+    <h2>OOPS! There seems to be an error! Page not found!</h2>
+    <br>
+    <br>
+
+    <a href="{% url "index" %}" class="btn btn-warning">Home</a>
+{% endblock content %}

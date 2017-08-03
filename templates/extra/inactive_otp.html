@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+	<h2>Your mobile number is not verified.
+	Please verify your mobile number</h2>
+	<form action="" method="post">
+		{% csrf_token %}
+		<input type="text" name="cur_number" id="cur_number" class="form-control" placeholder="Mobile Number">
+		<input type="submit" name="submit">
+	</form>
+{% endblock content %}

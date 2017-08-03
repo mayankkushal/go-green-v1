@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title_block %}
+	500 | Internal Server Error
+{% endblock title_block %}
+{% block content %}
+	<h2>OOPS! There seems to be an error!</h2>
+	<h3>Our engineers have been informed</h3>
+	<br>
+	<br>
+	<a href="{% url "index" %}" class="btn btn-warning">Go back to Home</a>
+{% endblock content %}

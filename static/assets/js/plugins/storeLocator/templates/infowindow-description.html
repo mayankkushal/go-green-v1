@@ -1,0 +1,18 @@
+
+{{#location}}
+<div class="loc-name">{{name}}</div>
+<div>{{address}}</div>
+<div>{{address2}}</div>
+<div>{{city}}{{#if city}},{{/if}} {{state}} {{postal}}</div>
+<div>{{hours1}}</div>
+<div>{{hours2}}</div>
+<div>{{hours3}}</div>
+<div><a href="tel:{{phone}}">{{phone}}</div>
+<div><a href="{{web}}" target="_blank">{{niceURL web}}</a></div>
+<br>
+<br>
+{{#if distance}}
+	<div class="loc-dist">{{distance}} {{length}}</div>
+	<div class="loc-directions"><a href="https://maps.google.com/maps?saddr={{origin}}&amp;daddr={{address}} {{address2}} {{city}}, {{state}} {{postal}}" target="_blank" class="btn btn-info">Directions</a></div>
+{{/if}}
+{{/location}}

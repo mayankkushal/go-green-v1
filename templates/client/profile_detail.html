@@ -1,0 +1,89 @@
+{% extends 'profile_base.html' %}
+{% load staticfiles %}
+{% load qr_tags %}
+{% block content_wrapper %}
+  <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+    
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ cur_user.get_full_name }}</h3>
+      </div>
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-md-3 col-lg-3 " align="center">
+            {% if cur_user.profile_pic  %}
+              <img alt="User Pic" src="{{cur_user.profile_pic.url }}" class="img-circle img-responsive pro-pic">
+            {% else %}
+              <img alt="User Pic" src="{% static "img/no-user.png" %}" class="img-circle img-responsive pro-pic">
+            {% endif %}
+          </div>
+          
+          <!--<div class="col-xs-10 col-sm-10 hidden-md hidden-lg"> <br>
+            <dl>
+              <dt>DEPARTMENT:</dt>
+              <dd>Administrator</dd>
+              <dt>HIRE DATE</dt>
+              <dd>11/12/2013</dd>
+              <dt>DATE OF BIRTH</dt>
+              <dd>11/12/2013</dd>
+              <dt>GENDER</dt>
+              <dd>Male</dd>
+            </dl>
+          </div>-->
+          <div class=" col-md-9 col-lg-9 ">
+            <table class="table table-user-information">
+              <tbody>
+                
+                <tr>
+                  <td>Date Joined:</td>
+                  <td>{{ cur_user.user.date_joined.date }}</td>
+                </tr>
+                <tr>
+                  <td>Date of Birth</td>
+                  <td>{{ cur_user.dob }}</td>
+                </tr>
+                
+                <tr>
+                  <tr>
+                    <td>Gender</td>
+                    <td>{{ cur_user.gender }}</td>
+                  </tr>
+                  <tr>
+                    <td>Home Address</td>
+                    <td>{{ cur_user.address }}</td>
+                  </tr>
+                  <tr>
+                    <td>Email</td>
+                    <td><a href="{{ cur_user.user.email }}">{{ cur_user.user.email }}</a></td>
+                  </tr>
+                  <td>Phone Number</td>
+                  <td><a href="tel:{{ cur_user.phone_no.as_national }}">{{ cur_user.phone_no.as_national }}
+                  </td>
+                  
+                </tr>
+                
+              </tbody>
+            </table>
+            
+          </div>
+          <div align="center">
+            {% qr_from_text cur_user.user.pk "m" %}
+          </div>
+        </div>
+      </div>
+      <div class="panel-footer">
+      <div>
+        <a href="{% url "change_password" %}"class="btn btn-sm btn-primary" title="Change Password"><i class="fa fa-key"></i> Change Password</a>
+        <span class="pull-right">
+          
+          <a href="{% url "profile_update" pk=cur_user.pk %}" title="Edit Profile" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Update Profile</a>
+          
+          <a href="{% url "auth_logout" %}?next={% url "index" %}" class="btn btn-sm btn-danger" title="Logout"><i class="fa fa-sign-out"> Logout</i></a>
+        </span>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</div>
+{% endblock %}

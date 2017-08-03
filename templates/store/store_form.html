@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% load staticfiles %}
+{% block title_block %}Update Store details{% endblock %}
+{% block content %}
+	<h3>Edit your store details</h3>
+	{% if store.picture  %}
+		<img src="{{ store.picture.url }}" class="img img-responsive form-picture img-thumbnail img-circle" id="picture">
+	{% else %}
+		<img src="{% static "img/no-store.jpg" %} " class="img img-responsive form-picture img-thumbnail img-circle" id="picture">
+	{% endif %}
+	<form method="post" action="." enctype='multipart/form-data'>
+		{% csrf_token %}
+		{% for field in form %}
+			{% ifequal field|field_type 'imagefield'  %}
+				<label for="id_picture" class="custom-file-upload">
+					<i class="fa fa-cloud-upload"></i> Select picture
+				</label>
+				{% render_field field class="image-preview" %}
+				<br>
+				<br>
+			{% else %}
+				<div class="form-group">
+					<label class="control-label col-sm-2">{{ field.label }}</label>
+					<div class="col-sm-10">
+						{% render_field field class="form-control" placeholder=field.label %}
+						<br>
+					</div>
+				</div>
+			{% endifequal %}
+		{% endfor %}
+		{% for error in form.non_field_errors %}
+			<div class="alert alert-danger">
+				<strong>{{ error|escape }}</strong>
+			</div>
+		{% endfor %}
+		<br>
+		<br>
+		<button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" type="submit" value="Submit" />Save</button>
+	</form>
+{% endblock %}
+<span class="mdl-textfield__error">{{ er }}</span>
