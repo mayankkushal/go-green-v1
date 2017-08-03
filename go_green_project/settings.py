@@ -69,12 +69,18 @@ INSTALLED_APPS = [
     'django_social_share',
     "social_widgets",
     'django_instagram',
+    'guardian',
 ]
 
 SITE_ID = 1
 
 
-AUTHENTICATION_BACKENDS = ( 'django.contrib.auth.backends.AllowAllUsersModelBackend', )
+AUTHENTICATION_BACKENDS = ( 
+    'django.contrib.auth.backends.AllowAllUsersModelBackend',
+    'guardian.backends.ObjectPermissionBackend',
+     )
+
+ANONYMOUS_USER_NAME = None #django-gaurdian ANONYMOUS_USER_NAME, different from django anonymous_user
 
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; 
 REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.

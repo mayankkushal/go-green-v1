@@ -1,5 +1,7 @@
 from django.contrib import admin
-from .models import Store, Product, Category
+from .models import Store, Product, Category 
+from guardian.admin import GuardedModelAdmin
+
 
 # Register your models here.
 
@@ -12,7 +14,7 @@ class ProductInline(admin.TabularInline):
 	model = Product
 	
 
-class StoreAdmin(admin.ModelAdmin):
+class StoreAdmin(GuardedModelAdmin):
 	list_display = ('name', 'city', 'state', 'category')
 	list_filter = ('city', 'state')
 	raw_id_fields = ('store','category')
@@ -44,7 +46,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(GuardedModelAdmin):
 	'''
 		Admin View for Product
 	'''
