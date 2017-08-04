@@ -49,6 +49,7 @@ urlpatterns = [
     url(r'^bills/', include('bills.urls')),
     url(r'^inbox/notifications/', include(notifications.urls, namespace='notifications')),
     url(r'^blog/', include('blog.urls')),
+    url(r'^pos/', include('pos.urls')),
     url(r'^locator/', include('locator.urls', namespace='locator')),
     url(r'^', include('client.urls')),
     

@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load widget_tweaks %}
+
+{% block content_wrapper %}
+<!--
+	<form action="" method="post" id='myForm'>{% csrf_token %}
+		{{ form.as_p }}
+
+		<table class="table">
+			{{ items.management_form }}
+
+			{% for form in items.forms %}
+				{% if forloop.first %}
+					<thead>
+					<tr>
+						{% for field in form.visible_fields %}
+							<th style="text-align:center;">{{ field.label|capfirst }}</th>
+						{% endfor %}
+					</tr>
+					</thead>
+				{% endif %}
+				<tr>
+					{% for field in form.visible_fields %}
+						<td>
+							{# Include the hidden fields in the form #}
+							{% if forloop.first %}
+								{% for hidden in form.hidden_fields %}
+									{{ hidden }}
+								{% endfor %}
+							{% endif %}
+							{{ field.errors.as_ul }}
+							{% render_field field class="form-control" %}
+							{{ form.non_field_errors }}
+						</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</table>
+		<input type="submit" value="Save"/>
+	</form>
+
+
+<!-- ------------------------------------ -->
+<div class="container min-height">
+	<form action="" method="post" id='myForm'>{% csrf_token %}
+	<div class="form-group">
+		{% for field in form %}
+			<label>Customer Number</label>
+			{% render_field field class="form-control" %}
+		{% endfor %}
+	</div>
+	<div>
+		<table class="table table-bordered table-striped">
+			{{ items.management_form }}
+
+			{% for form in items.forms %}
+				{% if forloop.first %}
+					<thead>
+					<tr>
+						{% for field in form.visible_fields %}
+							<th style="text-align:center;">{{ field.label|capfirst }}</th>
+						{% endfor %}
+					</tr>
+					</thead>
+				{% endif %}
+				<tr>
+					{% for field in form.visible_fields %}
+						<td>
+							{# Include the hidden fields in the form #}
+							{% if forloop.first %}
+								{% for hidden in form.hidden_fields %}
+									{{ hidden }}
+								{% endfor %}
+							{% endif %}
+							{{ field.errors.as_ul }}
+							{% render_field field class="form-control" %}
+							{{ form.non_field_errors }}
+						</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</table>
+		<input type="submit" value="Save"/>
+	</div>
+	</form>
+</div>
+{% endblock content_wrapper %}
+
+{% block extra_scripts %}
+	<script src="{% static 'js/jquery.formset.js' %}"></script>
+	<script type="text/javascript">
+	$('#myForm tbody tr').formset({
+		addText: 'Add Item',
+		deleteText: 'Remove',
+		prefix: '{{ items.prefix }}'
+	});
+	window.onbeforeunload = function() {
+	  return "All the changes will be lost!";
+	}
+</script>
+ 	<!-- forms.media -->
+	{{ items.media }}
+{% endblock extra_scripts %}

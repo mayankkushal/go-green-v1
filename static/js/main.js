@@ -118,6 +118,9 @@ function timer(time,update,complete) {
     });
   });
 
+/* function changeFunction(){
+    alert("asdfasdf");
+  }*/
 });
 //blog comment 
 $(document).on('submit', '#comment-form', function(e){
@@ -169,4 +172,50 @@ $(document).on('submit', '#comment-form', function(e){
       }
     });
 
-
+function productDetail(value,id){
+    var all = id.split("-");
+    var no = all[1];
+    var base = all[0];
+    var product_pk = value
+    if(product_pk){
+      $.ajax({
+        type:'get',
+        url: '/pos/product_detail',
+        data:{
+          'product_pk':product_pk,
+        },
+        success:function(data){
+          var skuId = "#"+base+"-"+no+"-sku";
+          var priceId = "#"+base+"-"+no+"-price";
+          var taxId = "#"+base+"-"+no+"-tax";
+          var qtyId = "#"+base+"-"+no+"-quantity";
+          var totalId = "#"+base+"-"+no+"-total";
+          
+          $(skuId).val(data.sku);
+          $(priceId).val(data.price);
+          $(taxId).val(data.tax);
+          if($(qtyId).val() > 0){
+            $(totalId).val($(priceId).val() * $(qtyId).val());
+          }
+          else{
+            $(qtyId).val(1);
+             $(totalId).val($(priceId).val() * $(qtyId).val());
+          }
+          },
+        error: function(xhr, status, error) {
+            var err = eval("(" + xhr.responseText + ")");
+            console.log(err.Message);
+          }
+      });
+    }
+  }
+function calculateTotal(x, value){
+  id = x.id;
+  var all = id.split("-");
+  var no = all[1];
+  var base = all[0];
+  var priceId = "#"+base+"-"+no+"-price";
+  var totalId = "#"+base+"-"+no+"-total";
+  total = $(priceId).val() * value;
+  $(totalId).val(total);
+}
