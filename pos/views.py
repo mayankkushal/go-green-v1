@@ -23,9 +23,12 @@ class CreateBill(CreateView):
 	form_class = BillForm
 	model = Bill
 	template_name = 'pos/billing_page.html'
-	success_url = reverse_lazy('index')
 
 	def get_initial(self):
+		"""
+			Passes the customer number from the session as initial data to the
+			form and clears the session as it cannot be further used.
+		"""
 		no = self.request.session.get('cus_no')
 		self.request.session['cus_no'] = None
 		return { 'customer_no': no,}
@@ -43,7 +46,8 @@ class CreateBill(CreateView):
 		items = context['items']
 		
 		with transaction.atomic():
-			profile = Profile.objects.get(phone_no=form.cleaned_data['customer_no'])
+			profile = Profile.objects.get(phone_no=form.data['customer_no'])
+			form.instance.customer_no = form.data['customer_no']
 			form.instance.customer = User.objects.get(profile=profile)
 			store = Store.objects.get(store=self.request.user)
 			form.instance.store = store
@@ -56,6 +60,12 @@ class CreateBill(CreateView):
 				item.save()
 
 		return super(CreateBill, self).form_valid(form)
+
+	def get_success_url(self):
+		"""
+			Returns the bill details page
+		"""
+		return reverse_lazy('bill_detail', kwargs={'pk': self.object.pk})
 
 
 class ProductAutocomplete(autocomplete.Select2QuerySetView):
@@ -98,6 +108,10 @@ def product_detail(request):
 
 
 class BillingStart(FormView):
+	"""
+		Takes the customer phone number and validates if the customer
+		exists and then proceeds to billing page.
+	"""
 	success_url = reverse_lazy('billing')
 	template_name = 'pos/billing_start.html'
 	form_class = CustomerPhoneNumberForm

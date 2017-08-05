@@ -86,7 +86,7 @@ def profile_login(request):
 	On user login method redirects the user according to thier status
 	1)If the user is active, ie. has verified phone number
 		a) client - redirected to bills page
-		b) store - redirected to store details page
+		b) store - redirected to `billing_start.html` page
 		c) admin - redirected to admin page
 	2)If the user is inactive ie. not verifeid redirect to the OTP verification
 		page.
@@ -102,7 +102,7 @@ def profile_login(request):
 				return redirect(reverse('bill_list'))
 			except:
 				slug = request.user.store.slug
-				return redirect('/store/detail/'+slug)
+				return redirect(reverse('billing_start'))
 	else:
 		return redirect('/inactive_otp')
 

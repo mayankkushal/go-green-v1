@@ -991,9 +991,6 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 	margin: 10px;
 	background-color: white;
 }
-#newsletter .modal-content{
-	background-color: #76FF03;
-}
 #newsletter .modal-header{
 	border-bottom: 0 !important;
 }
@@ -1026,4 +1023,10 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
  	margin-top: 20vh;
  	margin-bottom: 20vh;
  	padding: 30px;
+}
+.billing-container{
+	width: 85vw;
+	background-color: white;
+	margin: auto;
+	padding: 15px;
 }

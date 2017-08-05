@@ -2,50 +2,21 @@
 {% load staticfiles %}
 {% load widget_tweaks %}
 
+{% block title_block %}
+	Billing
+{% endblock title_block %}
+
 {% block content_wrapper %}
-<!--
-	<form action="" method="post" id='myForm'>{% csrf_token %}
-		{{ form.as_p }}
-
-		<table class="table">
-			{{ items.management_form }}
-
-			{% for form in items.forms %}
-				{% if forloop.first %}
-					<thead>
-					<tr>
-						{% for field in form.visible_fields %}
-							<th style="text-align:center;">{{ field.label|capfirst }}</th>
-						{% endfor %}
-					</tr>
-					</thead>
-				{% endif %}
-				<tr>
-					{% for field in form.visible_fields %}
-						<td>
-							{# Include the hidden fields in the form #}
-							{% if forloop.first %}
-								{% for hidden in form.hidden_fields %}
-									{{ hidden }}
-								{% endfor %}
-							{% endif %}
-							{{ field.errors.as_ul }}
-							{% render_field field class="form-control" %}
-							{{ form.non_field_errors }}
-						</td>
-					{% endfor %}
-				</tr>
-			{% endfor %}
-		</table>
-		<input type="submit" value="Save"/>
-	</form>
-
-
-<!-- ------------------------------------ -->
-<div class="container min-height">
-	<form action="" method="post" id='myForm'>{% csrf_token %}
+<div class="billing-container min-height">
+<h3 align="center">Billing</h3>
+	<form action="" method="post" id='billingForm'>{% csrf_token %}
 	<div class="form-group">
 		{% for field in form %}
+			{% for error in field.errors %}
+		      <div class="alert alert-danger">
+		          <strong>{{ error|escape }}</strong>
+		      </div>
+		  	{% endfor %}
 			<label>Customer Number</label>
 			{% render_field field class="form-control" %}
 		{% endfor %}
@@ -74,30 +45,80 @@
 								{% endfor %}
 							{% endif %}
 							{{ field.errors.as_ul }}
-							{% render_field field class="form-control" %}
+							{% render_field field class+="form-control" %}
 							{{ form.non_field_errors }}
 						</td>
 					{% endfor %}
 				</tr>
 			{% endfor %}
 		</table>
-		<input type="submit" value="Save"/>
+		<input type="submit" value="Continue" class="btn btn-lg btn-warning" />
 	</div>
 	</form>
 </div>
+
+<!-- Billing Modal
+<!-- Modal -->
+<div id="billingModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Confirm</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table ">
+        	<tr>
+        		<td align="right">Taxable sale Amount (&#8377;):</td>
+        		<td id="sale_amount" align="right"></td>
+        	</tr>
+        	<tr>
+        		<td align="right">Tax (&#8377;):</td>
+        		<td id="tax_amount" align="right"></td>
+        	</tr>
+        	<tr>
+        		<td align="right">Total Amount (&#8377;):</td>
+        		<td id="total_amount" align="right"></td>
+        	</tr>
+        	<tr>
+        		<td align="right">Amount to Pay (&#8377;):</td>
+        		<td id="rounded_amount" align="right"></td>
+        	</tr>
+        </table>
+        <div>
+        	<input type="number" name="got" id="got" autofocus class="form-control" placeholder="Customer Paid (&#8377;)">
+        	<p>Return (&#8377;): <strong id="amount_return"></strong></p>
+        </div>
+      </div>
+      <div class="modal-footer">
+      	<button type="button" class="btn btn-success pull-left" id="proceedBtn">Proceed</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Modal end -->
+
 {% endblock content_wrapper %}
 
 {% block extra_scripts %}
 	<script src="{% static 'js/jquery.formset.js' %}"></script>
 	<script type="text/javascript">
-	$('#myForm tbody tr').formset({
-		addText: 'Add Item',
-		deleteText: 'Remove',
+	$('#billingForm tbody tr').formset({
+		addText: '<button class="btn btn-success">Add Item</button>',
+		deleteText: '<button class="btn btn-danger btn-sm">Delete</button>',
 		prefix: '{{ items.prefix }}'
 	});
-	window.onbeforeunload = function() {
-	  return "All the changes will be lost!";
-	}
+	
+	$(window).on('beforeunload', function(){
+    	return "Any changes will be lost";
+	});
+	
+	$(document).on("submit", "form", function(event){
+	    $(window).off('beforeunload');
+	});
 </script>
  	<!-- forms.media -->
 	{{ items.media }}

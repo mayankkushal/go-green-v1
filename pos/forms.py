@@ -14,12 +14,22 @@ class BaseItemInlineFormset(BaseInlineFormSet):
 	pass
 
 class BillForm(forms.ModelForm):
+
+	def clean_customer_no(self):
+		try:
+			profile = Profile.objects.get(phone_no=self.cleaned_data['customer_no'])
+		except Profile.DoesNotExist:
+			raise forms.ValidationError("Customer phone number not found, cannot proceed with billing. Please start again!")
+		return self.cleaned_data
+	
 	class Meta:
 		model = Bill
 		fields = ['customer_no',]
 		widgets = {
 			'customer_no':forms.TextInput(attrs={'readonly':'readonly'})
 		}
+
+
 
 class ItemForm(forms.ModelForm):
 	product_number = forms.CharField(label='Product', widget=autocomplete.Select2(
@@ -32,7 +42,11 @@ class ItemForm(forms.ModelForm):
 				),)
 	tax = forms.DecimalField(label="Tax", widget=forms.NumberInput(attrs={'readonly':'readonly'}))
 	price = forms.DecimalField(label="Price", disabled=True, required=False)
-	total = forms.DecimalField(label="Total", disabled=True, required=False)
+	total = forms.DecimalField(label="Total", 
+						disabled=True, 
+						required=False,
+						widget=forms.NumberInput(attrs={'class':'total'})
+					)
 	class Meta:
 		model = Item
 		fields = ['product_number', 'sku', 'quantity']
@@ -42,10 +56,16 @@ class ItemForm(forms.ModelForm):
 				attrs={
 					'oninput':"calculateTotal(this, value)",
 				}
-			)
+			),
+			# 'total': forms.NumberInput(
+			# 	attrs={
+			# 		'class':"total"
+			# 	}
+			# )
 		}
 
 ItemFormSet = inlineformset_factory(Bill, Item, form=ItemForm, extra=1, can_delete=True)
+
 
 class CustomerPhoneNumberForm(forms.Form):
 	customer_phone_no = forms.CharField(label='Customer Number')
