@@ -23,7 +23,7 @@ urlpatterns = [
 	url(r'^password_change/$', views.change_password, name='change_password'),
 		
 	url(r'^qr_scanner', views.qr_scanner, name="qr_scanner"),
-	url(r'^qr_redirect', views.qr_redirect, name='qr_redirect'),
+	url(r'^qr_redirect', views.QrRedirect.as_view(), name='qr_redirect'),
 	
 	url(r'^notify', views.NotificationView.as_view(), name='notify'),
 	url(r'^mark_read', views.mark_read),

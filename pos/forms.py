@@ -47,22 +47,14 @@ class ItemForm(forms.ModelForm):
 						required=False,
 						widget=forms.NumberInput(attrs={'class':'total'})
 					)
+	quantity = forms.IntegerField(min_value=1,
+					widget=forms.NumberInput(attrs={'oninput':"calculateTotal(this, value)"})
+				)
 	class Meta:
 		model = Item
 		fields = ['product_number', 'sku', 'quantity']
 		exclude = ('bill','product', 'price', 'tax', 'total')
-		widgets = {
-			'quantity': forms.NumberInput(
-				attrs={
-					'oninput':"calculateTotal(this, value)",
-				}
-			),
-			# 'total': forms.NumberInput(
-			# 	attrs={
-			# 		'class':"total"
-			# 	}
-			# )
-		}
+
 
 ItemFormSet = inlineformset_factory(Bill, Item, form=ItemForm, extra=1, can_delete=True)
 
@@ -83,3 +75,29 @@ class CustomerPhoneNumberForm(forms.Form):
 		except KeyError:
 			pass
 		return self.cleaned_data
+
+
+class ItemReturnForm(forms.ModelForm):
+	class Meta:
+		model = Item
+		exclude = ('bill',)
+		widgets = {
+			'product': forms.Select(attrs={'disabled':"on"}),
+			'sku': forms.TextInput(attrs={'disabled':"on"}),
+			'quantity':forms.NumberInput(attrs={'max':"on", 'oninput':"calculateTotal(this, value)", 'min':"1"},),
+			'tax':forms.NumberInput(attrs={'disabled':"on"}),
+			'price':forms.NumberInput(attrs={'disabled':"on"}),
+			'total':forms.NumberInput(attrs={'disabled':"on", 'class':'total'})
+		}
+ItemReturnFormSet = inlineformset_factory(Bill, Item, form=ItemReturnForm, extra=0, can_delete=True)
+
+
+class BillReturnForm(forms.ModelForm):
+	class Meta:
+		model = Bill
+		fields = ['customer_no', 'bill_no', 'total']
+		widgets = {
+			'customer_no':forms.TextInput(attrs={'readonly':'readonly'}),
+			'bill_no':forms.TextInput(attrs={'readonly':'readonly'}),
+			'total':forms.NumberInput(attrs={'readonly':'readonly'}),
+		}

@@ -20,7 +20,7 @@
 	</div>
 	<hr>
 	<div class="col-sm-4 card-left">
-		{% qr_from_text store.slug "m" %}
+		<img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl={{ store.phone_no.national_number }}" />
 	</div>
 	<div class="col-sm-8 card-right">
 		<h5>About</h5>

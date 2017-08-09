@@ -69,7 +69,6 @@
                 <li class="hidden-xs"><a href="{% url "notify" %}"><i class="fa fa-bell" aria-hidden="true"></i>{% live_notify_badge classes="badge" %}</a></li>
               {% endif %}
               {% if user.is_authenticated and user.store %}
-                <li><a href="{% url "billing_start" %}"><i class="fa fa-inr" aria-hidden="true"></i> Billing</a></li>
                 <li><a href="{% url "qr_scanner" %}"><i class="fa fa-qrcode" aria-hidden="true"></i> Scanner</a></li>
                 <li><a href="{{ user.store.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
                 Profile</a></li>
@@ -84,7 +83,18 @@
       </nav>
     </header>
     
-    
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p align="center">{{ message }}</p>
+          </div>
+        {% endfor %}
+      </ul>
+    {% endif %}
     {% block content_wrapper %}{% endblock %}
     
     <div class="container">

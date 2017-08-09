@@ -24,7 +24,7 @@
                 <form id="login-form" action="{% url "login" %}" method="post" role="form" style="display: block;">
                   {% csrf_token %}
                   <div class="form-group">
-                    <input type="text" name="username" id="id_username" tabindex="1" class="form-control" placeholder="Username" value="">
+                    <input type="text" name="username" id="id_username" tabindex="1" class="form-control" placeholder="Phone Number" value="">
                   </div>
                   <div class="form-group">
                     <input type="password" name="password" id="id_password" tabindex="2" class="form-control" placeholder="Password">
@@ -50,7 +50,7 @@
                     </div>
                   {% endfor %}
                   <div class="form-group">
-                    <input type="tel" name="phone_no" id="id_phone_no" tabindex="1" class="form-control" placeholder="Phone Number" value="">
+                    <input type="tel" name="phone_no" id="id_phone_no" tabindex="1" class="form-control" placeholder="Phone Number" value="" pattern="\d{10}">
                   </div>
                   {% for error in form.email.errors %}
                     <div class="alert alert-danger">

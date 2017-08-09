@@ -14,7 +14,7 @@ class BillAdmin(admin.ModelAdmin):
 	"""
 	list_display = ('bill_no', 'date', 'total')
 	list_filter = ('store', )
-	raw_id_fields = ('store', 'customer')
+	raw_id_fields = ('store', )
 	inlines = [ItemInline,]
 
 admin.site.register(Item)

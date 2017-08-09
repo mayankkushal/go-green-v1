@@ -56,7 +56,65 @@ $('#resend').click(function() {
     $.get('/resend_otp')
 });
 
+function b_total() {
+    var sale = 0.0
+    var tax = 0.0
+    $('.total').each(function() {
+        var all = $(this).attr('id').split("-");
+        var no = all[1];
+        var base = all[0];
+        var taxId = "#" + base + "-" + no + "-tax";
+
+        tax += parseFloat($(this).val()) * (parseFloat($(taxId).val()) / 100);
+        sale += parseFloat($(this).val());
+    });
+    var tot = tax + sale;
+    return {
+        'sale': sale,
+        'tax': tax,
+        'tot': tot,
+    }
+}
+
+function b_fill(sale, tot, tax) {
+
+    $('#sale_amount').html(sale);
+    $('#tax_amount').html(tax);
+    $('#total_amount').html(tot);
+}
+
 $(function() {
+    $('.field-franchise').addClass('hidden');
+    $('.field-store').addClass('hidden');
+    $('.field-store_chain').addClass('hidden');
+
+    if ($("#id_type_of_product").val() == 'F') {
+        $('.field-store').addClass('hidden');
+        $('.field-store_chain').removeClass('hidden');
+    } else if ($("#id_type_of_product").val() == 'S') {
+        $('.field-store').removeClass('hidden');
+        $('.field-store_chain').addClass('hidden');
+    }
+
+    $('#id_stand_alone').change(function() {
+        if ($(this).is(':checked')) {
+            $('.field-franchise').addClass('hidden');
+            $('.field-category').removeClass('hidden');
+        } else {
+            $('.field-franchise').removeClass('hidden');
+            $('.field-category').addClass('hidden');
+        }
+    });
+
+    $("#id_type_of_product").change(function() {
+        if ($(this).val() == 'F') {
+            $('.field-store').addClass('hidden');
+            $('.field-store_chain').removeClass('hidden');
+        } else {
+            $('.field-store').removeClass('hidden');
+            $('.field-store_chain').addClass('hidden');
+        }
+    });
 
     $('#id_password1').pwstrength({
         ui: {
@@ -120,43 +178,19 @@ $(function() {
 
     $('#billingForm').submit(function(e, submit) {
         if (!submit) e.preventDefault();
-        
-        var sale = 0.0
-        var tax = 0.0
-        
-        $('.total').each(function() {
-            var all = $(this).attr('id').split("-");
-            var no = all[1];
-            var base = all[0];
-            var taxId = "#" + base + "-" + no + "-tax";
-
-            tax += parseFloat($(this).val()) * (parseFloat($(taxId).val()) / 100);
-            sale += parseFloat($(this).val());
-        });
-        var tot = tax + sale;
-        var pay_amount = Math.round(tot);
-
-        $('#billingModal').modal('show');
-
-        $('#sale_amount').html("");
-        $('#tax_amount').html("");
-        $('#total_amount').html("");
-        $('#rounded_amount').html("");
-
-        $('#sale_amount').html(sale);
-        $('#tax_amount').html(tax);
-        $('#total_amount').html(tot);
-        $('#rounded_amount').html(pay_amount);
-
-        $("#got").keyup(function(){
-          if($("#got").val()>tot)
-          $('#amount_return').html($("#got").val() - pay_amount);
-        });
-
+        $('#billingModal').modal('show'); 
+        $('#payment').html($('#total_amount').text());
     });
     
+    $('#returnForm').submit(function(e, submit) {
+        if (!submit) e.preventDefault();
+        $('#billingModal').modal('show');
+        $('#payment').html($('#total_amount').text());
+    });
+
     $('#proceedBtn').click(function() { // Submits the form again as it was prevented earlier
         $('#billingForm').trigger('submit', [true]);
+        $('#returnForm').trigger('submit', [true]);
     });
 
 });
@@ -242,6 +276,8 @@ function productDetail(value, id) {
                     $(qtyId).val(1);
                     $(totalId).val($(priceId).val() * $(qtyId).val());
                 }
+                cal = b_total();
+                b_fill(cal.sale, cal.tot, cal.tax);
             },
             error: function(xhr, status, error) {
                 var err = eval("(" + xhr.responseText + ")");
@@ -260,4 +296,7 @@ function calculateTotal(x, value) {
     var totalId = "#" + base + "-" + no + "-total";
     total = $(priceId).val() * value;
     $(totalId).val(total);
+    cal = b_total();
+    b_fill(cal.sale, cal.tot, cal.tax);
+
 }

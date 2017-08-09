@@ -1,10 +1,10 @@
 from django.shortcuts import render
 from django.db import transaction
-from django.views.generic import CreateView
+from django.views.generic import CreateView, UpdateView
 from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 
 import simplejson as json
 
@@ -13,7 +13,7 @@ from dal import autocomplete
 from bills.models import Bill, Item
 from client.models import Profile
 from store.models import Store, Product
-from .forms import BillForm, ItemFormSet, CustomerPhoneNumberForm
+from .forms import BillForm, ItemFormSet, CustomerPhoneNumberForm, ItemReturnFormSet, BillReturnForm
 # Create your views here.
 
 class CreateBill(CreateView):
@@ -107,21 +107,44 @@ def product_detail(request):
 			return HttpResponse()
 
 
-class BillingStart(FormView):
-	"""
-		Takes the customer phone number and validates if the customer
-		exists and then proceeds to billing page.
-	"""
-	success_url = reverse_lazy('billing')
-	template_name = 'pos/billing_start.html'
-	form_class = CustomerPhoneNumberForm
+class ReturnBill(UpdateView):
 
-	def form_valid(self, form):
-		"""
-		If the form is valid, add the customer number to the session.
-		"""
-		no = form.data.get('customer_phone_no')
-		self.request.session['cus_no'] = no
-		return super(BillingStart, self).form_valid(form)
+	model = Bill
+	form_class = BillReturnForm
+	template_name = 'pos/return_page.html'
+	success_url = reverse_lazy('index')
 
+	def get(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		form_class = self.get_form_class()
+		form = self.get_form(form_class)
+		items = ItemReturnFormSet(instance = self.object)
+		return self.render_to_response(self.get_context_data(form = form, items = items))
 
+	def post(self, request, *args, **kwargs):
+		self.object = self.get_object()
+		form_class = self.get_form_class()
+		form = self.get_form(form_class)
+		items = ItemReturnFormSet(self.request.POST, instance=self.object)
+
+		if (form.is_valid() and items.is_valid()):
+		  return self.form_valid(form, items)
+		return self.form_invalid(form, items)
+
+	def form_valid(self, form, items):
+		obj = form.save(commit=False)
+		obj.pk = None
+		obj.customer_no = form.data['customer_no']
+		obj.bill_no = form.data['bill_no']
+		obj.original = False
+		obj.save()
+		
+		for item in items:
+			item.instance.pk = None
+			item.instance.bill = obj
+			item.save()
+		obj.save()
+		return HttpResponseRedirect(self.get_success_url())
+
+	def form_invalid(self, form, items):
+		return self.render_to_response(self.get_context_data(form=form, items=items))

@@ -1,18 +1,25 @@
 from django.contrib import admin
-from .models import Store, Product, Category 
+from .models import Store, Product, Category, Franchise
 from guardian.admin import GuardedModelAdmin
 
 
 # Register your models here.
 
 
-class ProductInline(admin.TabularInline):
+# class ProductInline(admin.TabularInline):
 
+# 	'''
+# 		Tabular Inline View for Product
+# 	'''
+# 	model = Product
+
+class FranchiseAdmin(admin.ModelAdmin):
 	'''
-		Tabular Inline View for Product
+		Admin View for Franchise
 	'''
-	model = Product
-	
+	pass
+
+admin.site.register(Franchise, FranchiseAdmin)
 
 class StoreAdmin(GuardedModelAdmin):
 	list_display = ('name', 'city', 'state', 'category')
@@ -20,10 +27,13 @@ class StoreAdmin(GuardedModelAdmin):
 	raw_id_fields = ('store','category')
 	fieldsets = (
 		('Details', {
-			'fields': (('store','category'),('name', 'phone_no'),'description', 'picture')
+			'fields': ('store',('name', 'phone_no'),'description', 'picture')
 		}),
 		('Address', {
 			'fields': ('street', ('city', 'state', 'postal'), 'location')
+		}),
+		('Policies', {
+			'fields': (('return_days', 'stand_alone'),'franchise', 'category')
 		}),
 		('Optional', {
 			'fields': ('website', 'hours')
@@ -32,7 +42,7 @@ class StoreAdmin(GuardedModelAdmin):
 			'fields': ('token',)
 		})
 	)
-	inlines = (ProductInline, )
+	# inlines = (ProductInline, )
 
 
 admin.site.register(Store, StoreAdmin)
@@ -46,13 +56,15 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 
-class ProductAdmin(GuardedModelAdmin):
-	'''
-		Admin View for Product
-	'''
-	list_display = ('name', 'store', 'price')
-	list_filter = ('store',)
-	raw_id_fields = ('store',)
-	search_fields = ('name','store')
 
-admin.site.register(Product, ProductAdmin)
+# class ProductAdmin(GuardedModelAdmin):
+# 	'''
+# 		Admin View for Product
+# 	'''
+# 	list_display = ('name', 'price')
+# 	#list_filter = ('store',)
+# 	#raw_id_fields = ('store','franchise')
+# 	search_fields = ('name',)
+# 	fieldsets = (('Detail',{"fields":('franchise',)}),)
+
+admin.site.register(Product)

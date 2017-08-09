@@ -3,13 +3,13 @@
 {% load widget_tweaks %}
 
 {% block title_block %}
-	Billing
+	Returns
 {% endblock title_block %}
 
 {% block content_wrapper %}
 <div class="billing-container min-height">
-<h3 align="center">Billing</h3>
-	<form action="" method="post" id='billingForm'>{% csrf_token %}
+<h3 align="center">Returns</h3>
+	<form action="" method="post" id='returnForm'>{% csrf_token %}
 	<div class="form-group">
 		{% for field in form %}
 			{% for error in field.errors %}
@@ -17,7 +17,7 @@
 		          <strong>{{ error|escape }}</strong>
 		      </div>
 		  	{% endfor %}
-			<label>Customer Number</label>
+			<label>{{ field.label }}</label>
 			{% render_field field class="form-control" %}
 		{% endfor %}
 	</div>
@@ -52,23 +52,9 @@
 				</tr>
 			{% endfor %}
 		</table>
-		<input type="submit" value="Confirm Billing" class="btn btn-lg btn-warning" />
+		<input type="submit" value="Continue" class="btn btn-lg btn-warning" />
 	</div>
 	</form>
-	<table class="table ">
-        	<tr>
-        		<td align="right">Taxable sale Amount (&#8377;):</td>
-        		<td id="sale_amount" align="right"></td>
-        	</tr>
-        	<tr>
-        		<td align="right">Tax (&#8377;):</td>
-        		<td id="tax_amount" align="right"></td>
-        	</tr>
-        	<tr>
-        		<td align="right">Total Amount (&#8377;):</td>
-        		<td id="total_amount" align="right"></td>
-        	</tr>
-        </table>
 </div>
 
 <!-- Billing Modal
@@ -82,37 +68,44 @@
         <h4 class="modal-title">Confirm</h4>
       </div>
       <div class="modal-body">
-      <p>Have you received Rs.<strong id="payment"></strong> payment from the customer?</p>
+        <table class="table ">
+        	<tr>
+        		<td align="right">Taxable sale Amount (&#8377;):</td>
+        		<td id="sale_amount" align="right"></td>
+        	</tr>
+        	<tr>
+        		<td align="right">Tax (&#8377;):</td>
+        		<td id="tax_amount" align="right"></td>
+        	</tr>
+        	<tr>
+        		<td align="right">Total Amount (&#8377;):</td>
+        		<td id="total_amount" align="right"></td>
+        	</tr>
+        	<tr>
+        		<td align="right">Amount to Pay (&#8377;):</td>
+        		<td id="rounded_amount" align="right"></td>
+        	</tr>
+        </table>
+        <div>
+        	<input type="number" name="got" id="got" autofocus class="form-control" placeholder="Customer Paid (&#8377;)">
+        	<p>Return (&#8377;): <strong id="amount_return"></strong></p>
+        </div>
       </div>
       <div class="modal-footer">
-      	<button type="button" class="btn btn-success pull-left" id="proceedBtn" autofocus>Yes</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      	<button type="button" class="btn btn-success pull-left" id="proceedBtn">Proceed</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
       </div>
     </div>
 
   </div>
 </div>
 <!-- Modal end -->
-
 {% endblock content_wrapper %}
 
 {% block extra_scripts %}
-	<script src="{% static 'js/jquery.formset.js' %}"></script>
 	<script type="text/javascript">
-	$('#billingForm tbody tr').formset({
-		addText: '<button class="btn btn-success">Add Item</button>',
-		deleteText: '<button class="btn btn-danger btn-sm">Delete</button>',
-		prefix: '{{ items.prefix }}'
-	});
-	
-	$(window).on('beforeunload', function(){
-    	return "Any changes will be lost";
-	});
-	
-	$(document).on("submit", "form", function(event){
-	    $(window).off('beforeunload');
-	});
-</script>
- 	<!-- forms.media -->
-	{{ items.media }}
+	$('#returnForm').on('submit', function() {
+		    $('input, select').prop('disabled', false);
+		});
+	</script>
 {% endblock extra_scripts %}
