@@ -53,7 +53,7 @@
 			});
 			scannedImg.src = res.imgData;
 			scannedQR[txt] = res.format + ": " + res.code;
-			   window.location.href = '/qr_redirect?val='+res.code;
+			   window.location.href = '/qr_redirect?val='+res.code; 
 		},
 		getDevicesError: function(error) {
 			var p, message = "Error detected with the following parameters:\n";
@@ -90,16 +90,12 @@
 	var decoder = new WebCodeCamJS("#webcodecam-canvas").buildSelectMenu("#camera-select", "environment|back").init(args);
 
 	$(document).ready(function(){
-		alert("enter")
 		if (!decoder.isInitialized()) {
 			scannedQR[txt] = "Scanning ...";
-			alert("if")
 		} else {
 			scannedQR[txt] = "Scanning ...";
 			decoder.play(); 
-			alert('palyed');
 		}
-		alert("alsdf");
 	}, false);
 	
 	/*decoder.play(); // Starts the camera atuomatically on page load

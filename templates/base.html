@@ -83,7 +83,18 @@
       </nav>
     </header>
     
-    
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <p align="center">{{ message }}</p>
+          </div>
+        {% endfor %}
+      </ul>
+    {% endif %}
     {% block content_wrapper %}{% endblock %}
     
     <div class="container">
@@ -106,7 +117,7 @@
               <input type="email" class="form-control" placeholder="Enter your email" 
                       id='newsletter_email' autofocus value="{{ user.email }}">
               <span class="input-group-btn">
-                <button class="btn btn-warning" type="submit" id="newsletterBtn">Subscribe</button>
+                <button class="btn btn-success" type="submit" id="newsletterBtn">Subscribe</button>
               </span>
             </div>
           </div>
@@ -170,7 +181,7 @@
             <span>&copy; GOGREEN 2017</span>
           </div>
           <div class="footer-legal col-sm-4">
-          <button type="button" class="btn btn-info" data-toggle="modal" data-target="#newsletter">Newsletter</button>          
+          <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newsletter">Newsletter</button>          
             <a href="{% url "blog:index" %}">Blog</a>&nbsp&nbsp
             {% get_flatpages as flatpages %}
             {% for page in flatpages %}

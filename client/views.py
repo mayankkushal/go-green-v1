@@ -1,13 +1,16 @@
 from django.shortcuts import render, redirect, reverse
 from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.views.generic import DetailView, TemplateView, RedirectView
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
+from django.contrib import messages
 
 import json
 import csv
 import random
+import re
+import datetime
  
 from .models import Profile, SlideShowImage, Banner, Newsletter
 from .forms import ProfileUpdateForm, OTPVerificationForm
@@ -66,16 +69,8 @@ class ProfileDetailView(DetailView):
 	context_object_name = 'cur_user'
 	slug_field = 'phone_no'
 
-	def get(self, request, *args, **kwargs):
-
-		if not request.user.profile.first_name:
-			return redirect(reverse('profile_update', kwargs={'pk':request.user.profile.pk}))
-
-		return super(ProfileDetailView, self).get(request, *args, **kwargs)
-
 	def get_context_data(self, **kwargs):
 		context = super(ProfileDetailView, self).get_context_data(**kwargs)
-		context['bills'] = Bill.objects.filter(customer=self.request.user)[:5]
 		return context
 
 
@@ -86,7 +81,7 @@ def profile_login(request):
 	On user login method redirects the user according to thier status
 	1)If the user is active, ie. has verified phone number
 		a) client - redirected to bills page
-		b) store - redirected to store details page
+		b) store - redirected to `billing_start.html` page
 		c) admin - redirected to admin page
 	2)If the user is inactive ie. not verifeid redirect to the OTP verification
 		page.
@@ -102,7 +97,7 @@ def profile_login(request):
 				return redirect(reverse('bill_list'))
 			except:
 				slug = request.user.store.slug
-				return redirect('/store/detail/'+slug)
+				return redirect(reverse('qr_scanner'))
 	else:
 		return redirect('/inactive_otp')
 
@@ -278,80 +273,131 @@ def change_password(request):
 
 
 
-def qr_redirect(request):
+
+class QrRedirect(FormView):
 	"""
-		The scanned value from the qr is processed 
-		1) If the user is client, they can access only the store details page
-			hence they redirected there.
-		2) if the user is store, they are redirected to the bills page which show 
-			the bills for that store from that user.
+	Redirects using the value from the qr code on `get` request and uses the
+	values from the phone_no field for the `post` request.
 	"""
-	if request.method == 'GET':
-		
-		if request.user.is_authenticated:
-			
-			if Profile.objects.filter(user=request.user).exists(): # If the user is customer
-				slug = request.GET['val']
-				try:
-					store = Store.objects.get(slug=str(slug))
-				except Store.DoesNotExist:
-					raise Http404()
-				if store:
-					return redirect('/store/detail/'+store.slug)
 
-			elif Store.objects.filter(store=request.user).exists(): # If the user is store
-				pk = request.GET['val']
-				try:
-					client = User.objects.get(pk=int(pk))
-				except User.DoesNotExist:
-					raise Http404()
-				if client:
-					store = Store.objects.get(store=request.user)
-					bills = Bill.objects.filter(customer=client, store=store)
+	def is_customer(self):
+		return True if Profile.objects.filter(user=self.request.user).exists() else False
 
-					# pk of all the valid bills is stored as all the bills cannot be JSON
-					# serialised
-					bill_list = [bill.pk for bill in bills ]
+	def is_store(self):
+		return True if Store.objects.filter(store=self.request.user).exists() else False
 
-					# stored in session and is used in the `BillListView` directly
-					# from the session
-					request.session['bill_list'] = bill_list
+	def store_present(self, slug):
+		"""
+			Checks if the store is present if not, raise a `404` 
+		"""
+		store = None
+		try:
+			store = Store.objects.get(phone_no=str(num))
+		except Store.DoesNotExist:
+			raise Http404()
+		return store
 
-					return redirect(reverse('bill_list'))
+	def customer_present(self, phone_no):
+		"""
+			Checks if the customer is present if not, raise a `404` 
+		"""
+		client = None
+		try:
+			client = User.objects.get(profile__phone_no=phone_no)
+		except User.DoesNotExist:
+			raise Http404()
+		return client
+
+	def bill_present(self, bill_pk):
+		"""
+			Checks if the bill is present if not, raise a `404` 
+		"""
+		bill = None
+		try:
+			bill = Bill.objects.get(pk=bill_pk)
+		except:
+			raise Http404()
+		return bill
+
+	def is_phone(self, val):
+		"""
+			The value from the qr is matched with `ph:` for phone number
+		"""
+		return bool(re.match(r'^ph:\d', val))
+
+	def is_bill(self, val):
+		"""
+			The value from the qr is matched with `bi:` for bill number
+		"""
+		return bool(re.match(r'^bi:\d', val))
 	
-	elif request.method == 'POST':
-		if request.user.is_authenticated:
+	def extract_value(self, val):
+		"""
+			Returns all the letters after the first 3 letters, ie leaving `ph:` or `bi:`
+		"""
+		return val[3:]
+
+	def is_bill_return_valid(self, bill):
+		"""
+			Returns True if the bill is eligible to be returned.
+			Conditions:
+				a)Bill shouldn't be returned already ie. `bill.original` should be True
+				b)Bill should lie in return period of that specific store.
+		"""
+		store = bill.store
+		days_occured = datetime.date.today() - bill.date.date()
+		if bill.original:
+			if days_occured < datetime.timedelta(store.return_days):
+				return True
+			else:
+				messages.error(self.request, 
+					'Bill has crossed its return period. Store allows return within '+str(store.return_days)+" days")
+				return False
+		else:
+			messages.error(self.request, 'Bill can only be returned once. Please contact the manager fo more information')
+		return False
+
+	def redirect_to_billing(self, phone_no):
+		client = self.customer_present(phone_no)
+		if client:
+			self.request.session['cus_no'] = client.profile.phone_no.national_number
+			return True
+
+	def get(self, request, *args, **kwargs):
+		if self.is_customer():
+			phone_no = request.GET['val']
+			store = self.store_present(phone_no)
+			if store:
+				return redirect('/store/detail/'+store.slug)
+
+		elif self.is_store():
+			val = request.GET['val']
 			
-			if Profile.objects.filter(user=request.user).exists(): # If the user is customer
-				num = request.POST.get('phone_no')
-				try:
-					store = Store.objects.get(phone_no=str(num))
-				except Store.DoesNotExist:
-					raise Http404()
-				if store:
-					return redirect('/store/detail/'+store.slug)
+			if self.is_phone(val):
+				phone_no = self.extract_value(val)
+				if self.redirect_to_billing(phone_no):
+					return redirect(reverse('billing'))
 
-			elif Store.objects.filter(store=request.user).exists(): # If the user is store
-				num = request.POST.get('phone_no')
-				try:
-					client = Profile.objects.get(phone_no=str(num))
-				except User.DoesNotExist:
-					raise Http404()
-				if client:
-					store = Store.objects.get(store=request.user)
-					bills = Bill.objects.filter(customer=client.user, store=store)
+			elif self.is_bill(val):
+				bill_pk = self.extract_value(val)
+				bill = self.bill_present(bill_pk)
+				if bill:
+					if self.is_bill_return_valid(bill):
+						return redirect('/pos/return/'+str(bill.pk))
+					else:
+						return redirect(reverse('qr_scanner'))
 
-					# pk of all the valid bills is stored as all the bills cannot be JSON
-					# serialised
-					bill_list = [bill.pk for bill in bills ]
+	def post(self, request, *args, **kwargs):
+		if self.is_customer():
+			num = request.POST.get('phone_no')
+			store = self.store_present(num)
+			if store:
+				return redirect('/store/detail/'+store.slug)
 
-					# stored in session and is used in the `BillListView` directly
-					# from the session
-					request.session['bill_list'] = bill_list
-
-					return redirect(reverse('bill_list'))
-
-
+		elif self.is_store():
+			num = request.POST.get('phone_no')		
+			self.request.session['cus_no'] = num
+			return redirect(reverse('billing'))
 
 
 from django.contrib.auth.forms import AuthenticationForm

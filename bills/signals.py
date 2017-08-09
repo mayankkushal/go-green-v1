@@ -17,7 +17,7 @@ def set_bill_no(sender, instance, created, **kwargs):
 			instance.bill_no = '100000'+str(instance.id)
 			
 			instance.save()
-	notify.send(instance.store, recipient=instance.customer, 
+		notify.send(instance.store, recipient=instance.customer, 
 				verb='Payment successful, you have a new bill, numbered #'+instance.bill_no,
 				url=instance.get_absolute_url(), pk=instance.pk)
 

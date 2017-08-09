@@ -33,52 +33,64 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'admin_tools',
-    'admin_tools.theming',
-    'admin_tools.menu',
-    'admin_tools.dashboard',
-    'django.contrib.admin',
-    'django.contrib.sites',
-    'registration',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.flatpages',
-    'client',
-    'widget_tweaks',
-    'phonenumber_field',
-    'qrcode',
-    'store',
-    'bills',
-    'rest_framework',
-    'rest_framework.authtoken',
-    'django_twilio',
-    'notifications',
-    'apps.search',
-    'bootstrap_pagination',
-    'location_field.apps.DefaultConfig',
-    'locator',
-    'blog',
-    'django.contrib.sitemaps',
-    'robots',
-    'django_extensions',
-    'sorl.thumbnail',
-    'djangoseo',
-    'django_social_share',
-    "social_widgets",
-    'django_instagram',
-    'guardian',
+	'admin_tools',
+	'admin_tools.theming',
+	'admin_tools.menu',
+	'admin_tools.dashboard',
+	'dal',
+	'dal_select2',
+	'django.contrib.admin',
+	'django.contrib.sites',
+	'registration',
+	'django.contrib.auth',
+	'django.contrib.contenttypes',
+	'django.contrib.sessions',
+	'django.contrib.messages',
+	'django.contrib.staticfiles',
+	'django.contrib.flatpages',
+	'client',
+	'widget_tweaks',
+	'phonenumber_field',
+	'qrcode',
+	'store',
+	'bills',
+	'rest_framework',
+	'rest_framework.authtoken',
+	'django_twilio',
+	'notifications',
+	'apps.search',
+	'bootstrap_pagination',
+	'location_field.apps.DefaultConfig',
+	'locator',
+	'blog',
+	'pos',
+	'django.contrib.sitemaps',
+	'robots',
+	'django_extensions',
+	'sorl.thumbnail',
+	'djangoseo',
+	'django_social_share',
+	"social_widgets",
+	'django_instagram',
+	'guardian',
 ]
 
 SITE_ID = 1
 
+from django.contrib.messages import constants as messages
+
+MESSAGE_TAGS = {
+	messages.DEBUG: 'alert-info',
+	messages.INFO: 'alert-info',
+	messages.SUCCESS: 'alert-success',
+	messages.WARNING: 'alert-warning',
+	messages.ERROR: 'alert-danger',
+}
 
 AUTHENTICATION_BACKENDS = ( 
-    'django.contrib.auth.backends.AllowAllUsersModelBackend',
-    'guardian.backends.ObjectPermissionBackend',
-     )
+	'django.contrib.auth.backends.AllowAllUsersModelBackend',
+	'guardian.backends.ObjectPermissionBackend',
+	 )
 
 ANONYMOUS_USER_NAME = None #django-gaurdian ANONYMOUS_USER_NAME, different from django anonymous_user
 
@@ -89,43 +101,43 @@ LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = '/accounts/register/'
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+	'django.middleware.security.SecurityMiddleware',
+	'django.contrib.sessions.middleware.SessionMiddleware',
+	'django.middleware.common.CommonMiddleware',
+	'django.middleware.csrf.CsrfViewMiddleware',
+	'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'django.contrib.messages.middleware.MessageMiddleware',
+	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'go_green_project.urls'
 
 TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR, ],
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                "django.template.context_processors.i18n",
-                'django.contrib.messages.context_processors.messages',
-            ],
-            'loaders': [
-                # insert your TEMPLATE_LOADERS here
-                'admin_tools.template_loaders.Loader',
-                'django.template.loaders.filesystem.Loader',
-                'django.template.loaders.app_directories.Loader',
-            ]
-        },
-    },
+	{
+		'BACKEND': 'django.template.backends.django.DjangoTemplates',
+		'DIRS': [TEMPLATE_DIR, ],
+		'OPTIONS': {
+			'context_processors': [
+				'django.template.context_processors.debug',
+				'django.template.context_processors.request',
+				'django.contrib.auth.context_processors.auth',
+				"django.template.context_processors.i18n",
+				'django.contrib.messages.context_processors.messages',
+			],
+			'loaders': [
+				# insert your TEMPLATE_LOADERS here
+				'admin_tools.template_loaders.Loader',
+				'django.template.loaders.filesystem.Loader',
+				'django.template.loaders.app_directories.Loader',
+			]
+		},
+	},
 ]
 
 WSGI_APPLICATION = 'go_green_project.wsgi.application'
 
 SEO_MODELS = [
-    'store.models.store',
+	'store.models.store',
 ]
 
 
@@ -140,20 +152,20 @@ NO = '+16154120909'
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
 REST_FRAMEWORK = { 
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    )
+	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework.authentication.TokenAuthentication',
+		'rest_framework.authentication.SessionAuthentication',
+	),
+	'DEFAULT_PERMISSION_CLASSES': (
+		'rest_framework.permissions.IsAuthenticated',
+	)
 }
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+	'default': {
+		'ENGINE': 'django.db.backends.sqlite3',
+		'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+	}
 }
 
 # Notifications settings
@@ -165,18 +177,18 @@ NOTIFICATIONS_SOFT_DELETE=True
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+	{
+		'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+	},
+	{
+		'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+	},
 ]
 
 
@@ -231,6 +243,6 @@ ALLOWED_HOSTS = ['*']
 DEBUG = False
 
 try:
-    from .local_settings import *
+	from .local_settings import *
 except ImportError:
-    pass
+	pass

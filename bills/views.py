@@ -68,16 +68,17 @@ class BillListView(ListView):
 		context = super(BillListView, self).get_context_data(**kwargs)
 		bill_filter_qs = []
 		bill_filter = []
+		customer_no = self.request.user.profile.phone_no.national_number
 
 		if Profile.objects.filter(user=self.request.user).exists():
-			bill_list = Bill.objects.filter(customer=self.request.user)
+			bill_list = Bill.objects.filter(customer_no=customer_no)
 			bill_filter = BillFilter(self.request.GET, queryset=bill_list)
 			
 			bill_filter.dateTimeOptions['startDate'] = self.request.user.date_joined.date().strftime("%m-%d-%Y")
 			bill_filter.dateTimeOptions['endDate'] = datetime.date.today().strftime("%m-%d-%Y")
 			if bill_list:
-				context['total_min'] = int(Bill.objects.filter(customer=self.request.user).aggregate(Min('total'))['total__min'])
-				context['total_max'] = int(Bill.objects.filter(customer=self.request.user).aggregate(Max('total'))['total__max'])
+				context['total_min'] = int(Bill.objects.filter(customer_no=customer_no).aggregate(Min('total'))['total__min'])
+				context['total_max'] = int(Bill.objects.filter(customer_no=customer_no).aggregate(Max('total'))['total__max'])
 
 			bill_filter_qs = BillFilter(self.request.GET, queryset=bill_list).qs
 
