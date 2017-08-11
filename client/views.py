@@ -284,7 +284,7 @@ class QrRedirect(FormView):
 		return True if Profile.objects.filter(user=self.request.user).exists() else False
 
 	def is_store(self):
-		return True if Store.objects.filter(store=self.request.user).exists() else False
+		return True if Store.objects.filter(user=self.request.user).exists() else False
 
 	def store_present(self, slug):
 		"""

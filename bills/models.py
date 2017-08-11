@@ -108,7 +108,6 @@ class Item(models.Model):
 		tax_amount = decimal.Decimal(0.0)
 		if self.product.tax is not 0:
 			tax_amount = (self.price*(self.tax/100))*self.quantity
-			print(tax_amount)
 		return tax_amount
 
 	def update_quantity(self):

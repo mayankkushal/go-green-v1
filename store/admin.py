@@ -17,17 +17,32 @@ class FranchiseAdmin(admin.ModelAdmin):
 	'''
 		Admin View for Franchise
 	'''
-	pass
+	list_display = ('name', 'city', 'state', 'category')
+	list_filter = ('city', 'state')
+	fieldsets = (
+		('Details', {
+			'fields': ('user',('name', 'phone_no'),'description', 'picture')
+		}),
+		('Address', {
+			'fields': ('street', ('city', 'state', 'postal'), 'location')
+		}),
+		('Policies', {
+			'fields': (('return_days'), 'category')
+		}),
+		('Optional', {
+			'fields': ('website', 'hours')
+		}),
+	)
 
 admin.site.register(Franchise, FranchiseAdmin)
 
 class StoreAdmin(GuardedModelAdmin):
 	list_display = ('name', 'city', 'state', 'category')
 	list_filter = ('city', 'state')
-	raw_id_fields = ('store','category')
+	raw_id_fields = ('user','category')
 	fieldsets = (
 		('Details', {
-			'fields': ('store',('name', 'phone_no'),'description', 'picture')
+			'fields': ('user',('name', 'phone_no'),'description', 'picture')
 		}),
 		('Address', {
 			'fields': ('street', ('city', 'state', 'postal'), 'location')

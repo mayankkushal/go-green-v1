@@ -3,8 +3,8 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import TemplateView
 
 
-from .forms import StoreForm
-from .models import Store
+from .forms import StoreForm, ProductForm
+from .models import Store, Product
 # Create your views here.
 
 class StoreCreate(CreateView):
@@ -19,3 +19,9 @@ class StoreUpdate(UpdateView):
 
 class StoreLocator(TemplateView):
 	template_name = 'store/locator.html'
+
+
+class ProductCreate(CreateView):
+	form_class = ProductForm
+	model = Product
+	success_url = "/"

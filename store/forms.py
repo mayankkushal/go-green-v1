@@ -1,7 +1,7 @@
 from django import forms
 from phonenumber_field.widgets import PhoneNumberInternationalFallbackWidget
 
-from .models import Store
+from .models import Store, Product, Franchise
 
 class StoreForm(forms.ModelForm):
 	class Meta:
@@ -11,3 +11,9 @@ class StoreForm(forms.ModelForm):
 		widgets = {
 			'phone_no' : PhoneNumberInternationalFallbackWidget
 		}
+
+class ProductForm(forms.ModelForm):
+	class Meta:
+		model = Product
+		fields = ('__all__')
+

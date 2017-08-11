@@ -23,6 +23,7 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 
+
 class BaseDetails(models.Model):
 	"""
 	Base abstract model contains all the feilds for details of franchise and stores
@@ -56,13 +57,11 @@ class Franchise(BaseDetails):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='franchise')
 	category = models.ForeignKey(Category, related_name='franchise', null=True)
 	
-
-	class Meta:
-		pass
-
+	def __str__(self):
+		return self.name
 
 class Store(BaseDetails):
-	store = models.OneToOneField(User, on_delete=models.CASCADE, related_name='store')
+	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='store')
 
 	stand_alone = models.BooleanField(_("Is a stand alone store?"), default=True)
 	franchise = models.ForeignKey(Franchise, related_name='store', null=True, blank=True)
@@ -78,7 +77,7 @@ class Store(BaseDetails):
 		if not self.id: 
 			self.slug = slugify(self.name)
 			self.name = self.name.title()
-			t = Token.objects.create(user=self.store)
+			t = Token.objects.create(user=self.user)
 			self.token = t.key
 		super(Store, self).save(*args, **kwargs)
 
@@ -128,8 +127,8 @@ class Product(models.Model):
 
 	type_of_product = models.CharField( max_length=1, choices=PRODUCT_CHOICES,
 				help_text="Whether the product belongs to a individual store or a Franchise?")
-	store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product', null=True)
-	store_chain = models.ForeignKey(Franchise, verbose_name="Franchise", related_name='franchise_product', null=True)
+	store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product', null=True, blank=True)
+	store_chain = models.ForeignKey(Franchise, verbose_name="Franchise", related_name='franchise_product', null=True, blank=True)
 	name = models.CharField(_('Name'), max_length=256)
 	sku = models.CharField(_('SKU'), max_length=100)
 	price = models.DecimalField(_('Price'), max_digits=10, decimal_places=2)
@@ -141,3 +140,5 @@ class Product(models.Model):
 
 	def __str__(self):
 		return self.name
+
+

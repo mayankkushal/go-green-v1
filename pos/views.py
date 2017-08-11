@@ -12,7 +12,7 @@ from dal import autocomplete
 
 from bills.models import Bill, Item
 from client.models import Profile
-from store.models import Store, Product
+from store.models import *
 from .forms import BillForm, ItemFormSet, CustomerPhoneNumberForm, ItemReturnFormSet, BillReturnForm
 # Create your views here.
 
@@ -49,7 +49,7 @@ class CreateBill(CreateView):
 			profile = Profile.objects.get(phone_no=form.data['customer_no'])
 			form.instance.customer_no = form.data['customer_no']
 			form.instance.customer = User.objects.get(profile=profile)
-			store = Store.objects.get(store=self.request.user)
+			store = Store.objects.get(user=self.request.user)
 			form.instance.store = store
 			self.object = form.save()
 		
@@ -67,7 +67,7 @@ class CreateBill(CreateView):
 		"""
 		return reverse_lazy('bill_detail', kwargs={'pk': self.object.pk})
 
-
+from itertools import chain
 class ProductAutocomplete(autocomplete.Select2QuerySetView):
 	"""
 		Autocompletes the product field in the billing page
@@ -77,8 +77,13 @@ class ProductAutocomplete(autocomplete.Select2QuerySetView):
 		if not self.request.user.is_authenticated():
 			return Product.objects.none()
 
-		store = Store.objects.get(store=self.request.user)
-		qs = Product.objects.filter(store=store)
+		store = Store.objects.get(user=self.request.user)
+		try:
+			franchise = store.franchise
+		except:
+			franchise = None
+		qs = list(chain(Product.objects.filter(store=store), Product.objects.filter(store_chain=franchise)))
+		
 		if self.q:
 			qs = qs.filter(name__istartswith=self.q)
 
