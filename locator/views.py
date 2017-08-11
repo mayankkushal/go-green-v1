@@ -15,12 +15,14 @@ def locations(request):
     formatted_locations = []
     count = 1
     for location in locations:
+        category = location.category.name if location.stand_alone else location.franchise.category.name
+        
         formatted_locations.append({
             'id': str(count),
             'name': location.name,
             'lat': location.get_lat,
             'lng': location.get_long,
-            'category':location.category.name,
+            'category':category,
             'address': location.street,
             'address2': '',
             'city': location.city,

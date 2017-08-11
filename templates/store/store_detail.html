@@ -2,41 +2,76 @@
 {% load qr_tags %}
 {% load staticfiles %}
 {% block title_block %}Store | {{ store.name }}{% endblock %}
-{% block content %}
-	<div class="store-pro-top">
-		{% if store.picture  %}
-			<img src="{{ store.picture.url }}" class="img img-responsive img-circle store-pro-pic">
-		{% else %}
-			<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
-		{% endif %}
-		<div class="row">
-			<div class="col-sm-6">
-				<h2>{{ store.name }}</h2><a href="{% url "auth_logout" %}">(Logout)</a>
+{% block content_wrapper %}
+	<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+		
+		<div class="panel panel-success">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{ store.name }}</h3>
 			</div>
-			<div class="col-sm-6">
-				<h4><i class="fa fa-phone"></i><a href="tel:{{ store.phone_no }}"> {{ store.phone_no }}</a></h4>
+			<div class="panel-body">
+				<div class="row">
+					<div class="col-md-3 col-lg-3 " align="center">
+						{% if store.picture  %}
+							<img src="{{ store.picture.url }}" class="img img-responsive img-circle store-pro-pic">
+						{% else %}
+							<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
+						{% endif %}
+					</div>
+					{{ store.category.name }}
+					<div class=" col-md-9 col-lg-9 ">
+						<table class="table table-user-information">
+							<tbody>
+								<tr>
+									<td>About</td>
+									<td>{{ store.description }}</a></td>
+								</tr>
+								<tr>
+									<td>Date Joined:</td>
+									<td>{{ store.user.date_joined.date }}</td>
+								</tr>
+								<tr>
+									<td>Address</td>
+									<td>{{ store.street }}, {{ store.city }}, <br>
+									{{ store.state }}, {{ store.postal }}</td>
+								</tr>
+								<tr>
+									<td>Email</td>
+									<td><a href="{{ store.user.email }}">{{ store.user.email }}</a></td>
+								</tr>
+								<tr>
+									<td>Phone Number</td>
+									<td><a href="tel:{{ store.phone_no.as_national }}">{{ store.phone_no.as_national }}
+									</td>
+								</tr>
+								{% ifequal request.user store.user %}
+									<tr>
+										<td>Token</td>
+										<td>{{ store.token }}</a></td>
+									</tr>
+								{% endifequal %}
+							</tbody>
+						</table>
+						
+					</div>
+					<div align="center">
+						<img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl={{ store.phone_no.national_number }}" />
+					</div>
+				</div>
 			</div>
+			<div class="panel-footer">
+				<div>
+					<a href="{% url "change_password" %}"class="btn btn-sm btn-primary" title="Change Password"><i class="fa fa-key"></i> Change Password</a>
+					<span class="pull-right">
+						
+						<a href="#" title="Edit Profile" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Inventory</a>
+						
+						<a href="{% url "auth_logout" %}?next={% url "index" %}" class="btn btn-sm btn-danger" title="Logout"><i class="fa fa-sign-out"> Logout</i></a>
+					</span>
+				</div>
+			</div>
+			
 		</div>
-	</div>
-	<hr>
-	<div class="col-sm-4 card-left">
-		<img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl={{ store.phone_no.national_number }}" />
-	</div>
-	<div class="col-sm-8 card-right">
-		<h5>About</h5>
-		<p>{{ store.description }}</p>
-		{% ifequal request.user store.store %}
-			<p>API key: {{ store.token }}</p>
-		{% endifequal %}
-	</div>
-	<div class="col-sm-8 card-right">
-		<div id="map">
-		</div>
-	</div>
-	<div class="col-sm-4 card-left">
-		<h4>Address</h4>
-		<p>{{ store.street }}, {{ store.city }}, <br>
-		{{ store.state }}, {{ store.postal }}</p>
 	</div>
 	<script>
 	function initMap() {
