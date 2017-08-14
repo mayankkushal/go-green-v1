@@ -55,7 +55,8 @@ class CreateBill(CreateView):
 		
 		if items.is_valid():
 			for item in items:
-				item.instance.product = Product.objects.get(pk=item.cleaned_data['product_number'])
+				print(item.cleaned_data['product_pk'])
+				item.instance.product = Product.objects.get(pk=item.cleaned_data['product_pk'])
 				item.instance.bill = self.object
 				item.save()
 
@@ -67,7 +68,7 @@ class CreateBill(CreateView):
 		"""
 		return reverse_lazy('bill_detail', kwargs={'pk': self.object.pk})
 
-from itertools import chain
+
 class ProductAutocomplete(autocomplete.Select2QuerySetView):
 	"""
 		Autocompletes the product field in the billing page
@@ -82,12 +83,30 @@ class ProductAutocomplete(autocomplete.Select2QuerySetView):
 			franchise = store.franchise
 		except:
 			franchise = None
-		qs = list(chain(Product.objects.filter(store=store), Product.objects.filter(store_chain=franchise)))
+
+		qs = Product.objects.filter(store_chain=franchise) if franchise else Product.objects.filter(store=store)
 		
 		if self.q:
 			qs = qs.filter(name__istartswith=self.q)
 
 		return qs
+
+
+class SKUAutocomplete(autocomplete.Select2ListView):
+	def get_list(self):
+
+		store = Store.objects.get(user=self.request.user)
+		try:
+			franchise = store.franchise
+		except:
+			franchise = None
+		if franchise:
+			qs =  Product.objects.filter(store_chain=franchise).values_list('sku', flat=True)
+		else: 
+			qs = Product.objects.filter(store=store).values_list('sku', flat=True)
+
+		return qs
+
 
 
 def product_detail(request):
@@ -99,6 +118,8 @@ def product_detail(request):
 		try:
 			product = Product.objects.get(pk=request.GET.get('product_pk'))
 		except Product.DoesNotExist:
+			product = Product.objects.get(sku=request.GET.get('product_pk'))
+		except Product.DoesNotExist:
 			product = None
 
 		if product:
@@ -106,6 +127,8 @@ def product_detail(request):
 				'sku':product.sku,
 				'price':product.price,
 				'tax':product.tax,
+				'num':product.pk,
+				'name':product.name,
 			}
 			return HttpResponse(json.dumps(data), content_type='application/json')
 		else:

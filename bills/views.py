@@ -65,6 +65,10 @@ class BillListView(ListView):
 	paginate_by = 15
 	
 	def get_context_data(self, **kwargs):
+		"""
+		Returns the bills queryset if the the profile is available.
+		Adds a filter, and passes all the required data for jquery plugin.
+		"""
 		context = super(BillListView, self).get_context_data(**kwargs)
 		bill_filter_qs = []
 		bill_filter = []
@@ -81,12 +85,6 @@ class BillListView(ListView):
 				context['total_max'] = int(Bill.objects.filter(customer_no=customer_no).aggregate(Max('total'))['total__max'])
 
 			bill_filter_qs = BillFilter(self.request.GET, queryset=bill_list).qs
-
-		elif Store.objects.filter(store=self.request.user):
-			bills = self.request.session['bill_list']
-			if bills:
-				for pk in bills:
-					bill_filter_qs.append(Bill.objects.get(pk=pk))
 			
 		paginator = Paginator(bill_filter_qs, self.paginate_by)
 

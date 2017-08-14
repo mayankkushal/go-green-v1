@@ -64,9 +64,12 @@ function b_total() {
         var no = all[1];
         var base = all[0];
         var taxId = "#" + base + "-" + no + "-tax";
+        var deleteId = "#" + base + "-" + no + "-DELETE";
 
-        tax += parseFloat($(this).val()) * (parseFloat($(taxId).val()) / 100);
-        sale += parseFloat($(this).val());
+        if (!$(deleteId).is(":checked")) {
+            tax += parseFloat($(this).val()) * (parseFloat($(taxId).val()) / 100);
+            sale += parseFloat($(this).val());
+        }
     });
     var tot = tax + sale;
     return {
@@ -178,21 +181,21 @@ $(function() {
 
     $('#billingForm').submit(function(e, submit) {
         if (!submit) e.preventDefault();
-        $('#billingModal').modal('show'); 
-        $('#payment').html($('#total_amount').text());
-    });
-    
-    $('#returnForm').submit(function(e, submit) {
-        if (!submit) e.preventDefault();
         $('#billingModal').modal('show');
         $('#payment').html($('#total_amount').text());
+    });
+
+    $('#returnForm').submit(function(e, submit) {
+        if (!submit) e.preventDefault();
+        cal = b_total();
+        $('#billingModal').modal('show');
+        $('#return-amount').html($('#id_total').val() - cal.tot);
     });
 
     $('#proceedBtn').click(function() { // Submits the form again as it was prevented earlier
         $('#billingForm').trigger('submit', [true]);
         $('#returnForm').trigger('submit', [true]);
     });
-
 });
 
 //blog comment 
@@ -248,7 +251,7 @@ $.get(checkURL, {
     }
 });
 
-function productDetail(value, id) {
+function productDetail(value, id, obj) {
     var all = id.split("-");
     var no = all[1];
     var base = all[0];
@@ -263,6 +266,9 @@ function productDetail(value, id) {
             success: function(data) {
                 var skuId = "#" + base + "-" + no + "-sku";
                 var priceId = "#" + base + "-" + no + "-price";
+                var selectSku = "#select2-" + base + "-" + no + "-sku_number-container";
+                var selectProduct = "#select2-" + base + "-" + no + "-product_number-container";
+                var product_val = "#" + base + "-" + no + "-product_pk";
                 var taxId = "#" + base + "-" + no + "-tax";
                 var qtyId = "#" + base + "-" + no + "-quantity";
                 var totalId = "#" + base + "-" + no + "-total";
@@ -270,6 +276,15 @@ function productDetail(value, id) {
                 $(skuId).val(data.sku);
                 $(priceId).val(data.price);
                 $(taxId).val(data.tax);
+                $(product_val).val(data.num);
+                
+                $obj = $(obj);
+                $sku = $obj.closest('tr').children('td:eq(1)');
+                $sku.find('#select2-id_items-0-sku_number-container').text(data.sku)
+
+                $prd = $obj.closest('tr').children('td:eq(0)');
+                $prd.find('#select2-id_items-0-product_number-container').text(data.name);
+                
                 if ($(qtyId).val() > 0) {
                     $(totalId).val($(priceId).val() * $(qtyId).val());
                 } else {

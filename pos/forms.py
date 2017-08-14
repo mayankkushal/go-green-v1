@@ -32,12 +32,21 @@ class BillForm(forms.ModelForm):
 
 
 class ItemForm(forms.ModelForm):
-	product_number = forms.CharField(label='Product', widget=autocomplete.Select2(
+
+	product_number = forms.CharField(label='Product',required=False, widget=autocomplete.Select2(
 				url='product_autocomplete',
 				attrs={
 					# Set some placeholder
 					'data-placeholder': "Product",
-					'onchange':"productDetail(value,id)"
+					'onchange':"productDetail(value,id, this)"
+					},
+				),)
+	sku_number = forms.CharField(label='SKU',required=False, widget=autocomplete.ListSelect2(
+				url='sku_autocomplete',
+				attrs={
+					# Set some placeholder
+					'data-placeholder': "SKU",
+					'onchange':"productDetail(value,id, this)"
 					},
 				),)
 	tax = forms.DecimalField(label="Tax", widget=forms.NumberInput(attrs={'readonly':'readonly'}))
@@ -50,10 +59,14 @@ class ItemForm(forms.ModelForm):
 	quantity = forms.IntegerField(min_value=1,
 					widget=forms.NumberInput(attrs={'oninput':"calculateTotal(this, value)"})
 				)
+	product_pk = forms.IntegerField(widget=forms.HiddenInput())
 	class Meta:
 		model = Item
-		fields = ['product_number', 'sku', 'quantity']
-		exclude = ('bill','product', 'price', 'tax', 'total')
+		fields = ['product_number', 'sku_number','sku', 'quantity']
+		#exclude = ('bill','product', 'price','sku' 'tax', 'total')
+		widgets = {
+			'sku': forms.HiddenInput(),
+		}
 
 
 ItemFormSet = inlineformset_factory(Bill, Item, form=ItemForm, extra=1, can_delete=True)

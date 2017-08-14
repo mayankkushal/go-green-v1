@@ -68,28 +68,7 @@
         <h4 class="modal-title">Confirm</h4>
       </div>
       <div class="modal-body">
-        <table class="table ">
-        	<tr>
-        		<td align="right">Taxable sale Amount (&#8377;):</td>
-        		<td id="sale_amount" align="right"></td>
-        	</tr>
-        	<tr>
-        		<td align="right">Tax (&#8377;):</td>
-        		<td id="tax_amount" align="right"></td>
-        	</tr>
-        	<tr>
-        		<td align="right">Total Amount (&#8377;):</td>
-        		<td id="total_amount" align="right"></td>
-        	</tr>
-        	<tr>
-        		<td align="right">Amount to Pay (&#8377;):</td>
-        		<td id="rounded_amount" align="right"></td>
-        	</tr>
-        </table>
-        <div>
-        	<input type="number" name="got" id="got" autofocus class="form-control" placeholder="Customer Paid (&#8377;)">
-        	<p>Return (&#8377;): <strong id="amount_return"></strong></p>
-        </div>
+      	<p>The money to be returned is Rs.<strong id="return-amount"></strong> (Including taxes)</p>     
       </div>
       <div class="modal-footer">
       	<button type="button" class="btn btn-success pull-left" id="proceedBtn">Proceed</button>
