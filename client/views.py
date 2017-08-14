@@ -5,12 +5,14 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.contrib import messages
+from django.conf import settings
 
 import json
 import csv
 import random
 import re
 import datetime
+import twitter
  
 from .models import Profile, SlideShowImage, Banner, Newsletter
 from .forms import ProfileUpdateForm, OTPVerificationForm
@@ -31,6 +33,18 @@ from django.contrib.auth.forms import PasswordChangeForm
 class HomePage(TemplateView):
 	template_name='client/index.html'
 
+	def get_tweets(self):
+		"""
+		returns twitter feed with settings as described below, contains all related twitter settings
+		"""
+		api = twitter.Api(consumer_key=settings.TWITTER_FEED_CONSUMER_PUBLIC_KEY,
+						  consumer_secret=settings.TWITTER_FEED_CONSUMER_SECRET,
+						  access_token_key=settings.TWITTER_FEED_OPEN_AUTH_TOKEN,
+						  access_token_secret=settings.TWITTER_FEED_OPEN_AUTH_SECRET
+						  )
+
+		return api.GetUserTimeline(screen_name='mob_bills', exclude_replies=True, include_rts=False) 
+
 	def get_context_data(self, **kwargs):
 		context = super(HomePage, self).get_context_data(**kwargs)
 		banner = Banner.objects.get(name='HomepageSlider')
@@ -39,7 +53,8 @@ class HomePage(TemplateView):
 
 		article_list = Article.objects.filter().order_by('-date_created')[:6]
 		context['article_list'] = article_list
-
+		context['tweets'] = self.get_tweets()
+		
 		return context
 
 

@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
+from decouple import config
 #from django.contrib.auth.backends import AllowAllUsersModelBackend
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -23,7 +24,7 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'c6=xb$gl7+np)bn)5--@ft$_@jm@!5t88)lyha*@*2lsg4s=mk'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -92,6 +93,14 @@ AUTHENTICATION_BACKENDS = (
 	'guardian.backends.ObjectPermissionBackend',
 	 )
 
+
+TWITTER_FEED_CONSUMER_PUBLIC_KEY = config('TWITTER_FEED_CONSUMER_PUBLIC_KEY')
+TWITTER_FEED_CONSUMER_SECRET = config('TWITTER_FEED_CONSUMER_SECRET')
+TWITTER_FEED_OPEN_AUTH_TOKEN = config('TWITTER_FEED_OPEN_AUTH_TOKEN')
+TWITTER_FEED_OPEN_AUTH_SECRET = config('TWITTER_FEED_OPEN_AUTH_SECRET')
+
+
+
 ANONYMOUS_USER_NAME = None #django-gaurdian ANONYMOUS_USER_NAME, different from django anonymous_user
 
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; 
@@ -143,10 +152,10 @@ SEO_MODELS = [
 
 #twilio
 
-TWILIO_ACCOUNT_SID = 'AC1a2a32c3f81f0d75a31979a1e576443b'
-TWILIO_AUTH_TOKEN = '2c93ecfb12004e6a117b67044d16ea47'
-TWILIO_DEFAULT_CALLERID = 'MKING'
-NO = '+16154120909'
+TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
+TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
+TWILIO_DEFAULT_CALLERID = config("TWILIO_DEFAULT_CALLERID")
+NO = config('NO')
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases

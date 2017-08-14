@@ -2,6 +2,7 @@
 {% load staticfiles %}
 {% load social_widgets %}
 {% load instagram_client %}
+
 {% block content_wrapper %}
   <div class="owl-carousel owl-theme" id="main-carousel">
     {% for image in slider_image %}
@@ -46,9 +47,23 @@
           {% endfor %}
         </div>
       </div>
+      {% load twitter_tags %}
       <div class="col-md-4 widget">
         <h4 align="center">Twitter</h4>
-        <p align="center">Miss us? We are coming soon!</p>
+        <ul>
+        {% for tweet in tweets %}
+        <li>
+            <div class="tweet-meta">
+                <a href="https://www.twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}" target="_blank">
+                    <img src="{{ tweet.user.profile_image_url }}" width="32" height="32" />
+                    <h2>{{ tweet.user.name }}<br /><span>@{{ tweet.user.screen_name }} &middot; {{ tweet.created_at|twitter_date }}</span></h2>
+                </a>
+            </div>
+            <p>{{ tweet|urlize_tweet_text|safe }}</p>
+        </li>
+        {% endfor %}
+
+    </ul>
       </div>
     </div>
   </div>
