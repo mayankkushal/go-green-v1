@@ -10,6 +10,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Max, Min
 from django.utils.decorators import method_decorator
+from easy_pdf.views import PDFTemplateResponseMixin
+
 
 import json
 import datetime
@@ -157,3 +159,8 @@ def check_notification(request):
 		return HttpResponse(json.dumps(bill_detail), content_type='application/json')
 	return HttpResponse("All notified")
 	
+
+class BillPDFView(PDFTemplateResponseMixin, DetailView):
+	model = Bill
+	template_name = 'bills/bill_pdf.html'
+	context_object_name = 'bill'

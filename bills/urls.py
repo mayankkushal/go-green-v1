@@ -7,7 +7,8 @@ urlpatterns = [
 	url(r'^api/(?P<bill_no>[0-9]+)$', views.BillDetail.as_view()),
 	url(r'^list$', views.BillListView.as_view(), name='bill_list'),
 	url(r'^detail/(?P<pk>[\w\-]+)$', views.BillDetailView.as_view(), name="bill_detail"),
-	url(r'^check_notified', views.check_notification)
+	url(r'^check_notified', views.check_notification),
+	url(r'^pdf/(?P<pk>[\w\-]+)', views.BillPDFView.as_view(), name="bill_pdf")
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns) 

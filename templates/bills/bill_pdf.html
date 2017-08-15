@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Bill #{{ bill.bill_no }}</title>
+	</head>
+	<body>
+		<h1><a href="http://www.mobbills.com">MobBills</a></h1>
+		<h1 align="center">Invoice</h1>
+		<div class="invoice-title">
+			<h3 align="right">Order # {{ bill.bill_no }}</h3>
+		</div>
+		<hr>
+		<div class="col-xs-6 text-right">
+			<address>
+				<strong>Store:</strong><br>
+				{{ bill.store.name }}<br>
+				{{ bill.store.street }}<br>
+				{{ bill.store.city }}<br>
+				{{ bill.store.state }} {{ bill.store.postal }}
+			</address>
+		</div>
+		
+		<div class="col-xs-6 text-right">
+			<p align="right"><strong>Order Date:</strong><br>
+			{{ bill.date.date }}</p><br><br>
+		</div>
+		<table>
+			<thead style="background-color:#76FF03">
+				<tr>
+					<td><strong>Item</strong></td>
+					<td ><strong>Price</strong></td>
+					<td><strong>Quantity</strong></td>
+					<td><strong>Total</strong></td>
+				</tr>
+			</thead>
+			<tbody>
+				{% for item in bill.items.all %}
+					<tr>
+						<td>{{ item.product.name }}</td>
+						<td>{{ item.price }}</td>
+						<td>{{ item.quantity }}</td>
+						<td>{{ item.total }}</td>
+					</tr>
+				{% endfor %}
+				<tr></tr>
+				<tr></tr>
+				<tr></tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td><strong>Sale Value</strong></td>
+					<td>{{ bill.sale_value }}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td><strong>Tax amount</strong></td>
+					<td>{{ bill.tax_amount }}</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td><strong>Total</strong></td>
+					<td>{{ bill.total }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>
