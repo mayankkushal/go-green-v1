@@ -15,5 +15,5 @@ class StoreForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
 	class Meta:
 		model = Product
-		fields = ('__all__')
+		exclude = ('type_of_product', 'store', 'store_chain')
 

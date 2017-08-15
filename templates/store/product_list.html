@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title_block %}
+	Inventory
+{% endblock title_block %}
+{% block content_wrapper %}
+	<div class="container min-height">
+		<h1 align="center">Inventory</h1>
+		<table class="table table-responsive table-bordered">
+			<tr class="green">
+				<th>Product</th>
+				<th>Quantity</th>
+				<th>Delete</th>
+			</tr>
+			{% for product in product_list %}
+				<tr>
+					<td class="product-list" onclick="location.href='{{ product.get_absolute_url }}'">
+						{{ product.name }}
+					</td>
+					<td onclick="location.href='{{ product.get_absolute_url }}'" style="background-color:white">
+						{{ product.quantity }}
+					</td>
+					<td align="left" style="background-color:white"><a href="{% url "store:delete_product" product.pk %}" class="btn btn-warning">Delete</a></td>
+				</tr>
+			{% endfor %}
+		</table>
+		<a href="{% url "store:add_product" %}" class="btn btn-success">Add Product</a>
+		{% include 'extra/pagination.html' with page_obj=product_list %}
+	</div>
+{% endblock content_wrapper %}

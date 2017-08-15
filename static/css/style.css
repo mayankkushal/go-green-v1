@@ -21,7 +21,7 @@ li{
 	font-size: 1.2em;
 }
 .min-height{
-	min-height: 80vh;
+	min-height: 77vh;
 }
 .btn-success{
 	background-color: #76FF03 !important;
@@ -1029,4 +1029,17 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 	background-color: white;
 	margin: auto;
 	padding: 15px;
+}
+.product-list{
+	background-color: white;
+	padding: 10px;
+	border-radius: 3px;
+}
+.product-list:hover{
+	background-color: #d9f9bd;
+	cursor:pointer
+}
+.green{
+	background-color: #76FF03;
+	color: grey;
 }

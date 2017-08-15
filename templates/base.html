@@ -11,7 +11,7 @@
     
     {% get_metadata %}
     
-    <title>{%block title_block %}{%endblock%}- GoGreen POS - All your bills at one place</title>
+    <title>{%block title_block %}{%endblock%}- MobBills POS - All your bills at one place</title>
     
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Titillium+Web:400,200,300,700,600' rel='stylesheet' type='text/css'>
@@ -62,21 +62,27 @@
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
+              
               {% if user.is_active and user.is_authenticated and user.profile %}
                 <li class="hidden-xs"><a href="{% url "bill_list" %}"><i class="fa fa-file-text" aria-hidden="true"></i> Bills</a></li>
                 <li class="hidden-xs"><a href="{{ user.profile.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
                 Profile</a></li>
                 <li class="hidden-xs"><a href="{% url "notify" %}"><i class="fa fa-bell" aria-hidden="true"></i>{% live_notify_badge classes="badge" %}</a></li>
               {% endif %}
+              
               {% if user.is_authenticated and user.store %}
                 <li><a href="{% url "qr_scanner" %}"><i class="fa fa-qrcode" aria-hidden="true"></i> Scanner</a></li>
                 <li><a href="{{ user.store.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
                 Profile</a></li>
+                <li><a href="{% url "store:product_list" %}"><i class="fa fa-truck" aria-hidden="true"></i> Inventory</a></li>
               {% endif %}
+              
               <li><a href="{% url "locator:locator" %}"><i class="fa fa-map-marker"></i></span> Find a Store</a></li>
+              
               {% if not user.is_authenticated%}
                 <li><a href="{% url "registration_register" %}"><i class="fa fa-user-circle"></i> Login/Register</a></li>
               {% endif %}
+            
             </ul>
           </div>
         </div>

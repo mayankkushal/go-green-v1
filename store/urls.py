@@ -19,6 +19,11 @@ urlpatterns = [
 		context_object_name='store_list',
 		model=Store
 		), name="store_list"),
+	
 	url(r'^locator', views.StoreLocator.as_view(), name='locator'),
+	
 	url(r'^add_product', views.ProductCreate.as_view(), name="add_product"),
+	url(r'^update_product/(?P<pk>[\w\-]+)/', views.ProductUpdate.as_view(), name="update_product"),
+	url(r'^product_list', views.ProductListView.as_view(), name='product_list'),
+	url(r'^(?P<pk>[\w\-]+)/delete', views.ProductDelete.as_view(), name='delete_product')
 ]
