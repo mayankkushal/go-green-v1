@@ -10,7 +10,11 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="invoice-title">
-                    <h2>Invoice</h2><h3 class="pull-right">Order # {{ bill.bill_no }}</h3>
+                    <h2>Invoice</h2>
+                    <h3 class="pull-right">Order # {{ bill.bill_no }}</h3><br>
+                    {% if user.store and bill.return_valid %}
+                        <a href="{% url "return_bill" bill.pk %}" class="btn btn-success">Return</a>
+                    {% endif %}
                 </div>
                 <hr>
                 <div class="row">
@@ -107,7 +111,7 @@
             {% post_to_facebook bill.get_absolute_url '<i class="fa fa-facebook-official fa-3x" style="color:#3b5998"></i>' %}
             {% post_to_twitter "New bill: {{bill.store.name}}. Check it out!" bill '<i class="fa fa-twitter fa-3x" style="color:#1da1f2"></i>' %}
             {% post_to_gplus bill '<i class="fa fa-google-plus-official fa-3x" style="color:#dd4b39"></i>' %}
-            <a href="{% url "bill_pdf" bill.pk %}" target="_blank"><i class="fa fa-file-pdf-o fa-3x" style="color:#dd4b39"></i>
+            <a href="{% url "bill_pdf" bill.pk %}" target="_blank"><i class="fa fa-file-pdf-o fa-3x" style="color:#dd4b39"></i></a>
         </div>
     </div>
 {% endblock %}

@@ -4,9 +4,10 @@
     Qr Code Scanner
 {% endblock title_block %}
 {% block content_wrapper %}
+<h1 align="center">Returns</h1>
     <div class="container" style="padding: 20px;">
         <div class="well">
-            <form action="/qr_redirect" method="post" class="form">
+            <form action="/qr_redirect_return" method="post" class="form">
                 {% csrf_token %}
                 <div class="row">
                     <div class="col-lg-11 col-xs-9">
@@ -89,5 +90,5 @@
 <script type="text/javascript" src="{% static "js/qrcodelib.js" %}"></script>
 <script type="text/javascript" src="{% static "js/webcodecamjs.js" %}"></script>
 <script type="text/javascript" src="{% static "js/mainqr.js" %}"></script>
-<script type="text/javascript">var redirectUrl = '/qr_redirect?val='</script>
+<script type="text/javascript">var redirectUrl = '/qr_redirect_return?val='</script>
 {% endblock %}

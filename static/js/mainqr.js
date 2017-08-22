@@ -53,7 +53,7 @@
 			});
 			scannedImg.src = res.imgData;
 			scannedQR[txt] = res.format + ": " + res.code;
-			   window.location.href = '/qr_redirect?val='+res.code; 
+			   window.location.href = redirectUrl + res.code; 
 		},
 		getDevicesError: function(error) {
 			var p, message = "Error detected with the following parameters:\n";

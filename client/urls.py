@@ -21,10 +21,12 @@ urlpatterns = [
 	
 	url(r'^login_redirect', views.profile_login, name="profile_login"),
 	url(r'^password_change/$', views.change_password, name='change_password'),
-		
-	url(r'^qr_scanner', views.qr_scanner, name="qr_scanner"),
-	url(r'^qr_redirect', views.QrRedirect.as_view(), name='qr_redirect'),
 	
+	url(r'^qr_scanner_return', views.QrScannerReturn.as_view(), name="qr_scanner_return"),
+	url(r'^qr_scanner', views.qr_scanner, name="qr_scanner"),
+	url(r'^qr_redirect_return', views.QRRedirectReturn.as_view(), name='qr_redirect_return'),
+	url(r'^qr_redirect', views.QrRedirect.as_view(), name='qr_redirect'),
+
 	url(r'^notify', views.NotificationView.as_view(), name='notify'),
 	url(r'^mark_read', views.mark_read),
 		

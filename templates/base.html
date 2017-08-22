@@ -71,7 +71,8 @@
               {% endif %}
               
               {% if user.is_authenticated and user.store %}
-                <li><a href="{% url "qr_scanner" %}"><i class="fa fa-qrcode" aria-hidden="true"></i> Scanner</a></li>
+                <li><a href="{% url "qr_scanner" %}"><i class="fa fa-qrcode" aria-hidden="true"></i> Billing</a></li>
+                <li><a href="{% url "qr_scanner_return" %}"><i class="fa fa-exchange" aria-hidden="true"></i> Returns</a></li>
                 <li><a href="{{ user.store.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
                 Profile</a></li>
                 <li><a href="{% url "store:product_list" %}"><i class="fa fa-truck" aria-hidden="true"></i> Inventory</a></li>

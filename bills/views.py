@@ -74,9 +74,9 @@ class BillListView(ListView):
 		context = super(BillListView, self).get_context_data(**kwargs)
 		bill_filter_qs = []
 		bill_filter = []
-		customer_no = self.request.user.profile.phone_no.national_number
 
 		if Profile.objects.filter(user=self.request.user).exists():
+			customer_no = self.request.user.profile.phone_no.national_number
 			bill_list = Bill.objects.filter(customer_no=customer_no)
 			bill_filter = BillFilter(self.request.GET, queryset=bill_list)
 			
@@ -88,7 +88,20 @@ class BillListView(ListView):
 
 			bill_filter_qs = BillFilter(self.request.GET, queryset=bill_list).qs
 			
-		paginator = Paginator(bill_filter_qs, self.paginate_by)
+			paginator = Paginator(bill_filter_qs, self.paginate_by)
+
+		elif Store.objects.filter(user=self.request.user).exists():
+			"""
+			If the user is store return a list of bills from the list of `pk` taken from session
+			"""
+			return_bill_list = []
+			bill_pk = self.request.session.get('bill_pk')
+			print("this is from bill")
+			print(bill_pk)
+			for pk in bill_pk:
+				return_bill_list.append(Bill.objects.get(pk=str(pk)))
+			
+			paginator = Paginator(return_bill_list, self.paginate_by)
 
 		page = self.request.GET.get('page')
 		try:

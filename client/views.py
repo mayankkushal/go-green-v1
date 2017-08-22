@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.validators import validate_email
 from django.contrib import messages
 from django.conf import settings
+from django.contrib.auth.mixins import UserPassesTestMixin
 
 import json
 import csv
@@ -119,6 +120,17 @@ def profile_login(request):
 
 def qr_scanner(request):
 	return render(request, 'extra/qr_scanner.html')
+
+
+class QrScannerReturn(UserPassesTestMixin, TemplateView):
+	template_name = 'extra/qr_scanner_return.html'
+
+	def test_func(self):
+		try:
+			store = self.request.user.store
+		except:
+			store = None
+		return store
 
 
 from registration.backends.simple.views import RegistrationView
@@ -287,14 +299,7 @@ def change_password(request):
 	})
 
 
-
-
-class QrRedirect(FormView):
-	"""
-	Redirects using the value from the qr code on `get` request and uses the
-	values from the phone_no field for the `post` request.
-	"""
-
+class VerificationMixin:
 	def is_customer(self):
 		return True if Profile.objects.filter(user=self.request.user).exists() else False
 
@@ -361,15 +366,12 @@ class QrRedirect(FormView):
 		"""
 		store = bill.store
 		days_occured = datetime.date.today() - bill.date.date()
-		if bill.original:
-			if days_occured < datetime.timedelta(store.return_days):
-				return True
-			else:
-				messages.error(self.request, 
-					'Bill has crossed its return period. Store allows return within '+str(store.return_days)+" days")
-				return False
+		if days_occured < datetime.timedelta(store.return_days):
+			return True
 		else:
-			messages.error(self.request, 'Bill can only be returned once. Please contact the manager fo more information')
+			messages.error(self.request, 
+				'Bill has crossed its return period. Store allows return within '+str(store.return_days)+" days")
+			return False
 		return False
 
 	def redirect_to_billing(self, phone_no):
@@ -378,6 +380,13 @@ class QrRedirect(FormView):
 			self.request.session['cus_no'] = client.profile.phone_no.national_number
 			return True
 
+
+
+class QrRedirect(VerificationMixin, FormView):
+	"""
+	Redirects using the value from the qr code on `get` request and uses the
+	values from the phone_no field for the `post` request.
+	"""
 	def get(self, request, *args, **kwargs):
 		if self.is_customer():
 			phone_no = request.GET['val']
@@ -413,6 +422,54 @@ class QrRedirect(FormView):
 			num = request.POST.get('phone_no')		
 			self.request.session['cus_no'] = num
 			return redirect(reverse('billing'))
+
+
+class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
+	"""
+	Redirects using the value from the qr code on `get` request and uses the
+	values from the phone_no field for the `post` request for returns.
+	"""
+	def test_func(self):
+		try:
+			store = self.request.user.store
+		except:
+			store = None
+		return store
+
+	def bill_to_list(self, phone_no):
+		bill_pk = []
+		bill = Bill.objects.filter(customer_no=phone_no)
+		for b in bill:
+			if b.return_valid:
+				bill_pk.append(b.pk)
+		return bill_pk
+
+	def get(self, request, *args, **kwargs):
+		if self.is_store():
+			val = request.GET['val']
+			
+			if self.is_phone(val):
+				phone_no = self.extract_value(val)
+				bill_pk = self.bill_to_list(phone_no)
+				self.request.session['bill_pk'] = bill_pk
+				return redirect(reverse('bill_list'))
+
+			elif self.is_bill(val):
+				bill_pk = self.extract_value(val)
+				bill = self.bill_present(bill_pk)
+				if bill:
+					if self.is_bill_return_valid(bill):
+						return redirect('/pos/return/'+str(bill.pk))
+					else:
+						return redirect(reverse('qr_scanner_return'))
+	def post(self, request, *args, **kwargs):
+		if self.is_store():
+			num = request.POST.get('phone_no')		
+			bill_pk = self.bill_to_list(num)
+			self.request.session['bill_pk'] = bill_pk
+			return redirect(reverse('bill_list'))
+
+
 
 
 from django.contrib.auth.forms import AuthenticationForm

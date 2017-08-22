@@ -4,6 +4,7 @@ from store.models import Store, Product
 from django.contrib.auth.models import User
 
 import decimal
+import datetime
 
 # Create your models here.
 
@@ -39,6 +40,16 @@ class Bill(models.Model):
 	@property
 	def get_customer(self):
 		return User.objects.get(profile__phone_no=self.customer_no)
+
+	@property
+	def return_valid(self):
+		store = self.store
+		print(datetime.date.today())
+		days_occured = datetime.date.today() - self.date.date()
+		if days_occured < datetime.timedelta(store.return_days):
+			return True
+		else:
+			return False
 
 	def get_tax_amount(self):
 		"""
@@ -78,7 +89,6 @@ class Bill(models.Model):
 		super(Bill, self).save(*args, **kwargs)
 
 
-
 class Item(models.Model):
 	"""
 	Individual product will have many-to-one relation to the bill. 
@@ -115,9 +125,10 @@ class Item(models.Model):
 		Substracts the quantity of the bill item from the total quantity of the product.
 		The new quantity is updated
 		"""
-		if not self.product.infinite_quantity:
+		if self.bill.original and not self.product.infinite_quantity:
 			self.product.quantity = self.product.quantity - self.quantity
 			self.product.save()
+		return
 
 	def save(self, *args, **kwargs):
 		if not self.id:
