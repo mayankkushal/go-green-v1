@@ -462,10 +462,20 @@ class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
 						return redirect('/pos/return/'+str(bill.pk))
 					else:
 						return redirect(reverse('qr_scanner_return'))
+	
 	def post(self, request, *args, **kwargs):
 		if self.is_store():
-			num = request.POST.get('phone_no')		
-			bill_pk = self.bill_to_list(num)
+			num = request.POST.get('phone_no')
+			bill_no = request.POST.get('bill_no')
+			bill_pk = []
+			if num:
+				bill_pk = self.bill_to_list(num)
+				
+			elif bill_no:
+				bills = Bill.objects.filter(bill_no=bill_no)
+				for b in bills:
+					bill_pk.append(b.pk)
+			
 			self.request.session['bill_pk'] = bill_pk
 			return redirect(reverse('bill_list'))
 

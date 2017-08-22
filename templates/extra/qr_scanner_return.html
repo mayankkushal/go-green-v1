@@ -10,8 +10,11 @@
             <form action="/qr_redirect_return" method="post" class="form">
                 {% csrf_token %}
                 <div class="row">
-                    <div class="col-lg-11 col-xs-9">
+                    <div class="col-lg-5 col-xs-9">
                         <input type="text" name="phone_no" pattern="\d{10}" id="phone_no" class="form-control" placeholder="Mobile Number (10 digits)" autofocus>
+                    </div>
+                     <div class="col-lg-6 col-xs-9">
+                        <input type="text" name="bill_no" id="phone_no" class="form-control" placeholder="Bill number" autofocus>
                     </div>
                     <div class="col-lg-1 col-xs-3">
                         <input type="submit" name="submit" class="btn btn-success pull-right" value="Search" >

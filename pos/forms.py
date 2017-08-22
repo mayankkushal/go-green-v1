@@ -49,7 +49,7 @@ class ItemForm(forms.ModelForm):
 					'onchange':"productDetail(value,id, this)"
 					},
 				),)
-	tax = forms.DecimalField(label="Tax", widget=forms.NumberInput(attrs={'readonly':'readonly'}))
+	tax = forms.DecimalField(label="Tax", widget=forms.HiddenInput(attrs={'readonly':'readonly'}))
 	price = forms.DecimalField(label="Price", disabled=True, required=False)
 	total = forms.DecimalField(label="Total", 
 						disabled=True, 
@@ -98,7 +98,7 @@ class ItemReturnForm(forms.ModelForm):
 			'product': forms.Select(attrs={'disabled':"on"}),
 			'sku': forms.TextInput(attrs={'disabled':"on"}),
 			'quantity':forms.NumberInput(attrs={'max':"on", 'oninput':"calculateTotal(this, value)", 'min':"1"},),
-			'tax':forms.NumberInput(attrs={'disabled':"on"}),
+			'tax':forms.HiddenInput(attrs={'disabled':"on"}),
 			'price':forms.NumberInput(attrs={'disabled':"on"}),
 			'total':forms.NumberInput(attrs={'disabled':"on", 'class':'total'})
 		}
