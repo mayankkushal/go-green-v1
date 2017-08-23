@@ -2,6 +2,28 @@
 <html>
 	<head>
 		<title>Bill #{{ bill.bill_no }}</title>
+		<style type="text/css">
+			table, td {
+				border: 1px solid black;
+				padding: 3px;
+				font-size: 12px;
+			}
+			th{
+				text-align: center;
+				background-color: #76FF03;
+				font-size: 15px;
+				color: grey;
+			}
+			h1{
+				font-size: 30px;
+			}
+			h3{
+				font-size: 20px;
+			}
+			pre{
+				font-size: 15px;
+			}
+		</style>
 	</head>
 	<body>
 		<h1><a href="http://www.mobbills.com">MobBills</a></h1>
@@ -12,25 +34,26 @@
 		<hr>
 		<div class="col-xs-6 text-right">
 			<address>
-				<strong>Store:</strong><br>
-				{{ bill.store.name }}<br>
-				{{ bill.store.street }}<br>
-				{{ bill.store.city }}<br>
-				{{ bill.store.state }} {{ bill.store.postal }}
+				<h3><strong>Store:</strong></h3>
+				<pre><strong>{{ bill.store.name }}</strong>
+{{ bill.store.street }}
+{{ bill.store.city }}
+{{ bill.store.state }} {{ bill.store.postal }}</pre>
 			</address>
 		</div>
 		
 		<div class="col-xs-6 text-right">
-			<p align="right"><strong>Order Date:</strong><br>
-			{{ bill.date.date }}</p><br><br>
+			<p align="right" style="font-size:15px;"><strong>Order Date:</strong><br>
+				{{ bill.date.date }}</p><br><br>
 		</div>
+		<div class="card">
 		<table>
-			<thead style="background-color:#76FF03">
+			<thead>
 				<tr>
-					<td><strong>Item</strong></td>
-					<td ><strong>Price</strong></td>
-					<td><strong>Quantity</strong></td>
-					<td><strong>Total</strong></td>
+					<th><strong>Item</strong></th>
+					<th ><strong>Price</strong></th>
+					<th><strong>Quantity</strong></th>
+					<th><strong>Total</strong></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -42,28 +65,28 @@
 						<td>{{ item.total }}</td>
 					</tr>
 				{% endfor %}
-				<tr></tr>
-				<tr></tr>
-				<tr></tr>
+			</tbody>
+		</table>
+		<br>
+		<br>
+		<br>
+		<br>
+		<table>
+			<tbody>
 				<tr>
-					<td></td>
-					<td></td>
 					<td><strong>Sale Value</strong></td>
 					<td>{{ bill.sale_value }}</td>
 				</tr>
 				<tr>
-					<td></td>
-					<td></td>
 					<td><strong>Tax amount</strong></td>
 					<td>{{ bill.tax_amount }}</td>
 				</tr>
 				<tr>
-					<td></td>
-					<td></td>
 					<td><strong>Total</strong></td>
 					<td>{{ bill.total }}</td>
 				</tr>
 			</tbody>
 		</table>
+		</div>
 	</body>
 </html>

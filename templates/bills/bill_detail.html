@@ -6,7 +6,10 @@
     Bill | {{ bill.bill_no }}
 {% endblock title_block %}
 {% block content_wrapper %}
-    <div class="container" style="background-color:white;"> 
+    <div class="container" style="background-color:white;">
+        <div align="center">
+            <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=bi:{{ bill.pk }}" />
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <div class="invoice-title">
@@ -105,7 +108,6 @@
                 </div>
             </div>
         </div>
-        <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=bi:{{ bill.pk }}" />
         <div id="share-btn">
             <h6>Share this receipt with your friends</h6>
             {% post_to_facebook bill.get_absolute_url '<i class="fa fa-facebook-official fa-3x" style="color:#3b5998"></i>' %}

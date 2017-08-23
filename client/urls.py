@@ -13,6 +13,8 @@ urlpatterns = [
 
 	url(r'^newsletter', views.newsletter, name='newsletter'),
 	url(r'^download_email', views.download_email),
+
+	url(r'^statement', views.ClientStatement.as_view(), name='statement'),
 	
 	url(r'^verify', views.OTPVerificationView.as_view(), name='otp-verify'),
 	url(r'^clear_pin', views.clear_pin),

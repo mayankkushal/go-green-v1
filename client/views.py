@@ -571,3 +571,19 @@ def download_email(request):
 		return response
 	else:
 		return redirect(reverse('index'))
+
+from django.utils import timezone
+class ClientStatement(TemplateView):
+	template_name = "client/statement.html"
+
+	def get_context_data(self, **kwargs):
+		context = super(ClientStatement, self).get_context_data(**kwargs)
+		
+		# month_start = i.today().replace(day=1)
+		month_end = datetime.date.today().replace(day=1) - datetime.timedelta (days = 1)
+		customer_no = self.request.user.profile.phone_no.national_number
+		
+		daily_bill = Bill.objects.filter(date=timezone.now(), customer_no=customer_no)
+		#monthly_bill = Bill.objects.filter(customer_no=customer_no, date__range=[month_start.date, month_end])
+		
+		return context
