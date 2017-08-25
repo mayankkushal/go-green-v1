@@ -65,6 +65,8 @@
               
               {% if user.is_active and user.is_authenticated and user.profile %}
                 <li class="hidden-xs"><a href="{% url "bill_list" %}"><i class="fa fa-file-text" aria-hidden="true"></i> Bills</a></li>
+                <li class="hidden-xs"><a href="{% url "statement" %}"><i class="fa fa-bar-chart" aria-hidden="true"></i> 
+                Statement</a></li>
                 <li class="hidden-xs"><a href="{{ user.profile.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
                 Profile</a></li>
                 <li class="hidden-xs"><a href="{% url "notify" %}"><i class="fa fa-bell" aria-hidden="true"></i>{% live_notify_badge classes="badge" %}</a></li>
@@ -145,25 +147,31 @@
               </div>
               <ul class="nav navbar-nav mobile-bar" style="float:none !important;">
                 <li>
-                  <a href="{% url "bill_list" %}">
+                  <a href="{% url "bill_list" %}" style="padding:0; padding-top:10px">
                     <span class="menu-icon fa fa-file-text"></span>
                     <span class="visible-xs">Bills</span>
                   </a>
                 </li>
+                  <li>
+                  <a href="{% url "statement" %}" style="padding:0; padding-top:10px">
+                    <span class="menu-icon fa fa-bar-chart"></span>
+                    <span class="visible-xs">Statement</span>
+                  </a>
+                </li>
                 <li class="visible-xs">
-                  <a href="{% url "qr_scanner" %}">
+                  <a href="{% url "qr_scanner" %}" style="padding:0; padding-top:10px">
                     <span class="menu-icon fa fa-qrcode"></span>
                     <span class="visible-xs">Scan</span>
                   </a>
                 </li>
                 <li>
-                  <a href="{{ user.profile.get_absolute_url }}">
+                  <a href="{{ user.profile.get_absolute_url }}" style="padding:0; padding-top:10px">
                     <span class="menu-icon fa fa-user-circle"></span>
                     <span class="visible-xs">Profile</span>
                   </a>
                 </li>
-                <li class="visible-xs">
-                  <a href="{% url "notify" %}">
+                <li>
+                  <a href="{% url "notify" %}" style="padding:0; padding-top:10px">
                     <span class="menu-icon fa fa-bell-o">{% live_notify_badge classes="badge menu-icon" %}</span>
                     <span class="visible-xs">Notification</span>
                   </a>

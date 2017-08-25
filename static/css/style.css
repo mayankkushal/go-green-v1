@@ -748,6 +748,7 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
   background: #fff;
   border-radius: 2px;
   margin: 1rem;
+  padding:20px;
 }
 .card-2 {
   box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
@@ -819,7 +820,7 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 }
 .navbar-nav.mobile-bar > li > a > span.menu-icon {
 	display: block;
-	font-size: 1.8em;
+	font-size: 1.5em;
 }
 
 @media (min-width: 768px) {
@@ -835,6 +836,9 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 	}
 	.navbar-nav.mobile-bar > li > a > span.menu-icon {
 		display: none;
+	}
+	a.nopadding{
+		padding: 0px !important;
 	}
 }
 

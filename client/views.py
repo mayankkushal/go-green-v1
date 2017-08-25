@@ -14,6 +14,7 @@ import random
 import re
 import datetime
 import twitter
+import pytz
  
 from .models import Profile, SlideShowImage, Banner, Newsletter
 from .forms import ProfileUpdateForm, OTPVerificationForm
@@ -52,7 +53,7 @@ class HomePage(TemplateView):
 		slider_image = SlideShowImage.objects.filter(slideshow=banner)
 		context['slider_image'] = slider_image
 
-		article_list = Article.objects.filter().order_by('-date_created')[:6]
+		article_list = Article.objects.filter().order_by('-date_created')[:3]
 		context['article_list'] = article_list
 		context['tweets'] = self.get_tweets()
 		
@@ -486,23 +487,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
 
 class InactiveAuthenticationForm(AuthenticationForm):
-	# a bit messy but it should work
-	# def clean(self):
-	# 	print("clean")
-	# 	try:
-	# 		print("asdfasdf")
-	# 		print(self.user_cache)
-	# 		return super(InactiveAuthenticationForm, self).clean()
-	# 	except ValidationError as e:
-	# 		print('ve as e')
-	# 		print(self.user_cache)
-	# 		if self.request.user.is_anonymous() : # user exists but is not active
-	# 			# behavior that's skipped because of the validation error
-	# 			#self.confirm_login_allowed(self.request.user)
-	# 			self.confirm_login_allowed(self.request.user)
-	# 			return self.cleaned_data
-	# 		else:
-	# 			raise e
+
 	def confirm_login_allowed(self, user):
 		"""
 		Controls whether the given User may log in. This is a policy setting,
@@ -572,18 +557,59 @@ def download_email(request):
 	else:
 		return redirect(reverse('index'))
 
-from django.utils import timezone
+
+
 class ClientStatement(TemplateView):
 	template_name = "client/statement.html"
 
+	def get_bill_total(self, bills):
+		total = 0
+		for b in bills:
+			total += b.total
+		return total
+
+	def get_unique_stores(self, bills):
+		stores = []
+		for b in bills:
+			stores.append(b.store.name)
+		return len(list(set(stores)))
+
 	def get_context_data(self, **kwargs):
 		context = super(ClientStatement, self).get_context_data(**kwargs)
+
+		utc=pytz.UTC
 		
-		# month_start = i.today().replace(day=1)
-		month_end = datetime.date.today().replace(day=1) - datetime.timedelta (days = 1)
+		today_date = utc.localize(datetime.datetime.today())
+		
+		month_start = utc.localize(datetime.datetime.today().replace(day=1))
+		next_month_start = datetime.datetime.today().replace(month=today_date.month + 1, day=1)
+		month_end = utc.localize(next_month_start - datetime.timedelta(days=1))
+
+		year_start = utc.localize(datetime.datetime.today().replace(month=1, day=1)) 
+		year_end = utc.localize(datetime.datetime.today().replace(month=12, day=31))
+		
 		customer_no = self.request.user.profile.phone_no.national_number
 		
-		daily_bill = Bill.objects.filter(date=timezone.now(), customer_no=customer_no)
-		#monthly_bill = Bill.objects.filter(customer_no=customer_no, date__range=[month_start.date, month_end])
-		
+		daily_bill = Bill.objects.filter(customer_no=customer_no, date=today_date)
+		monthly_bill = Bill.objects.filter(customer_no=customer_no, 
+						date__gte=month_start,
+						date__lte=month_end
+						)
+		yearly_bill = Bill.objects.filter(customer_no=customer_no, 
+						date__gte=year_start,
+						date__lte=year_end
+						)
+
+		context['daily_count'] = len(daily_bill)
+		context['monthly_count'] = len(monthly_bill)
+		context['yearly_count'] = len(yearly_bill)
+
+		context['daily_total'] = self.get_bill_total(daily_bill)
+		context['monthly_total'] = self.get_bill_total(monthly_bill)
+		context['yearly_total'] = self.get_bill_total(yearly_bill)
+
+		context['daily_store'] = self.get_unique_stores(daily_bill)
+		context['monthly_store'] = self.get_unique_stores(monthly_bill)
+		context['yearly_store'] = self.get_unique_stores(yearly_bill)
+
 		return context
