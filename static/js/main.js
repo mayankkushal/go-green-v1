@@ -86,6 +86,7 @@ function b_fill(sale, tot, tax) {
     $('#total_amount').html(tot);
 }
 
+// main jquery function
 $(function() {
     $('.field-franchise').addClass('hidden');
     $('.field-store').addClass('hidden');
@@ -119,11 +120,26 @@ $(function() {
         }
     });
 
+    // Inventory page, if infinite_quantity is checked, quantity should be disabled
+    if ($("#id_infinite_quantity").is(":checked")){
+        $('#id_quantity').attr('readonly', true);
+    }
+    else
+        $('#id_quantity').attr('readonly', false);
+
+    // Adds the max limit to the products in the return page on page load
+    $('.quantity').each(function(){
+        $(this).attr({'max':$(this).val()});
+    })
+
+    // Shows the password strength
     $('#id_password1').pwstrength({
         ui: {
             showVerdictsInsideProgressBar: true,
         }
     });
+
+    // Home page main crousel
     $('#main-carousel').owlCarousel({
         loop: true,
         margin: 10,
@@ -135,6 +151,7 @@ $(function() {
         singleItem: true,
     });
 
+    // Home page instagram crousel
     $('#insta-carousel').owlCarousel({
         loop: true,
         margin: 10,
@@ -146,19 +163,23 @@ $(function() {
         singleItem: true,
     });
 
+    // Adds the phone_no value to the username, so same can be used at both the places
     $('#id_phone_no').change(function() {
         $('.username').val($('#id_phone_no').val());
     })
 
+    // Shows the `Clear Filter` button if the url bar has filters applied
     if (window.location.search) {
         $('#clear-filter').show();
     }
 
+    // Clears the filter if url bar has filters
     $('#clear-filter').click(function(e) {
         e.preventDefault();
         window.location = window.location.href.split("?")[0];
     });
 
+    // AJAX for newsletter
     $('#newsletterBtn').click(function(e) {
         e.preventDefault();
         $.ajax({
@@ -179,12 +200,14 @@ $(function() {
         });
     });
 
+    // Prevents submit till `Yes` is clicked in the amount modal
     $('#billingForm').submit(function(e, submit) {
         if (!submit) e.preventDefault();
         $('#billingModal').modal('show');
         $('#payment').html($('#total_amount').text());
     });
 
+    // Prevents submit till `Yes` is clicked in the amount modal
     $('#returnForm').submit(function(e, submit) {
         if (!submit) e.preventDefault();
         cal = b_total();
@@ -314,4 +337,12 @@ function calculateTotal(x, value) {
     cal = b_total();
     b_fill(cal.sale, cal.tot, cal.tax);
 
+}
+function deactivateQuantity(obj){
+    $obj = $(obj);
+    if ($obj.is(":checked")){
+        $('#id_quantity').attr('readonly', true);
+    }
+    else
+        $('#id_quantity').attr('readonly', false);
 }

@@ -3,117 +3,120 @@
 {% load social_share %}
 {% load qr_tags %}
 {% block title_block %}
-    Bill | {{ bill.bill_no }}
+	Bill | {{ bill.bill_no }}
 {% endblock title_block %}
 {% block content_wrapper %}
-    <div class="container" style="background-color:white;">
-        <div align="center">
-            <img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=bi:{{ bill.pk }}" />
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="invoice-title">
-                    <h2>Invoice</h2>
-                    <h3 class="pull-right">Order # {{ bill.bill_no }}</h3><br>
-                    {% if user.store and bill.return_valid %}
-                        <a href="{% url "return_bill" bill.pk %}" class="btn btn-success">Return</a>
-                    {% endif %}
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <address>
-                            <strong>Billed To:</strong><br>
-                            {{ bill.customer_name }}<br>
-                            {{ bill.get_customer.profile.address }}<br>
-                        </address>
-                    </div>
-                    <div class="col-xs-6 text-right">
-                        <address>
-                            <strong>Store:</strong><br>
-                            {{ bill.store.name }}<br>
-                            {{ bill.store.street }}<br>
-                            {{ bill.store.city }}<br>
-                            {{ bill.store.state }} {{ bill.store.postal }}
-                        </address>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-6">
-                        <address>
-                            <strong>Customer contact details:</strong><br>
-                            {{ bill.get_customer.email }}<br>
-                            {{ bill.customer_no }}
-                        </address>
-                    </div>
-                    <div class="col-xs-6 text-right">
-                        <address>
-                            <strong>Order Date:</strong><br>
-                            {{ bill.date.date }}<br><br>
-                        </address>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <div class="col-md-12">
-                <div class="panel panel-default">
-                    <div class="panel-heading" style="background-color:#76FF03;">
-                        <h3 class="panel-title"><strong>Order summary</strong></h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="table-responsive">
-                            <table class="table table-condenced">
-                                <thead>
-                                    <tr>
-                                        <td><strong>Item</strong></td>
-                                        <td class="text-center"><strong>Price</strong></td>
-                                        <td class="text-center"><strong>Quantity</strong></td>
-                                        <td class="text-right"><strong>Total</strong></td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <!-- foreach ($order->lineItems as $line) or some such thing here -->
-                                    {% for item in bill.items.all %}
-                                        <tr>
-                                            <td>{{ item.product.name }}</td>
-                                            <td class="text-center">{{ item.price }}</td>
-                                            <td class="text-center">{{ item.quantity }}</td>
-                                            <td class="text-right">{{ item.total }}</td>
-                                        </tr>
-                                    {% endfor %}
-                                    <tr>
-                                        <td class="thick-line"></td>
-                                        <td class="thick-line"></td>
-                                        <td class="thick-line text-center"><strong>Sale Value</strong></td>
-                                        <td class="thick-line text-right">{{ bill.sale_value }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line text-center"><strong>Tax amount</strong></td>
-                                        <td class="no-line text-right">{{ bill.tax_amount }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="no-line"></td>
-                                        <td class="no-line"></td>
-                                        <td class="no-line text-center"><strong>Total</strong></td>
-                                        <td class="no-line text-right">{{ bill.total }}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="share-btn">
-            <h6>Share this receipt with your friends</h6>
-            {% post_to_facebook bill.get_absolute_url '<i class="fa fa-facebook-official fa-3x" style="color:#3b5998"></i>' %}
-            {% post_to_twitter "New bill: {{bill.store.name}}. Check it out!" bill '<i class="fa fa-twitter fa-3x" style="color:#1da1f2"></i>' %}
-            {% post_to_gplus bill '<i class="fa fa-google-plus-official fa-3x" style="color:#dd4b39"></i>' %}
-            <a href="{% url "bill_pdf" bill.pk %}" target="_blank"><i class="fa fa-file-pdf-o fa-3x" style="color:#dd4b39"></i></a>
-        </div>
-    </div>
+	<div class="container" style="background-color:white;">
+		<div align="center">
+			<img src="https://chart.googleapis.com/chart?cht=qr&chs=200x200&chl=bi:{{ bill.pk }}" />
+		</div>
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="invoice-title">
+					<h2>Invoice</h2>
+					<h3 class="pull-right">Order # {{ bill.bill_no }}</h3><br>
+					{% if user.store and bill.return_valid %}
+						<a href="{% url "return_bill" bill.pk %}" class="btn btn-success">Return</a>
+					{% endif %}
+				</div>
+				<hr>
+				<div class="row">
+					<div class="col-xs-6">
+						<address>
+							<strong>Billed To:</strong><br>
+							{{ bill.customer_name }}<br>
+							{{ bill.get_customer.profile.address }}<br>
+						</address>
+					</div>
+					<div class="col-xs-6 text-right">
+						<address>
+							<strong>Store:</strong><br>
+							{{ bill.store.name }}<br>
+							{{ bill.store.street }}<br>
+							{{ bill.store.city }}<br>
+							{{ bill.store.state }} {{ bill.store.postal }}
+						</address>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-6">
+						<address>
+							<strong>Customer contact details:</strong><br>
+							{{ bill.get_customer.email }}<br>
+							{{ bill.customer_no }}
+						</address>
+					</div>
+					<div class="col-xs-6 text-right">
+						<address>
+							<strong>Order Date:</strong><br>
+							{{ bill.date.date }}<br><br>
+						</address>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-12">
+				<div class="panel panel-default">
+					<div class="panel-heading" style="background-color:#76FF03;">
+						<h3 class="panel-title"><strong>Order summary</strong></h3>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive">
+							<table class="table table-condenced">
+								<thead>
+									<tr>
+										<td><strong>Item</strong></td>
+										<td class="text-center"><strong>Price</strong></td>
+										<td class="text-center"><strong>Quantity</strong></td>
+										<td class="text-right"><strong>Total</strong></td>
+									</tr>
+								</thead>
+								<tbody>
+									<!-- foreach ($order->lineItems as $line) or some such thing here -->
+									{% for item in bill.items.all %}
+										<tr>
+											<td>{{ item.product.name }}</td>
+											<td class="text-center">{{ item.price }}</td>
+											<td class="text-center">{{ item.quantity }}</td>
+											<td class="text-right">{{ item.total }}</td>
+										</tr>
+									{% endfor %}
+									<tr>
+										<td class="thick-line"></td>
+										<td class="thick-line"></td>
+										<td class="thick-line text-center"><strong>Sale Value</strong></td>
+										<td class="thick-line text-right">{{ bill.sale_value }}</td>
+									</tr>
+									<tr>
+										<td class="no-line"></td>
+										<td class="no-line"></td>
+										<td class="no-line text-center"><strong>Tax amount</strong></td>
+										<td class="no-line text-right">{{ bill.tax_amount }}</td>
+									</tr>
+									<tr>
+										<td class="no-line"></td>
+										<td class="no-line"></td>
+										<td class="no-line text-center"><strong>Total</strong></td>
+										<td class="no-line text-right">{{ bill.total }}</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{% if user.profile %}
+		{% url 'bill_pdf' bill.pk as pdf_url %}
+		<div id="share-btn">
+			<h6>Share this receipt with your friends</h6>
+			{% post_to_facebook  pdf_url '<i class="fa fa-facebook-official fa-3x" style="color:#3b5998"></i>' %}
+			{% post_to_twitter "New bill: {{bill.store.name}}. Check it out!" pdf_url '<i class="fa fa-twitter fa-3x" style="color:#1da1f2"></i>' %}
+			{% post_to_gplus pdf_url '<i class="fa fa-google-plus-official fa-3x" style="color:#dd4b39"></i>' %}
+			<a href="{% url "bill_pdf" bill.pk %}" target="_blank"><i class="fa fa-file-pdf-o fa-3x" style="color:#dd4b39"></i></a>
+		</div>
+		{% endif %}
+	</div>
 {% endblock %}

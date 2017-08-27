@@ -820,7 +820,7 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 }
 .navbar-nav.mobile-bar > li > a > span.menu-icon {
 	display: block;
-	font-size: 1.5em;
+	font-size: 1.3em;
 }
 
 @media (min-width: 768px) {

@@ -16,4 +16,7 @@ class ProductForm(forms.ModelForm):
 	class Meta:
 		model = Product
 		exclude = ('type_of_product', 'store', 'store_chain')
+		widgets = {
+			'infinite_quantity' : forms.CheckboxInput(attrs={'onchange': "deactivateQuantity(this)"})
+		}
 

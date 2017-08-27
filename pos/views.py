@@ -55,10 +55,12 @@ class CreateBill(CreateView):
 		
 		if items.is_valid():
 			for item in items:
-				print(item.cleaned_data['product_pk'])
-				item.instance.product = Product.objects.get(pk=item.cleaned_data['product_pk'])
-				item.instance.bill = self.object
-				item.save()
+				try: # Doesn't save the product when the product_pk is empty
+					item.instance.product = Product.objects.get(pk=item.cleaned_data['product_pk'])
+					item.instance.bill = self.object
+					item.save()
+				except KeyError:
+					pass
 
 		return super(CreateBill, self).form_valid(form)
 
@@ -140,7 +142,6 @@ class ReturnBill(UpdateView):
 	model = Bill
 	form_class = BillReturnForm
 	template_name = 'pos/return_page.html'
-	success_url = reverse_lazy('index')
 
 	def get(self, request, *args, **kwargs):
 		self.object = self.get_object()
@@ -176,3 +177,9 @@ class ReturnBill(UpdateView):
 
 	def form_invalid(self, form, items):
 		return self.render_to_response(self.get_context_data(form=form, items=items))
+
+	def get_success_url(self):
+		"""
+			Returns the bill details page
+		"""
+		return reverse_lazy('bill_detail', kwargs={'pk': self.object.pk})

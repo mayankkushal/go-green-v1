@@ -52,13 +52,14 @@ class BaseDetails(models.Model):
 
 class Franchise(BaseDetails):
 	"""
-	Description: Model Description
+	Description: A chain of many stores, borrows the same details as a normal store.
 	"""
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='franchise')
 	category = models.ForeignKey(Category, related_name='franchise', null=True)
 	
 	def __str__(self):
 		return self.name
+
 
 class Store(BaseDetails):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='store')
@@ -132,7 +133,7 @@ class Product(models.Model):
 	name = models.CharField(_('Name'), max_length=256)
 	sku = models.CharField(_('SKU'), max_length=100)
 	price = models.DecimalField(_('Price'), max_digits=10, decimal_places=2)
-	quantity = models.IntegerField(_("Available Quantity"), default=0)
+	quantity = models.IntegerField(_("Available Quantity"), default=0, blank=True)
 	tax = models.DecimalField(_("Tax"), max_digits=5, decimal_places=2, default=0.00)
 	infinite_quantity = models.BooleanField(_("Infinite Quantity"),
 					 default=False,

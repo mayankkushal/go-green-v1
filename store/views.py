@@ -33,7 +33,7 @@ class StoreLocator(TemplateView):
 class ProductCreate(CreateView):
 	form_class = ProductForm
 	model = Product
-	success_url = "/"
+	success_url = reverse_lazy('store:product_list')
 
 	def form_valid(self, form):
 		if self.request.user.store.stand_alone:
@@ -49,6 +49,7 @@ class ProductCreate(CreateView):
 class ProductUpdate(UpdateView):
 	form_class = ProductForm
 	model = Product
+	success_url = reverse_lazy('store:product_list')
 
 	def get_queryset(self):
 		queryset = super(ProductUpdate, self).get_queryset()

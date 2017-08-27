@@ -57,7 +57,9 @@ class ItemForm(forms.ModelForm):
 						widget=forms.NumberInput(attrs={'class':'total'})
 					)
 	quantity = forms.IntegerField(min_value=1,
-					widget=forms.NumberInput(attrs={'oninput':"calculateTotal(this, value)"})
+					widget=forms.NumberInput(attrs={
+						'oninput': "calculateTotal(this, value)",
+						})
 				)
 	product_pk = forms.IntegerField(widget=forms.HiddenInput())
 	class Meta:
@@ -97,7 +99,11 @@ class ItemReturnForm(forms.ModelForm):
 		widgets = {
 			'product': forms.Select(attrs={'disabled':"on"}),
 			'sku': forms.TextInput(attrs={'disabled':"on"}),
-			'quantity':forms.NumberInput(attrs={'max':"on", 'oninput':"calculateTotal(this, value)", 'min':"1"},),
+			'quantity':forms.NumberInput(attrs={
+				'oninput':"calculateTotal(this, value)", 
+				'min':"1",
+				'class':'quantity'
+				}),
 			'tax':forms.HiddenInput(attrs={'disabled':"on"}),
 			'price':forms.NumberInput(attrs={'disabled':"on"}),
 			'total':forms.NumberInput(attrs={'disabled':"on", 'class':'total'})

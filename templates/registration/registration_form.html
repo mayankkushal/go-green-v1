@@ -50,7 +50,7 @@
                     </div>
                   {% endfor %}
                   <div class="form-group">
-                    <input type="tel" name="phone_no" id="id_phone_no" tabindex="1" class="form-control" placeholder="Phone Number" value="" pattern="\d{10}">
+                    <input type="tel" name="phone_no" id="id_phone_no" tabindex="1" class="form-control" placeholder="Phone Number" value="" pattern="\d{10}" title="10 digit phone number">
                   </div>
                   {% for error in form.email.errors %}
                     <div class="alert alert-danger">

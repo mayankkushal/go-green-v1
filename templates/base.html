@@ -147,31 +147,31 @@
               </div>
               <ul class="nav navbar-nav mobile-bar" style="float:none !important;">
                 <li>
-                  <a href="{% url "bill_list" %}" style="padding:0; padding-top:10px">
+                  <a href="{% url "bill_list" %}" style="padding:0; padding-top:13px">
                     <span class="menu-icon fa fa-file-text"></span>
                     <span class="visible-xs">Bills</span>
                   </a>
                 </li>
                   <li>
-                  <a href="{% url "statement" %}" style="padding:0; padding-top:10px">
+                  <a href="{% url "statement" %}" style="padding:0; padding-top:13px">
                     <span class="menu-icon fa fa-bar-chart"></span>
                     <span class="visible-xs">Statement</span>
                   </a>
                 </li>
                 <li class="visible-xs">
-                  <a href="{% url "qr_scanner" %}" style="padding:0; padding-top:10px">
+                  <a href="{% url "qr_scanner" %}" style="padding:0; padding-top:13px">
                     <span class="menu-icon fa fa-qrcode"></span>
                     <span class="visible-xs">Scan</span>
                   </a>
                 </li>
                 <li>
-                  <a href="{{ user.profile.get_absolute_url }}" style="padding:0; padding-top:10px">
+                  <a href="{{ user.profile.get_absolute_url }}" style="padding:0; padding-top:13px">
                     <span class="menu-icon fa fa-user-circle"></span>
                     <span class="visible-xs">Profile</span>
                   </a>
                 </li>
                 <li>
-                  <a href="{% url "notify" %}" style="padding:0; padding-top:10px">
+                  <a href="{% url "notify" %}" style="padding:0; padding-top:13px">
                     <span class="menu-icon fa fa-bell-o">{% live_notify_badge classes="badge menu-icon" %}</span>
                     <span class="visible-xs">Notification</span>
                   </a>

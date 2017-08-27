@@ -7,11 +7,10 @@ from rest_framework import generics
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import Max, Min
 from django.utils.decorators import method_decorator
 from easy_pdf.views import PDFTemplateResponseMixin
-
 
 import json
 import datetime
@@ -96,8 +95,6 @@ class BillListView(ListView):
 			"""
 			return_bill_list = []
 			bill_pk = self.request.session.get('bill_pk')
-			print("this is from bill")
-			print(bill_pk)
 			for pk in bill_pk:
 				return_bill_list.append(Bill.objects.get(pk=str(pk)))
 			
@@ -118,13 +115,24 @@ class BillListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class BillDetailView(DetailView):
+class BillDetailView(UserPassesTestMixin, DetailView):
 	"""
 	Individual bill details
 	"""
 
 	model = Bill
 	context_object_name = 'bill' 
+
+	def test_func(self):
+		"""
+		Only allows the customer and the store of the bill to access the details
+		"""
+		bill = self.get_object()
+		customer = User.objects.get(profile__phone_no=bill.customer_no)
+		if (self.request.user == customer) or (self.request.user.store == bill.store):
+			return self.request.user
+		else:
+			return None
 
 	def get_context_data(self, **kwargs):
 		'''

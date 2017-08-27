@@ -453,6 +453,7 @@ class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
 				phone_no = self.extract_value(val)
 				bill_pk = self.bill_to_list(phone_no)
 				self.request.session['bill_pk'] = bill_pk
+
 				return redirect(reverse('bill_list'))
 
 			elif self.is_bill(val):
@@ -474,8 +475,12 @@ class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
 				
 			elif bill_no:
 				bills = Bill.objects.filter(bill_no=bill_no)
-				for b in bills:
-					bill_pk.append(b.pk)
+
+				if len(bills) == 1 :
+					return redirect('/pos/return/'+str(bills[0].pk))
+				else:
+					for b in bills:
+						bill_pk.append(b.pk)
 			
 			self.request.session['bill_pk'] = bill_pk
 			return redirect(reverse('bill_list'))
