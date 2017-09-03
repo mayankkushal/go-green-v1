@@ -5,6 +5,7 @@ from bills import views
 urlpatterns = [
 	url(r'^api$', views.BillList.as_view()),
 	url(r'^api/(?P<bill_no>[0-9]+)$', views.BillDetail.as_view()),
+	url(r'^alogin/(?P<username>[\w\-]+)/(?P<password>[\w\-]+)', views.example_view),
 	url(r'^list$', views.BillListView.as_view(), name='bill_list'),
 	url(r'^detail/(?P<pk>[\w\-]+)$', views.BillDetailView.as_view(), name="bill_detail"),
 	url(r'^check_notified', views.check_notification),
