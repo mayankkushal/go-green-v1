@@ -27,7 +27,6 @@ from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 
-from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 # Create your views here.
@@ -99,7 +98,8 @@ def profile_login(request):
 	1)If the user is active, ie. has verified phone number
 		a) client - redirected to bills page
 		b) store - redirected to `billing_start.html` page
-		c) admin - redirected to admin page
+		c) franchise - redirected to statements page
+		d) admin - redirected to admin page
 	2)If the user is inactive ie. not verifeid redirect to the OTP verification
 		page.
 
@@ -112,9 +112,12 @@ def profile_login(request):
 			try:
 				profile = request.user.profile
 				return redirect(reverse('bill_list'))
-			except:
-				slug = request.user.store.slug
-				return redirect(reverse('qr_scanner'))
+			except Profile.DoesNotExist:
+				try:
+					slug = request.user.store.slug
+					return redirect(reverse('qr_scanner'))
+				except Store.DoesNotExist:
+					return redirect(reverse('store:product_list'))
 	else:
 		return redirect('/inactive_otp')
 
@@ -439,7 +442,7 @@ class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
 
 	def bill_to_list(self, phone_no):
 		bill_pk = []
-		bill = Bill.objects.filter(customer_no=phone_no)
+		bill = Bill.objects.filter(customer_no=phone_no, store=self.request.user.store, editable=True)
 		for b in bill:
 			if b.return_valid:
 				bill_pk.append(b.pk)
@@ -468,24 +471,29 @@ class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
 	def post(self, request, *args, **kwargs):
 		if self.is_store():
 			num = request.POST.get('phone_no')
-			bill_no = request.POST.get('bill_no')
+			bill_no = request.POST.get('bill_no')	
 			bill_pk = []
+			
 			if num:
 				bill_pk = self.bill_to_list(num)
+				if not bill_pk:
+					messages.error(request, 'No bill found with the said phone number :'+num)
+					return redirect(reverse('qr_scanner_return'))
 				
 			elif bill_no:
-				bills = Bill.objects.filter(bill_no=bill_no)
-
-				if len(bills) == 1 :
-					return redirect('/pos/return/'+str(bills[0].pk))
+				bills = Bill.objects.filter(bill_no=bill_no, store=self.request.user.store, editable=True)
+				if bills:
+					if len(bills) == 1 :
+						return redirect('/pos/return/'+str(bills[0].pk))
+					else:
+						for b in bills:
+							bill_pk.append(b.pk)
 				else:
-					for b in bills:
-						bill_pk.append(b.pk)
+					messages.error(request, 'No bill found with the said bill number :'+bill_no)
+					return redirect(reverse('qr_scanner_return'))
 			
 			self.request.session['bill_pk'] = bill_pk
 			return redirect(reverse('bill_list'))
-
-
 
 
 from django.contrib.auth.forms import AuthenticationForm
@@ -585,6 +593,9 @@ class ClientStatement(TemplateView):
 		utc=pytz.UTC
 		
 		today_date = utc.localize(datetime.datetime.today())
+
+		week_start = today_date - datetime.timedelta(days=today_date.weekday())
+		week_end = week_start + datetime.timedelta(days=6)
 		
 		month_start = utc.localize(datetime.datetime.today().replace(day=1))
 		next_month_start = datetime.datetime.today().replace(month=today_date.month + 1, day=1)
@@ -595,7 +606,13 @@ class ClientStatement(TemplateView):
 		
 		customer_no = self.request.user.profile.phone_no.national_number
 		
-		daily_bill = Bill.objects.filter(customer_no=customer_no, date=today_date)
+		daily_bill = Bill.objects.filter(customer_no=customer_no,
+						date__gt=today_date - datetime.timedelta(days=1),
+						date__lt=today_date + datetime.timedelta(days=1))
+		weekly_bill = Bill.objects.filter(customer_no=customer_no, 
+						date__gte=week_start,
+						date__lte=week_end
+						)
 		monthly_bill = Bill.objects.filter(customer_no=customer_no, 
 						date__gte=month_start,
 						date__lte=month_end
@@ -606,14 +623,17 @@ class ClientStatement(TemplateView):
 						)
 
 		context['daily_count'] = len(daily_bill)
+		context['weekly_count'] = len(weekly_bill)
 		context['monthly_count'] = len(monthly_bill)
 		context['yearly_count'] = len(yearly_bill)
 
 		context['daily_total'] = self.get_bill_total(daily_bill)
+		context['weekly_total'] = self.get_bill_total(weekly_bill)
 		context['monthly_total'] = self.get_bill_total(monthly_bill)
 		context['yearly_total'] = self.get_bill_total(yearly_bill)
 
 		context['daily_store'] = self.get_unique_stores(daily_bill)
+		context['weekly_store'] = self.get_unique_stores(weekly_bill)
 		context['monthly_store'] = self.get_unique_stores(monthly_bill)
 		context['yearly_store'] = self.get_unique_stores(yearly_bill)
 

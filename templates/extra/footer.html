@@ -1,0 +1,26 @@
+{% load flatpages %}
+
+<div class="container">
+  <div class="row">
+    <div class=" footer-social col-sm-4">
+      <a href="https://twitter.com/mob_bills" target="_blank"><i class="fa fa-twitter"></i></a>&nbsp&nbsp&nbsp&nbsp
+      <a href="https://www.facebook.com/mobbillspos/" target="_blank"><i class="fa fa-facebook-official"></i></a>&nbsp&nbsp&nbsp&nbsp
+      <a target="_blank" href="https://www.instagram.com/mobbills/"><i class="fa fa-instagram"></i></a>&nbsp&nbsp&nbsp&nbsp
+      <a target="_blank" href="https://www.linkedin.com/company/mobbills"><i class="fa fa-linkedin"></i></a>&nbsp&nbsp&nbsp&nbsp
+    </div>
+    <div class="footer-copy col-sm-4">
+      <span>&copy; GOGREEN 2017</span>
+    </div>
+    <div class="footer-legal col-sm-4">
+      <button type="button" class="btn btn-success" data-toggle="modal" data-target="#newsletter">Newsletter</button>
+      <a href="{% url "blog:index" %}">Blog</a>&nbsp&nbsp
+      {% get_flatpages as flatpages %}
+      {% for page in flatpages %}
+        <a href="/info{{ page.url }}">{{ page.title }}</a>&nbsp&nbsp
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% if user.profile %}
+  <div class="pseudo-height hidden-lg"></div>
+{% endif %}

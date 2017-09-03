@@ -120,16 +120,21 @@ $(function() {
         }
     });
 
+    setTimeout(function() {
+                $('.alert').fadeOut('slow');
+            }, 4000);
+
     // Inventory page, if infinite_quantity is checked, quantity should be disabled
-    if ($("#id_infinite_quantity").is(":checked")){
+    if ($("#id_infinite_quantity").is(":checked")) {
         $('#id_quantity').attr('readonly', true);
-    }
-    else
+    } else
         $('#id_quantity').attr('readonly', false);
 
     // Adds the max limit to the products in the return page on page load
-    $('.quantity').each(function(){
-        $(this).attr({'max':$(this).val()});
+    $('.quantity').each(function() {
+        $(this).attr({
+            'max': $(this).val()
+        });
     })
 
     // Shows the password strength
@@ -207,17 +212,30 @@ $(function() {
         $('#payment').html($('#total_amount').text());
     });
 
+    // Prevent bill from submitting if return amount is `0`
+    var returnAmount = 0
+
     // Prevents submit till `Yes` is clicked in the amount modal
     $('#returnForm').submit(function(e, submit) {
         if (!submit) e.preventDefault();
         cal = b_total();
         $('#billingModal').modal('show');
-        $('#return-amount').html($('#id_total').val() - cal.tot);
+        returnAmount = $('#id_total').val() - cal.tot;
+        $('#return-amount').html(returnAmount);
     });
 
-    $('#proceedBtn').click(function() { // Submits the form again as it was prevented earlier
+    // Submits the form again as it was prevented earlier
+    $('#proceedBtn').click(function() {
         $('#billingForm').trigger('submit', [true]);
-        $('#returnForm').trigger('submit', [true]);
+        if (returnAmount != 0)
+            $('#returnForm').trigger('submit', [true]);
+        else {
+            $('#r-error').removeClass('hidden')
+            $('#return-error').html("<strong>Error!</strong>Bill cannot be saved. There is no change in the bill");
+            setTimeout(function() {
+                $('#r-error').fadeOut('fast');
+            }, 3000);
+        }
     });
 });
 
@@ -274,6 +292,7 @@ $.get(checkURL, {
     }
 });
 
+// Get product detail when selcted from the drop down
 function productDetail(value, id, obj) {
     var all = id.split("-");
     var no = all[1];
@@ -300,14 +319,14 @@ function productDetail(value, id, obj) {
                 $(priceId).val(data.price);
                 $(taxId).val(data.tax);
                 $(product_val).val(data.num);
-                
+
                 $obj = $(obj);
                 $sku = $obj.closest('tr').children('td:eq(1)');
                 $sku.find('#select2-id_items-0-sku_number-container').text(data.sku)
 
                 $prd = $obj.closest('tr').children('td:eq(0)');
                 $prd.find('#select2-id_items-0-product_number-container').text(data.name);
-                
+
                 if ($(qtyId).val() > 0) {
                     $(totalId).val($(priceId).val() * $(qtyId).val());
                 } else {
@@ -338,11 +357,11 @@ function calculateTotal(x, value) {
     b_fill(cal.sale, cal.tot, cal.tax);
 
 }
-function deactivateQuantity(obj){
+
+function deactivateQuantity(obj) {
     $obj = $(obj);
-    if ($obj.is(":checked")){
+    if ($obj.is(":checked")) {
         $('#id_quantity').attr('readonly', true);
-    }
-    else
+    } else
         $('#id_quantity').attr('readonly', false);
 }

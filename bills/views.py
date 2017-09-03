@@ -96,8 +96,12 @@ class BillListView(ListView):
 			return_bill_list = []
 			bill_pk = self.request.session.get('bill_pk')
 			for pk in bill_pk:
-				return_bill_list.append(Bill.objects.get(pk=str(pk)))
-			
+				try:
+					return_bill_list.append(Bill.objects.get(pk=str(pk), editable=True))
+				except Bill.DoesNotExist:
+					pass
+			self.request.session['bill_pk'] = []
+
 			paginator = Paginator(return_bill_list, self.paginate_by)
 
 		page = self.request.GET.get('page')
@@ -185,3 +189,14 @@ class BillPDFView(PDFTemplateResponseMixin, DetailView):
 	model = Bill
 	template_name = 'bills/bill_pdf.html'
 	context_object_name = 'bill'
+
+	def get_context_data(self, **kwargs):
+		context = super(BillPDFView, self).get_context_data(**kwargs)
+		context['user'] = self.request.user.is_authenticated()
+		bill = self.get_object()
+		try:
+			customer = Profile.objects.get(phone_no=bill.customer_no)
+		except:
+			customer = None
+		context['customer'] = customer
+		return context

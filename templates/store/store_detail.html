@@ -12,11 +12,19 @@
 			<div class="panel-body">
 				<div class="row">
 					<div class="col-md-3 col-lg-3 " align="center">
-						{% if store.picture  %}
+					{% if store.stand_alone %}
+					    {% if store.picture %}
 							<img src="{{ store.picture.url }}" class="img img-responsive img-circle store-pro-pic">
 						{% else %}
 							<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
 						{% endif %}
+					{% else %}
+						{% if store.franchise.picture %}
+							<img src="{{ store.franchise.picture.url }}" class="img img-responsive img-circle store-pro-pic">
+						{% else %}
+							<img src="{% static "img/no-store.jpg" %} " class="img img-responsive store-pro-pic">
+						{% endif %}
+					{% endif %}
 					</div>
 					{{ store.category.name }}
 					<div class=" col-md-9 col-lg-9 ">
@@ -47,7 +55,7 @@
 								{% ifequal request.user store.user %}
 									<tr>
 										<td>Token</td>
-										<td>{{ store.token }}</a></td>
+										<td>{{ store.token }}</td>
 									</tr>
 								{% endifequal %}
 							</tbody>

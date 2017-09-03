@@ -65,11 +65,13 @@
           {% include "extra/bill_render.html" with bill=bill %}
         </div>
         {% empty %}
+        <div class="container">
         {% if user.profile %}
           <p>You do not have any bills currently</p>
         {% else %}
-          <p>The customer doesn't have any bills with you currently</p>
+          <p>No bills found</p>
         {% endif %}
+        </div>
         {% if forloop.counter == 4 %}
         </div>
         <div class="row">

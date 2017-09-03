@@ -53,7 +53,12 @@ class ProductUpdate(UpdateView):
 
 	def get_queryset(self):
 		queryset = super(ProductUpdate, self).get_queryset()
-		return queryset.filter(store__user=self.request.user)
+		try:
+			store = self.request.user.store
+			q = queryset.filter(store__user=self.request.user)
+		except Store.DoesNotExist:
+			q = queryset.filter(store_chain__user=self.request.user)
+		return q
 
 
 class ProductListView(ListView):
@@ -63,7 +68,12 @@ class ProductListView(ListView):
 	def get_context_data(self, **kwargs):
 
 		context = super(ProductListView, self).get_context_data(**kwargs)
-		product_list = Product.objects.filter(store__user=self.request.user)
+
+		try:
+			store = self.request.user.store
+			product_list = Product.objects.filter(store__user=self.request.user)
+		except Store.DoesNotExist:
+			product_list = Product.objects.filter(store_chain__user=self.request.user)
 
 		paginator = Paginator(product_list, self.paginate_by)
 

@@ -27,7 +27,7 @@
 		'regionID'                   : 'bh-sl-region',
 		'mapSettings'                : {
 			mapTypeId      : google.maps.MapTypeId.ROADMAP,
-			zoom           : 11
+			zoom           : 15
 		},
 		'markerImg'                  : null,
 		'markerDim'                  : null,

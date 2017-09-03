@@ -37,8 +37,8 @@ class FranchiseAdmin(admin.ModelAdmin):
 admin.site.register(Franchise, FranchiseAdmin)
 
 class StoreAdmin(GuardedModelAdmin):
-	list_display = ('name', 'city', 'state', 'category')
-	list_filter = ('city', 'state')
+	list_display = ('name', 'city', 'state', 'category', 'stand_alone')
+	list_filter = ('city', 'state', 'stand_alone')
 	raw_id_fields = ('user','category')
 	fieldsets = (
 		('Details', {

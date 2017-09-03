@@ -64,7 +64,7 @@
         <a href="{% url "change_password" %}"class="btn btn-sm btn-primary" title="Change Password"><i class="fa fa-key"></i> Change Password</a>
         <span class="pull-right">
           
-          <a href="{% url "profile_update" pk=cur_user.pk %}" title="Edit Profile" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Update Profile</a>
+          <a href="{% url "profile_update" pk=cur_user.pk %}" title="Edit Profile" class="btn btn-sm btn-warning"><i class="fa fa-edit"></i> Profile</a>
           
           <a href="{% url "auth_logout" %}?next={% url "index" %}" class="btn btn-sm btn-danger" title="Logout"><i class="fa fa-sign-out"> Logout</i></a>
         </span>

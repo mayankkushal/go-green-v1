@@ -12,8 +12,8 @@ class BillAdmin(admin.ModelAdmin):
 	Costomized Bill admin. 
 	Showing details in bill form
 	"""
-	list_display = ('bill_no', 'date', 'total')
-	list_filter = ('store', )
+	list_display = ('bill_no', 'date', 'total', 'editable')
+	list_filter = ('store','editable' )
 	raw_id_fields = ('store', )
 	inlines = [ItemInline,]
 

@@ -14,11 +14,11 @@ class Bill(models.Model):
 	'''
 	bill_no = models.CharField(max_length=100, default='', blank=True)
 	store = models.ForeignKey(Store, related_name='bill')
-	#customer = models.ForeignKey(User, related_name='bill', null=True)
 	customer_no = models.CharField(max_length=100, default='', blank=True)
 	date = models.DateTimeField(auto_now_add=True)
 	notified = models.BooleanField(default=False)
-	original = models.BooleanField(default=True)
+	original = models.BooleanField(default=True)#Only the first bill will have this active
+	editable = models.BooleanField(default=True)#Onl the latest bills with the same bill number will be editable
 	sale_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	total = models.DecimalField(max_digits=10, decimal_places=2)

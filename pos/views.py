@@ -119,10 +119,8 @@ def product_detail(request):
 	if request.method == 'GET':
 		try:
 			product = Product.objects.get(pk=request.GET.get('product_pk'))
-		except Product.DoesNotExist:
+		except:
 			product = Product.objects.get(sku=request.GET.get('product_pk'))
-		except Product.DoesNotExist:
-			product = None
 
 		if product:
 			data = {
@@ -161,6 +159,14 @@ class ReturnBill(UpdateView):
 		return self.form_invalid(form, items)
 
 	def form_valid(self, form, items):
+		
+		# Makes the old bill un-editable
+		old_bill = self.get_object()
+		old_bill.editable = False
+		old_bill.save()
+
+		# Saves a new copy of bill with the same bill number.
+		# Bill number is assigned in the post_save signal.
 		obj = form.save(commit=False)
 		obj.pk = None
 		obj.customer_no = form.data['customer_no']
@@ -169,9 +175,10 @@ class ReturnBill(UpdateView):
 		obj.save()
 		
 		for item in items:
-			item.instance.pk = None
-			item.instance.bill = obj
-			item.save()
+			if item.instance.quantity > 0:
+				item.instance.pk = None
+				item.instance.bill = obj
+				item.save()
 		obj.save()
 		return HttpResponseRedirect(self.get_success_url())
 

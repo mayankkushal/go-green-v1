@@ -19,12 +19,14 @@
 					</thead>
 					<tbody>
 						{% for item in bill.items.all %}
-							<tr>
-								<td align="left">{{ item.product.name }}&nbsp</td>
-								<td align="centre">{{ item.product.price }}&nbsp</td>
-								<td>{{ item.quantity }}&nbsp</td>
-								<td align="right">{{ item.total }}</td>
-							</tr>
+							{% if forloop.counter < 3%}
+								<tr>
+									<td align="left">{{ item.product.name }}&nbsp</td>
+									<td align="centre">{{ item.product.price }}&nbsp</td>
+									<td>{{ item.quantity }}&nbsp</td>
+									<td align="right">{{ item.total }}</td>
+								</tr>
+							{% endif %}
 						{% endfor %}
 					</tbody>
 				</table>

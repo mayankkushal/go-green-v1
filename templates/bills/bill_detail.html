@@ -112,6 +112,7 @@
 		{% url 'bill_pdf' bill.pk as pdf_url %}
 		<div id="share-btn">
 			<h6>Share this receipt with your friends</h6>
+			<a href="whatsapp://send?text=https://www.mobbills.com/bills/pdf/{{ bill.pk }}"><i class="fa fa-whatsapp fa-3x" style="color:#25D366"></i></a>
 			{% post_to_facebook  pdf_url '<i class="fa fa-facebook-official fa-3x" style="color:#3b5998"></i>' %}
 			{% post_to_twitter "New bill: {{bill.store.name}}. Check it out!" pdf_url '<i class="fa fa-twitter fa-3x" style="color:#1da1f2"></i>' %}
 			{% post_to_gplus pdf_url '<i class="fa fa-google-plus-official fa-3x" style="color:#dd4b39"></i>' %}

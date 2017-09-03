@@ -95,20 +95,19 @@ class CustomerPhoneNumberForm(forms.Form):
 class ItemReturnForm(forms.ModelForm):
 	class Meta:
 		model = Item
-		exclude = ('bill',)
+		exclude = ('bill','product')
 		widgets = {
-			'product': forms.Select(attrs={'disabled':"on"}),
-			'sku': forms.TextInput(attrs={'disabled':"on"}),
+			'sku': forms.TextInput(attrs={'readonly':"readonly"}),
 			'quantity':forms.NumberInput(attrs={
 				'oninput':"calculateTotal(this, value)", 
 				'min':"1",
 				'class':'quantity'
 				}),
-			'tax':forms.HiddenInput(attrs={'disabled':"on"}),
-			'price':forms.NumberInput(attrs={'disabled':"on"}),
-			'total':forms.NumberInput(attrs={'disabled':"on", 'class':'total'})
+			'tax':forms.HiddenInput(attrs={'readonly':"readonly"}),
+			'price':forms.NumberInput(attrs={'readonly':"readonly"}),
+			'total':forms.NumberInput(attrs={'readonly':"readonly", 'class':'total'})
 		}
-ItemReturnFormSet = inlineformset_factory(Bill, Item, form=ItemReturnForm, extra=0, can_delete=True)
+ItemReturnFormSet = inlineformset_factory(Bill, Item, form=ItemReturnForm, extra=0)
 
 
 class BillReturnForm(forms.ModelForm):

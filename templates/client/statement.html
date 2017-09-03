@@ -12,7 +12,7 @@
 				<tr>
 					<td></td>
 					<th scope="col">Stores Visited</th>
-					<th scope="col">Total Number of Bills</th>
+					<th scope="col">Number of Bills</th>
 					<th scope="col">Total Spending</th>
 				</tr>
 				<tr>
@@ -20,6 +20,12 @@
 					<td>{{ daily_store }}</td>
 					<td>{{ daily_count }}</td>
 					<td> &#8377;{{ daily_total }}</td>
+				</tr>
+				<tr>
+					<th scope="row">This week</th>
+					<td>{{ weekly_store }}</td>
+					<td>{{ weekly_count }}</td>
+					<td> &#8377;{{ weekly_total }}</td>
 				</tr>
 				<tr>
 					<th scope="row">This Month</th>

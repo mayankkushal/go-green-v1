@@ -23,7 +23,7 @@
                             {% endif %}
                             <td class="notice_message"><a href="{{ notice.data.url }}">{{ notice.verb|safe }}</a></td>
                             <td class="notice_time">{{ notice.actor }}</td>
-                            <td class="notice_time">{{ notice.timestamp|timesince }} {% trans "ago" %}</td>
+                            <td class="notice_time">{{ notice.timestamp }}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
