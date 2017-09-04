@@ -74,6 +74,7 @@ INSTALLED_APPS = [
 	"social_widgets",
 	'django_instagram',
 	'guardian',
+	'api'
 ]
 
 SITE_ID = 1

@@ -51,12 +51,13 @@ urlpatterns = [
     url(r'^blog/', include('blog.urls')),
     url(r'^pos/', include('pos.urls')),
     url(r'^locator/', include('locator.urls', namespace='locator')),
+    url(r'^api/v1/', include("api.urls")),
     url(r'^', include('client.urls')),
     
     url(r'^info/', include('django.contrib.flatpages.urls')),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     url(r'^sitemap-(?P<section>.+)\.xml$', sitemap, {'sitemaps': sitemaps}),
-    url(r'^robots\.txt$', include('robots.urls')),
+    url(r'^robots\.txt', include('robots.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)  
 
 

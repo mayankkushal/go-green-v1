@@ -6,7 +6,7 @@ from store.models import Product
 class ItemSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Item
-		fields = ('sku', 'quantity')
+		fields = ('product_name','sku', 'quantity', 'price', 'tax', 'total')
 
 class BillSerializer(serializers.ModelSerializer):
 	"""
