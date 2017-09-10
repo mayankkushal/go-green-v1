@@ -1,0 +1,640 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"art",
+				"article"
+			],
+			[
+				"TEM",
+				"TEMPLATE_DIR"
+			],
+			[
+				"ar",
+				"article"
+			],
+			[
+				"m",
+				"mysitte"
+			],
+			[
+				"qu",
+				"question_id"
+			],
+			[
+				"date",
+				"datetime"
+			],
+			[
+				"_",
+				"_str_"
+			],
+			[
+				"que",
+				"question_txt"
+			],
+			[
+				"fo",
+				"from"
+			],
+			[
+				"fa",
+				"fade"
+			],
+			[
+				"F",
+				"FeedbackAnswer"
+			],
+			[
+				"Feedback",
+				"FeedbackQuestion"
+			],
+			[
+				"activity",
+				"activity"
+			],
+			[
+				"Act",
+				"Activity"
+			],
+			[
+				"Activity",
+				"ActivityType"
+			],
+			[
+				"Te",
+				"TextField"
+			],
+			[
+				"f",
+				"from"
+			],
+			[
+				"s",
+				"self"
+			],
+			[
+				"__",
+				"__str__"
+			],
+			[
+				"se",
+				"section"
+			],
+			[
+				"co",
+				"col-centered"
+			],
+			[
+				"bu",
+				"blue"
+			],
+			[
+				"pa",
+				"padding-right"
+			],
+			[
+				"pad",
+				"padding-left"
+			],
+			[
+				"padd",
+				"padding-right"
+			],
+			[
+				"paddi",
+				"padding-left"
+			],
+			[
+				"bor",
+				"border-top"
+			],
+			[
+				"border-r",
+				"border-right"
+			],
+			[
+				"ma",
+				"margin-right"
+			],
+			[
+				"mar",
+				"margin-left"
+			],
+			[
+				"col",
+				"color"
+			],
+			[
+				"hom",
+				"homeHtmlToInsertIntoMainPage"
+			],
+			[
+				"in",
+				"insertHtml"
+			],
+			[
+				"cho",
+				"chosenCategoryShortName"
+			],
+			[
+				"rand",
+				"randomCategoryShortName"
+			],
+			[
+				"inser",
+				"insertProperty"
+			],
+			[
+				"sh",
+				"short_name"
+			],
+			[
+				"ch",
+				"chooseRandomCategory"
+			],
+			[
+				"buil",
+				"buildAndShowHomeHTML"
+			],
+			[
+				"ca",
+				"categories"
+			],
+			[
+				"fi",
+				"firstLetter"
+			],
+			[
+				"na",
+				"names"
+			],
+			[
+				"to",
+				"toLowerCase"
+			],
+			[
+				"nam",
+				"name"
+			],
+			[
+				"fu",
+				"function"
+			],
+			[
+				"wi",
+				"window"
+			],
+			[
+				"hea",
+				"heading"
+			],
+			[
+				"ba",
+				"background"
+			],
+			[
+				"o",
+				"overflow"
+			],
+			[
+				"p",
+				"position"
+			],
+			[
+				"c",
+				"col-xs-12"
+			],
+			[
+				"b",
+				"border"
+			],
+			[
+				"col-m",
+				"col-sm-6"
+			],
+			[
+				"mag",
+				"margin-left"
+			],
+			[
+				"background-c",
+				"background-color"
+			],
+			[
+				"C",
+				"class\tAttr"
+			],
+			[
+				"n",
+				"navbar"
+			],
+			[
+				"u",
+				"ul\tTag"
+			],
+			[
+				"li",
+				"li\tTag"
+			],
+			[
+				"menu",
+				"menu"
+			],
+			[
+				"margin",
+				"margin-left"
+			],
+			[
+				"margi",
+				"margin-right"
+			],
+			[
+				"fon",
+				"font-weight"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"tex",
+				"text-align"
+			],
+			[
+				"bo",
+				"border-bottom"
+			],
+			[
+				"sty",
+				"styles"
+			],
+			[
+				"backg",
+				"background-color"
+			],
+			[
+				"fl",
+				"float"
+			],
+			[
+				"max",
+				"max-width"
+			],
+			[
+				"min",
+				"min-width"
+			],
+			[
+				"wid",
+				"width"
+			],
+			[
+				"over",
+				"overflow"
+			],
+			[
+				"ove",
+				"overflow-wrap"
+			],
+			[
+				"di",
+				"div\tTag"
+			],
+			[
+				"cl",
+				"clear"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"h",
+				"height"
+			],
+			[
+				"st",
+				"style\tTag"
+			],
+			[
+				"bac",
+				"background-color"
+			],
+			[
+				"box",
+				"box-sizing"
+			],
+			[
+				"me",
+				"meta\tTag"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 490.0,
+		"last_filter": "S",
+		"selected_items":
+		[
+			[
+				"S",
+				"Set Syntax: HTML"
+			],
+			[
+				"",
+				"HTML: Encode Special Characters"
+			]
+		],
+		"width": 593.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Harshitha/go-green-v1/static/css/theming.css",
+		"/C/Users/Harshitha/go-green-v1/static/css/datetimepicker.css",
+		"/C/Users/Harshitha/Desktop/TRYOUT1.html",
+		"/C/Program Files/Git/ReleaseNotes.html",
+		"/C/Users/Harshitha/college_project/templates/details/index.html",
+		"/C/Users/Harshitha/college_project/static/css/creative.min.css",
+		"/C/Users/Harshitha/college_project/static/css/creative.css",
+		"/C/Users/Harshitha/college_project/templates/base.html",
+		"/C/Users/Harshitha/AppData/Local/Temp/Temp1_bootstrap-4.0.0-alpha.6-dist.zip/bootstrap-4.0.0-alpha.6-dist/css/bootstrap-grid.css",
+		"/C/Users/Harshitha/AppData/Local/Temp/Temp1_bootstrap-4.0.0-alpha.6-dist.zip/bootstrap-4.0.0-alpha.6-dist/css/bootstrap.css",
+		"/C/Users/Harshitha/AppData/Local/Temp/Temp1_HTML_Export_D4c7b732bddd7c50a76aae0d1c61ab1f4.zip/exporthtml/exporthtml/css/internal/editor-min.css",
+		"/C/Users/Harshitha/Desktop/Mobbils prototype 1/index.html",
+		"/C/Users/Harshitha/Desktop/Mobbils prototype 1_0/index.html",
+		"/C/Users/Harshitha/college_project/templates/activity/activity_list.html",
+		"/C/Users/Harshitha/Documents/Machine Learning A-Z Template Folder/Part 1 - Data Preprocessing/data_preprocessing_template.py",
+		"/C/Octave/Octave-4.2.1/README.html",
+		"/C/Users/Harshitha/Documents/trial/style.css",
+		"/C/Users/Harshitha/Documents/trial/harshu.html",
+		"/D/details sindhu/Application.html",
+		"/C/Users/Harshitha/Documents/notes/JAVA/applet Programs.docx",
+		"/C/Users/Harshitha/Documents/style.css",
+		"/C/Users/Harshitha/Documents/harshu.html",
+		"/C/Users/Harshitha/fullstack-course4/examples/Lecture16/style.css",
+		"/C/Users/Harshitha/college_project/templates/activity/feedback_activity_list.html",
+		"/C/Users/Harshitha/college_project/se_project/settings.py",
+		"/C/Users/Harshitha/college_project/templates/activity/activity_entry.html",
+		"/C/Users/Harshitha/college_project/templates/activity/activity.html",
+		"/C/Users/Harshitha/college_project/templates/activity/feedback.html",
+		"/C/virtualenv/blogproject/blogproject/templates/myblog/index.html",
+		"/C/virtualenv/blogproject/blogproject/settings.py",
+		"/C/virtualenv/blogproject/blogproject/myblog/admin.py",
+		"/C/virtualenv/blogproject/blogproject/myblog/models.py",
+		"/C/virtualenv/blogproject/blogproject/myblog/views.py",
+		"/C/virtualenv/blogproject/blogproject/myblog/urls.py",
+		"/C/virtualenv/blogproject/myblog/apps.py",
+		"/C/virtualenv/blogproject/myblog/admin.py",
+		"/C/virtualenv/blogproject/myblog/urls.py",
+		"/C/virtualenv/blogproject/myblog/views.py",
+		"/C/virtualenv/blogproject/myblog/tests.py",
+		"/C/virtualenv/se_project/templates/base.html",
+		"/C/Users/Harshitha/AppData/Local/Temp/Temp1_startbootstrap-clean-blog-gh-pages (1).zip/startbootstrap-clean-blog-gh-pages/index.html",
+		"/C/Users/Harshitha/AppData/Local/Temp/Temp1_startbootstrap-clean-blog-gh-pages (1).zip/startbootstrap-clean-blog-gh-pages/css/clean-blog.min.css",
+		"/C/virtualenv/myblogvenv/Scripts/django-admin.py",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/UAE0c21183.html",
+		"/C/mysitte/polls/templates/polls/index.html",
+		"/C/mysitte/mysitte/urls.py",
+		"/C/mysitte/mysitte/settings.py",
+		"/C/mysitte/polls/urls.py",
+		"/C/mysitte/polls/views.py",
+		"/C/mysitte/polls/admin.py",
+		"/C/mysitte/polls/models.py",
+		"/D/GIF/UAE0c21250.html",
+		"/D/GIF/UAE0c21249.html",
+		"/D/GIF/UAE0c21248.html",
+		"/D/GIF/UAE0c21247.html",
+		"/D/GIF/UAE0c21246.html",
+		"/D/GIF/UAE0c21245.html",
+		"/D/GIF/UAE0c21244.html",
+		"/D/GIF/UAE0c21243.html",
+		"/D/GIF/UAE0c21242.html",
+		"/D/GIF/UAE0c21241.html",
+		"/D/GIF/UAE0c21240.html",
+		"/D/GIF/UAE0c21239.html",
+		"/D/GIF/UAE0c21238.html",
+		"/D/GIF/UAE0c21237.html",
+		"/D/GIF/UAE0c21236.html",
+		"/D/GIF/UAE0c21235.html",
+		"/D/GIF/UAE0c21234.html",
+		"/D/GIF/UAE0c21233.html",
+		"/D/GIF/UAE0c21232.html",
+		"/D/GIF/UAE0c21231.html",
+		"/D/GIF/UAE0c21230.html",
+		"/D/GIF/UAE0c21229.html",
+		"/D/GIF/UAE0c21228.html",
+		"/D/GIF/UAE0c21227.html",
+		"/D/GIF/UAE0c21226.html",
+		"/D/GIF/UAE0c21225.html",
+		"/D/GIF/UAE0c21224.html",
+		"/D/GIF/UAE0c21223.html",
+		"/D/GIF/UAE0c21222.html",
+		"/D/GIF/UAE0c21221.html",
+		"/D/GIF/UAE0c21220.html",
+		"/D/GIF/UAE0c21219.html",
+		"/D/GIF/UAE0c21218.html",
+		"/D/GIF/UAE0c21217.html",
+		"/D/GIF/UAE0c21216.html",
+		"/D/GIF/UAE0c21215.html",
+		"/D/GIF/UAE0c21214.html",
+		"/D/GIF/UAE0c21213.html",
+		"/D/GIF/UAE0c21212.html",
+		"/D/GIF/UAE0c21211.html",
+		"/D/GIF/UAE0c21210.html",
+		"/D/GIF/UAE0c21209.html",
+		"/D/GIF/UAE0c21208.html",
+		"/D/GIF/UAE0c21207.html",
+		"/D/GIF/UAE0c21206.html",
+		"/D/GIF/UAE0c21205.html",
+		"/D/GIF/UAE0c21204.html",
+		"/D/GIF/UAE0c21203.html",
+		"/D/GIF/UAE0c21202.html",
+		"/D/GIF/UAE0c21201.html",
+		"/D/GIF/UAE0c21175.html",
+		"/D/GIF/UAE0c21174.html",
+		"/D/GIF/UAE0c21173.html",
+		"/D/GIF/UAE0c21171.html",
+		"/D/GIF/UAE0c21250.html.txt",
+		"/D/GIF/UAE0c21249.html.txt",
+		"/D/GIF/UAE0c21208.html.txt",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 185.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 186.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page189.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page184.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page183.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page182.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page181.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 200.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 199.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 198.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 197.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 196.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 195.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 194.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 193.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 192.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 191.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 190.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 188.html",
+		"/C/Users/Harshitha/Desktop/Ashwini typing/Page 187.html"
+	],
+	"find":
+	{
+		"height": 28.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"HTML",
+			"polls",
+			".navbar-nav",
+			".nav-tabs",
+			"content",
+			"red",
+			"%\n",
+			"collapse",
+			"\n</",
+			"transparent"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			".nav-tabs ",
+			".navbar-nav"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 46.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "theming.sublime-project",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 291.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
