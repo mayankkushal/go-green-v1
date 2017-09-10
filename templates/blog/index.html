@@ -8,7 +8,7 @@
   <h1>Articles</h1>
   <div class="row">
     {% for article in article_list %}
-      <div class="col-sm-4">
+      <div class="col-xs-12">
         <div class="sol-tile">
           {% with article.images.all|first as image %}
           <a href="{{ article.get_absolute_url }}"><img src="{{ image.picture.url }}" class="article-img">

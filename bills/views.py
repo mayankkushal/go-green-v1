@@ -200,12 +200,3 @@ class BillPDFView(PDFTemplateResponseMixin, DetailView):
 			customer = None
 		context['customer'] = customer
 		return context
-
-from django.contrib.auth import authenticate
-def example_view(request, username, password):
-	user = authenticate(username=username, password=password)
-	if user:
-		data = {'user_phone':user.profile.phone_no.national_number}
-		return HttpResponse(json.dumps(data), content_type='application/json')
-	else:
-		raise Http404
