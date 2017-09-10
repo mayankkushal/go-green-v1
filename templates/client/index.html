@@ -13,7 +13,7 @@
   </div>
   <div class="container">
     <div class="row">
-      <h3 align="center">We <strong style="color:#00FF8C">Blog!</strong></h3>
+      <h3 align="center">We <strong style="color:#76FF03">Blog!</strong></h3>
       {% for article in article_list %}
         <div class="col-lg-4 col-md-4">
           <div class="sol-tile">
@@ -28,7 +28,7 @@
     </div>
     
     <div class="row">
-      <h3 align="center"><strong style="color:#00FF8C">What's</strong> new?</h3>
+      <h3 align="center"><strong style="color:#76FF03">What's</strong> new?</h3>
       <div class="col-md-4 widget">
       <h4 align="center">Like us on Facebook</h4>
         {% social_widget_render 'facebook/likebox.html' href='https://www.facebook.com/mobbillspos/' %}
@@ -56,8 +56,7 @@
             <div class="tweet-meta">
                 <a href="https://www.twitter.com/{{ tweet.user.screen_name }}/status/{{ tweet.id }}" target="_blank">
                     <img src="{{ tweet.user.profile_image_url }}" width="32" height="32" />
-                    <p class="tw-name">{{ tweet.user.name }}</p>
-                    <p class="tw-meta">@{{ tweet.user.screen_name }} &middot; {{ tweet.created_at|twitter_date }}</p>
+                    <h2>{{ tweet.user.name }}<br /><span>@{{ tweet.user.screen_name }} &middot; {{ tweet.created_at|twitter_date }}</span></h2>
                 </a>
             </div>
             <p>{{ tweet|urlize_tweet_text|safe }}</p>
