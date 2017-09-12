@@ -105,13 +105,6 @@ class Item(models.Model):
 	def __str__(self):
 		return self.product.name
 
-	@property
-	def product_name(self):
-		"""
-		Returns the products name
-		"""
-		return self.product.name
-
 	def get_total(self):
 		"""
 		Calculates the total price of the item without tax, and returns the result
