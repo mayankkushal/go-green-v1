@@ -12,6 +12,7 @@ from django.core.paginator import PageNotAnInteger
 
 from .forms import StoreForm, ProductForm
 from .models import Store, Product
+from client.mixins import StatementMixin
 # Create your views here.
 
 class StoreCreate(CreateView):
@@ -99,3 +100,38 @@ class ProductDelete(DeleteView):
 		if not obj.store == self.request.user.store:
 			raise Http404
 		return obj
+
+
+class StoreStatement(StatementMixin, TemplateView):
+	template_name = "store/statement.html"
+
+	def get_context_data(self, **kwargs):
+		context = super(StoreStatement, self).get_context_data(**kwargs)
+
+		week_start, week_end = self.get_week_dates()
+		month_start, month_end = self.get_month_dates()
+		year_start, year_end = self.get_year_dates()
+
+		store = self.request.user.store
+		
+		daily_bill = self.get_daily_bill(store=store)
+		weekly_bill = self.get_bill_in_range(week_start, week_end, store=store)
+		monthly_bill = self.get_bill_in_range(month_start, month_end, store=store)
+		yearly_bill = self.get_bill_in_range(year_start, year_end, store=store)
+
+		context['daily_count'] = len(daily_bill)
+		context['weekly_count'] = len(weekly_bill)
+		context['monthly_count'] = len(monthly_bill)
+		context['yearly_count'] = len(yearly_bill)
+
+		context['daily_total'] = self.get_bill_total(daily_bill)
+		context['weekly_total'] = self.get_bill_total(weekly_bill)
+		context['monthly_total'] = self.get_bill_total(monthly_bill)
+		context['yearly_total'] = self.get_bill_total(yearly_bill)
+
+		context['daily_store'] = self.get_unique_customers(daily_bill)
+		context['weekly_store'] = self.get_unique_customers(weekly_bill)
+		context['monthly_store'] = self.get_unique_customers(monthly_bill)
+		context['yearly_store'] = self.get_unique_customers(yearly_bill)
+
+		return context

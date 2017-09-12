@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Store, Product, Category, Franchise
+from .models import Store, Product, Category, Franchise, FranchiseType
 from guardian.admin import GuardedModelAdmin
 
 
@@ -48,7 +48,7 @@ class StoreAdmin(GuardedModelAdmin):
 			'fields': ('street', ('city', 'state', 'postal'), 'location')
 		}),
 		('Policies', {
-			'fields': (('return_days', 'stand_alone'),'franchise', 'category')
+			'fields': (('return_days', 'stand_alone',), 'franchise_type', 'franchise', 'category')
 		}),
 		('Optional', {
 			'fields': ('website', 'hours')
@@ -70,16 +70,5 @@ class CategoryAdmin(admin.ModelAdmin):
 	search_fields = ('name',)
 
 admin.site.register(Category, CategoryAdmin)
-
-
-# class ProductAdmin(GuardedModelAdmin):
-# 	'''
-# 		Admin View for Product
-# 	'''
-# 	list_display = ('name', 'price')
-# 	#list_filter = ('store',)
-# 	#raw_id_fields = ('store','franchise')
-# 	search_fields = ('name',)
-# 	fieldsets = (('Detail',{"fields":('franchise',)}),)
-
 admin.site.register(Product)
+admin.site.register(FranchiseType)

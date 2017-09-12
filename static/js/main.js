@@ -88,9 +88,12 @@ function b_fill(sale, tot, tax) {
 
 // main jquery function
 $(function() {
+
+    // Admin js
     $('.field-franchise').addClass('hidden');
     $('.field-store').addClass('hidden');
     $('.field-store_chain').addClass('hidden');
+    $('.field-franchise_type').addClass('hidden');
 
     if ($("#id_type_of_product").val() == 'F') {
         $('.field-store').addClass('hidden');
@@ -104,9 +107,11 @@ $(function() {
         if ($(this).is(':checked')) {
             $('.field-franchise').addClass('hidden');
             $('.field-category').removeClass('hidden');
+            $('.field-franchise_type').addClass('hidden');
         } else {
             $('.field-franchise').removeClass('hidden');
             $('.field-category').addClass('hidden');
+            $('.field-franchise_type').removeClass('hidden');
         }
     });
 

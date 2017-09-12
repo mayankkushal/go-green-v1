@@ -24,6 +24,13 @@ class Category(models.Model):
 		return self.name
 
 
+class FranchiseType(models.Model):
+	name = models.CharField(_('Name'), max_length=254)
+
+	def __str__(self):
+		return self.name
+
+
 class BaseDetails(models.Model):
 	"""
 	Base abstract model contains all the feilds for details of franchise and stores
@@ -60,11 +67,21 @@ class Franchise(BaseDetails):
 	def __str__(self):
 		return self.name
 
+	def save(self, *args, **kwargs):
+		if not self.id: 
+			self.slug = slugify(self.name)
+			self.name = self.name.title()
+			self.city = self.city.title()
+			self.state = self.state.title()
+		super(Franchise, self).save(*args, **kwargs)
+
 
 class Store(BaseDetails):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='store')
 
 	stand_alone = models.BooleanField(_("Is a stand alone store?"), default=True)
+	franchise_type = models.ForeignKey(FranchiseType, related_name='store', null=True, blank=True)
+	
 	franchise = models.ForeignKey(Franchise, related_name='store', null=True, blank=True)
 
 	category = models.ForeignKey(Category, related_name='store', null=True, blank=True)
@@ -78,6 +95,8 @@ class Store(BaseDetails):
 		if not self.id: 
 			self.slug = slugify(self.name)
 			self.name = self.name.title()
+			self.city = self.city.title()
+			self.state = self.state.title()
 			t = Token.objects.create(user=self.user)
 			self.token = t.key
 		super(Store, self).save(*args, **kwargs)
