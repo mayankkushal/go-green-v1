@@ -121,3 +121,13 @@
 		{% endif %}
 	</div>
 {% endblock %}
+
+{% block extra_scripts %}
+	<script type="text/javascript">
+    $(document).ready(function(){
+     $(document).bind("contextmenu",function(e){
+       return false;
+     });
+    });
+  </script>
+{% endblock extra_scripts %}

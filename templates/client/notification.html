@@ -32,3 +32,13 @@
             {% include 'extra/pagination.html' with page_obj=notices %}
         </div>
     {% endblock %}
+
+{% block extra_scripts %}
+    <script type="text/javascript">
+    $(document).ready(function(){
+     $(document).bind("contextmenu",function(e){
+       return false;
+     });
+    });
+  </script>
+{% endblock extra_scripts %}

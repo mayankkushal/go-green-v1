@@ -34,7 +34,6 @@ class RegisterProfileForm(RegistrationForm):
 		return self.cleaned_data
 
 
-from django.core.cache import cache
 import random
 import requests
 def user_created(sender, user, request, **kwargs):
@@ -69,4 +68,18 @@ class OTPVerificationForm(forms.Form):
 	'''
 	OTP form, for pin and phone number
 	'''
-	pin = forms.CharField(max_length=5)
+	pin = forms.CharField(max_length=6)
+
+
+class PasswordResetForm(forms.Form):
+	phone_no = forms.CharField(max_length=10)
+
+	def clean(self):
+		try:
+			if not Profile.objects.filter(phone_no=self.cleaned_data['phone_no']).exists():
+				raise forms.ValidationError("Phone number does not exist in the database")
+		except KeyError:
+			pass
+
+		return self.cleaned_data
+

@@ -126,7 +126,7 @@ $(function() {
     });
 
     setTimeout(function() {
-                $('.alert').fadeOut('slow');
+                $('.alert-fade').fadeOut('slow');
             }, 4000);
 
     // Inventory page, if infinite_quantity is checked, quantity should be disabled

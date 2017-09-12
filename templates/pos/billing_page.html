@@ -115,4 +115,11 @@
 </script>
  	<!-- forms.media -->
 	{{ items.media }}
+	<script type="text/javascript">
+    $(document).ready(function(){
+     $(document).bind("contextmenu",function(e){
+       return false;
+     });
+    });
+  </script>
 {% endblock extra_scripts %}
