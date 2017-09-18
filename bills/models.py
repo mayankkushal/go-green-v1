@@ -18,10 +18,11 @@ class Bill(models.Model):
 	date = models.DateTimeField(auto_now_add=True)
 	notified = models.BooleanField(default=False)
 	original = models.BooleanField(default=True)#Only the first bill will have this active
-	editable = models.BooleanField(default=True)#Onl the latest bills with the same bill number will be editable
+	editable = models.BooleanField(default=True)#Only the latest bills with the same bill number will be editable
 	sale_value = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	tax_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	total = models.DecimalField(max_digits=10, decimal_places=2)
+	return_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 
 	class Meta:
 		ordering = ('-date',)

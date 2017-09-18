@@ -1,17 +1,9 @@
 from django.contrib import admin
-from .models import Store, Product, Category, Franchise, FranchiseType
+from .models import Store, Product, Category, Franchise, FranchiseType, ProductCategory
 from guardian.admin import GuardedModelAdmin
 
 
 # Register your models here.
-
-
-# class ProductInline(admin.TabularInline):
-
-# 	'''
-# 		Tabular Inline View for Product
-# 	'''
-# 	model = Product
 
 class FranchiseAdmin(admin.ModelAdmin):
 	'''
@@ -57,7 +49,6 @@ class StoreAdmin(GuardedModelAdmin):
 			'fields': ('token',)
 		})
 	)
-	# inlines = (ProductInline, )
 
 
 admin.site.register(Store, StoreAdmin)
@@ -72,3 +63,13 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product)
 admin.site.register(FranchiseType)
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    '''
+        Admin View for ProductCategory
+    '''
+    list_display = ('name', 'category_relation', 'parent_category')
+    list_filter = ('category_relation',)
+    search_fields = ('name',)
+
+admin.site.register(ProductCategory, ProductCategoryAdmin)

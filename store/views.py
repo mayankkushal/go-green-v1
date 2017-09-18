@@ -105,6 +105,20 @@ class ProductDelete(DeleteView):
 class StoreStatement(StatementMixin, TemplateView):
 	template_name = "store/statement.html"
 
+	def get_return_count(self, bills):
+		count = 0
+		for b in bills:
+			if not b.original:
+				count += 1
+		return count
+
+	def get_return_amount(self, bills):
+		total = 0
+		for b in bills:
+			if not b.original:
+				total += b.return_amount
+		return total
+
 	def get_context_data(self, **kwargs):
 		context = super(StoreStatement, self).get_context_data(**kwargs)
 
@@ -133,5 +147,15 @@ class StoreStatement(StatementMixin, TemplateView):
 		context['weekly_store'] = self.get_unique_customers(weekly_bill)
 		context['monthly_store'] = self.get_unique_customers(monthly_bill)
 		context['yearly_store'] = self.get_unique_customers(yearly_bill)
+
+		context['daily_r_count'] = self.get_return_count(daily_bill)
+		context['weekly_r_count'] = self.get_return_count(weekly_bill)
+		context['monthly_r_count'] = self.get_return_count(monthly_bill)
+		context['yearly_r_count'] = self.get_return_count(yearly_bill)
+
+		context['daily_r_total'] = self.get_return_amount(daily_bill)
+		context['weekly_r_total'] = self.get_return_amount(weekly_bill)
+		context['monthly_r_total'] = self.get_return_amount(monthly_bill)
+		context['yearly_r_total'] = self.get_return_amount(yearly_bill)
 
 		return context

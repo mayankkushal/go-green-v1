@@ -165,6 +165,8 @@ class ReturnBill(UpdateView):
 		old_bill.editable = False
 		old_bill.save()
 
+		old_total = old_bill.total # Total of the previous bill
+
 		# Saves a new copy of bill with the same bill number.
 		# Bill number is assigned in the post_save signal.
 		obj = form.save(commit=False)
@@ -180,6 +182,12 @@ class ReturnBill(UpdateView):
 				item.instance.bill = obj
 				item.save()
 		obj.save()
+
+		# Finalinizing the total return amount, it'll be stored in the new bill
+		return_amount = old_total - obj.get_total()
+		obj.return_amount = return_amount
+		obj.save()
+
 		return HttpResponseRedirect(self.get_success_url())
 
 	def form_invalid(self, form, items):

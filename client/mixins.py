@@ -20,7 +20,8 @@ class StatementMixin:
 		"""
 		total = 0
 		for b in bills:
-			total += b.total
+			if b.editable:
+				total += b.total
 		return total
 
 	def get_unique_stores(self, bills):
@@ -42,23 +43,23 @@ class StatementMixin:
 		return len(list(set(customers)))
 
 	def get_week_dates(self):
-		week_start = datetime.datetime.today() - datetime.timedelta(days=datetime.datetime.today().weekday())
+		week_start = pytz.timezone('Asia/Calcutta').localize(datetime.datetime.today()) - datetime.timedelta(days=datetime.datetime.today().weekday())
 		week_end = week_start + datetime.timedelta(days=6)
-		return pytz.UTC.localize(week_start), pytz.UTC.localize(week_end)
+		return week_start.replace(hour=00, minute=00), week_end.replace(hour=23, minute=59)
 
 	def get_month_dates(self):
-		month_start = pytz.UTC.localize(datetime.datetime.today().replace(day=1))
+		month_start = pytz.timezone('Asia/Calcutta').localize(datetime.datetime.today().replace(day=1))
 		next_month_start = datetime.datetime.today().replace(month=datetime.datetime.today().month + 1, day=1)
-		month_end = pytz.UTC.localize(next_month_start - datetime.timedelta(days=1))
-		return month_start, month_end
+		month_end = pytz.timezone('Asia/Calcutta').localize(next_month_start - datetime.timedelta(days=1))
+		return month_start.replace(hour=00, minute=00), month_end.replace(hour=23, minute=59)
 
 	def get_year_dates(self):
-		year_start = pytz.UTC.localize(datetime.datetime.today().replace(month=1, day=1)) 
-		year_end = pytz.UTC.localize(datetime.datetime.today().replace(month=12, day=31))
-		return year_start, year_end
+		year_start = pytz.timezone('Asia/Calcutta').localize(datetime.datetime.today().replace(month=1, day=1)) 
+		year_end = pytz.timezone('Asia/Calcutta').localize(datetime.datetime.today().replace(month=12, day=31))
+		return year_start.replace(hour=00, minute=00), year_end.replace(hour=23, minute=59)
 
 	def get_daily_bill(self, customer_no=None, store=None):
-		today_date = pytz.UTC.localize(datetime.datetime.today())
+		today_date = pytz.timezone('Asia/Calcutta').localize(datetime.datetime.today())
 		if customer_no:
 			return Bill.objects.filter(customer_no=customer_no,
 							date__gt=today_date - datetime.timedelta(days=1),

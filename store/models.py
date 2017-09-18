@@ -24,6 +24,24 @@ class Category(models.Model):
 		return self.name
 
 
+CATEGORY_CHOICES = (
+		('P','Parent'),
+		('S','Sub'),
+	)
+class ProductCategory(models.Model):
+	"""
+	Description: Category of defferent Products. Can have multiple sub-category
+	"""
+	name = models.CharField(_('Name'), max_length=254)
+	category_relation = models.CharField(_('Category Relation'), max_length=1, choices=CATEGORY_CHOICES,
+				help_text="Whether the Category is first in line or sub of any other Category.")
+	parent_category = models.ForeignKey('ProductCategory', related_name='sub_category',
+							  null=True, blank=True)
+
+	def __str__(self):
+		return self.name
+
+
 class FranchiseType(models.Model):
 	name = models.CharField(_('Name'), max_length=254)
 
@@ -147,12 +165,16 @@ class Product(models.Model):
 
 	type_of_product = models.CharField( max_length=1, choices=PRODUCT_CHOICES,
 				help_text="Whether the product belongs to a individual store or a Franchise?")
-	store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product', null=True, blank=True)
+	category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='product',
+									 null=True, blank=True)
+	store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product',
+								 null=True, blank=True)
 	store_chain = models.ForeignKey(Franchise, verbose_name="Franchise", related_name='franchise_product', null=True, blank=True)
 	name = models.CharField(_('Name'), max_length=256)
 	sku = models.CharField(_('SKU'), max_length=100)
 	price = models.DecimalField(_('Price'), max_digits=10, decimal_places=2)
 	quantity = models.IntegerField(_("Available Quantity"), default=0, blank=True)
+	discount = models.DecimalField(_('Discount'), max_digits=5, decimal_places=2, default=0.00)
 	tax = models.DecimalField(_("Tax"), max_digits=5, decimal_places=2, default=0.00)
 	infinite_quantity = models.BooleanField(_("Infinite Quantity"),
 					 default=False,
