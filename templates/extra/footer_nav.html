@@ -10,31 +10,31 @@
         </div>
         <ul class="nav navbar-nav mobile-bar" style="float:none !important;">
           <li>
-            <a href="{% url "bill_list" %}" style="padding:0; padding-top:13px">
+            <a href="{% url "bill_list" %}" style="padding:0; padding-top:5px">
               <span class="menu-icon fa fa-file-text"></span>
               <span class="visible-xs">Bills</span>
             </a>
           </li>
           <li>
-            <a href="{% url "statement" %}" style="padding:0; padding-top:13px">
+            <a href="{% url "statement" %}" style="padding:0; padding-top:5px">
               <span class="menu-icon fa fa-bar-chart"></span>
               <span class="visible-xs">Account</span>
             </a>
           </li>
           <li class="visible-xs">
-            <a href="{% url "qr_scanner" %}" style="padding:0; padding-top:13px">
+            <a href="{% url "qr_scanner" %}" style="padding:0; padding-top:5px">
               <span class="menu-icon fa fa-qrcode"></span>
               <span class="visible-xs">Scan</span>
             </a>
           </li>
           <li>
-            <a href="{{ user.profile.get_absolute_url }}" style="padding:0; padding-top:13px">
+            <a href="{{ user.profile.get_absolute_url }}" style="padding:0; padding-top:5px">
               <span class="menu-icon fa fa-user-circle"></span>
               <span class="visible-xs">Profile</span>
             </a>
           </li>
           <li>
-            <a href="{% url "notify" %}" style="padding:0; padding-top:13px">
+            <a href="{% url "notify" %}" style="padding:0; padding-top:5px">
               <span class="menu-icon fa fa-bell-o">{% live_notify_badge classes="badge menu-icon" %}</span>
               <span class="visible-xs">Messages</span>
             </a>
@@ -43,4 +43,50 @@
       </div>
     </nav>
   {% endif %}
+  
+  {# navbar for store #}
+    {% if user.store %}
+    <nav class="navbar-bottom navbar-default navbar-fixed-bottom animate visible-xs">
+      <div class="container">
+        <div class="navbar-header hidden-xs">
+          <a class="navbar-brand" href="#">Brand</a>
+        </div>
+        <ul class="nav navbar-nav mobile-bar" style="float:none !important;">
+          <li>
+            <a href="{% url "qr_scanner" %}" style="padding:0; padding-top:5px">
+              <span class="menu-icon fa fa-qrcode"></span>
+              <span class="visible-xs">Billing</span>
+            </a>
+          </li>
+          <li>
+            <a href="{% url "qr_scanner_return" %}" style="padding:0; padding-top:5px">
+              <span class="menu-icon fa fa-exchange"></span>
+              <span class="visible-xs">Return</span>
+            </a>
+          </li>
+          <li class="visible-xs">
+            <a href="{% url "store:statement" %}" style="padding:0; padding-top:5px">
+              <span class="menu-icon fa fa-bar-chart"></span>
+              <span class="visible-xs">Statement</span>
+            </a>
+          </li>
+          <li>
+            <a href="{{ user.store.get_absolute_url }}" style="padding:0; padding-top:5px">
+              <span class="menu-icon fa fa-user-circle"></span>
+              <span class="visible-xs">Profile</span>
+            </a>
+          </li>
+          {% if user.store.stand_alone %}
+          <li>
+            <a href="{% url "store:product_list" %}" style="padding:0; padding-top:5px">
+              <span class="menu-icon fa fa-truck"></span>
+              <span class="visible-xs">Inventory</span>
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  {% endif %}
+
 {% endif %}

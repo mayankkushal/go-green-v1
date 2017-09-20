@@ -20,7 +20,7 @@ class StatementMixin:
 		"""
 		total = 0
 		for b in bills:
-			if b.editable:
+			if b.original:
 				total += b.total
 		return total
 
@@ -30,7 +30,7 @@ class StatementMixin:
 		"""
 		stores = []
 		for b in bills:
-			stores.append(b.store.name)
+			stores.append(b.store.name) 
 		return len(list(set(stores)))
 
 	def get_unique_customers(self, bills):

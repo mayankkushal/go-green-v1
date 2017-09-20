@@ -14,6 +14,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
+from django.contrib import messages
 
 import random
 
@@ -108,6 +109,7 @@ class ResetOTPVerification(FormView):
 	template_name = "registration/reset_password_confirm.html"
 	form_class = OTPVerificationForm
 	success_url = reverse_lazy('reset_password_form')
+	login_url = reverse_lazy('login')
 
 	def verify_pin(self, pin, phone_no):
 		try:
@@ -122,11 +124,11 @@ class ResetOTPVerification(FormView):
 		profile = Profile.objects.get(phone_no=phone_no)
 		
 		if self.verify_pin(pin, phone_no) and profile:
-			print('inside verify')
 			return HttpResponseRedirect(self.get_success_url())
 
 		else:
-			return HttpResponse("asdfasdf")
+			messages.error(self.request, 'Incorrect OTP.')
+			return HttpResponseRedirect(self.login_url)
 
 	def get_context_data(self, **kwargs):
 
@@ -153,13 +155,10 @@ class ResetPasswordComplete(FormView):
 	def get_form_kwargs(self, **kwargs):
 		form_kwargs = super(ResetPasswordComplete, self).get_form_kwargs(**kwargs)
 		user = User.objects.get(profile__phone_no=self.request.session['cur_number'])
-		print("user is")
-		print(user)
 		form_kwargs["user"] = user
 		return form_kwargs
 
 	def form_valid(self, form):
 		form.save()
-		print("aslf")
 		return super(ResetPasswordComplete, self).form_valid(form)
 

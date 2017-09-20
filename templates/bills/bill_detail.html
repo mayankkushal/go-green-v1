@@ -29,6 +29,14 @@
 						</address>
 					</div>
 					<div class="col-xs-6 text-right">
+						{% if not bill.store.stand_alone %}
+							<img src="{{ bill.store.franchise.picture.url }}" class="img bill-logo">
+						{% else %}
+							{% if bill.store.picture %}
+								<img src="{{ bill.store.picture.url }}" class="img bill-logo">
+							{% endif %}
+						{% endif %}
+
 						<address>
 							<strong>Store:</strong><br>
 							{{ bill.store.name }}<br>

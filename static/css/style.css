@@ -266,9 +266,10 @@ nav > a, nav>li{
 	-webkit-box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 	border-radius: 2px;
-	font-family: 'Raleway Dots', cursive;
+	font-family: 'Raleway Dots', sans-serif;
 	background-color: #e5e8ea !important;
 	color: black !important;
+	font-weight: bold;
 }
 @media (max-width: 768px){
 	.bill-container{
@@ -964,6 +965,11 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 		width: 75%;
 		margin: 0 auto;
 	}
+.bill-logo{
+	height: 200px;
+	width: 200px;
+	margin-right: 0px !important;
+}
 @media(max-width: 768px){
 	.pro-pic{
 		max-height: 250px !important;
@@ -972,6 +978,11 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 	.locator-container{
 		width: 100%;
 	}
+	.bill-logo{
+	height: 110px;
+	width: 110px;
+	margin-right: 0px !important;
+}
 }
 .widget{
 	border: solid #DDDDDD 1px;
@@ -1020,6 +1031,7 @@ box-shadow: -1px -4px 5px 0px rgba(0,0,0,0.27);
 	margin: auto;
 	padding: 15px;
 }
+
 .product-list{
 	background-color: white;
 	padding: 10px;
