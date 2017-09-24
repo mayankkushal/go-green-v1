@@ -24,7 +24,7 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY =config('SECRET_KEY')
+SECRET_KEY ='ki3=m-zy1bb5ff+&8sg-^z3c@)s2kjawt9lj_rcrsite9sj+s7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
@@ -93,12 +93,10 @@ AUTHENTICATION_BACKENDS = (
 	 )
 
 
-TWITTER_FEED_CONSUMER_PUBLIC_KEY = config('WITTER_FEED_CONSUMER_PUBLIC_KEY')
-TWITTER_FEED_CONSUMER_SECRET =config('TWITTER_FEED_CONSUMER_SECRET')
-TWITTER_FEED_OPEN_AUTH_TOKEN = config('TWITTER_FEED_OPEN_AUTH_TOKEN')
-TWITTER_FEED_OPEN_AUTH_SECRET = config('TWITTER_FEED_OPEN_AUTH_SECRET')
-
-
+TWITTER_FEED_CONSUMER_PUBLIC_KEY = 'uTgwDCzo1kZfK1bEyaBFEAq5C'
+TWITTER_FEED_CONSUMER_SECRET = 'B9WuqUCiT63FY3lHhXlMJerArXS1zRTCwwNfs4sHfoltgsKn2m'
+TWITTER_FEED_OPEN_AUTH_TOKEN = '896679245849612288-mQnbUOsTMsWnKfZS5mdYkvlnYbUNzNy'
+TWITTER_FEED_OPEN_AUTH_SECRET = '9k7D3tZhSee0y3XvlICisTs3OOSyvqBzG60cWDJwSRpyt'
 
 ANONYMOUS_USER_NAME = None #django-gaurdian ANONYMOUS_USER_NAME, different from django anonymous_user
 
@@ -151,10 +149,10 @@ SEO_MODELS = [
 
 #twilio
 
-TWILIO_ACCOUNT_SID = config('TWILIO_ACCOUNT_SID')
-TWILIO_AUTH_TOKEN = config('TWILIO_AUTH_TOKEN')
-TWILIO_DEFAULT_CALLERID = config('TWILIO_DEFAULT_CALLERID')
-NO = config('NO')
+TWILIO_ACCOUNT_SID = 'AC1a2a32c3f81f0d75a31979a1e576443b'
+TWILIO_AUTH_TOKEN = '2c93ecfb12004e6a117b67044d16ea47'
+TWILIO_DEFAULT_CALLERID = 'MKING'
+NO = '+16154120909'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases

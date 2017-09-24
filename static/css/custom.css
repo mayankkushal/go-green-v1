@@ -1,14 +1,3 @@
-/*
-* Additional Custom CSS for GoGreen/MobBill courtesy of Muthu Kumar
-* https://github.com/MKRhere
-* https://www.facebook.com/MKRhere
-* https://www.twitter.com/MKRhere
-* https://telegram.me/MKRhere
-
-* The following stylesheet is licensed under MIT. Refer end of file for full license.
-
-* Theme color: #00FF8C;
-*/
 
 /* Body */
 
@@ -28,7 +17,7 @@ h3 strong {
 }
 
 p {
-	font-family: Arial, Helvetica, sans-serif;
+	font-family: Arial, Helvetica, sans-serif, Open Sans Condensed ;
 }
 
 a {
@@ -108,24 +97,5 @@ footer .footer-legal a {
 	margin: 0 0 0 1em
 }
 
-/* -------------------------- */
 
-/*
 
-* Additional Custom CSS for GoGreen/MobBill courtesy of Muthu Kumar
-* https://github.com/MKRhere
-* https://www.facebook.com/MKRhere
-* https://www.twitter.com/MKRhere
-* https://telegram.me/MKRhere
-
-Licensed under MIT for Harshitha for GoGreen/MobBill:
-
-Copyright 2017 Muthu Kumar, CodeFeathers.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-*/
