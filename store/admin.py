@@ -1,17 +1,9 @@
 from django.contrib import admin
-from .models import Store, Product, Category, Franchise
+from .models import Store, Product, Category, Franchise, FranchiseType, ProductCategory
 from guardian.admin import GuardedModelAdmin
 
 
 # Register your models here.
-
-
-# class ProductInline(admin.TabularInline):
-
-# 	'''
-# 		Tabular Inline View for Product
-# 	'''
-# 	model = Product
 
 class FranchiseAdmin(admin.ModelAdmin):
 	'''
@@ -30,7 +22,7 @@ class FranchiseAdmin(admin.ModelAdmin):
 			'fields': (('return_days'), 'category')
 		}),
 		('Optional', {
-			'fields': ('website', 'hours')
+			'fields': ('website', 'hours','mgr_password')
 		}),
 	)
 
@@ -48,16 +40,15 @@ class StoreAdmin(GuardedModelAdmin):
 			'fields': ('street', ('city', 'state', 'postal'), 'location')
 		}),
 		('Policies', {
-			'fields': (('return_days', 'stand_alone'),'franchise', 'category')
+			'fields': (('return_days', 'stand_alone',), 'franchise_type', 'franchise', 'category')
 		}),
 		('Optional', {
-			'fields': ('website', 'hours')
+			'fields': ('website', 'hours','mgr_password')
 		}),
 		('API', {
 			'fields': ('token',)
 		})
 	)
-	# inlines = (ProductInline, )
 
 
 admin.site.register(Store, StoreAdmin)
@@ -70,16 +61,15 @@ class CategoryAdmin(admin.ModelAdmin):
 	search_fields = ('name',)
 
 admin.site.register(Category, CategoryAdmin)
-
-
-# class ProductAdmin(GuardedModelAdmin):
-# 	'''
-# 		Admin View for Product
-# 	'''
-# 	list_display = ('name', 'price')
-# 	#list_filter = ('store',)
-# 	#raw_id_fields = ('store','franchise')
-# 	search_fields = ('name',)
-# 	fieldsets = (('Detail',{"fields":('franchise',)}),)
-
 admin.site.register(Product)
+admin.site.register(FranchiseType)
+
+class ProductCategoryAdmin(admin.ModelAdmin):
+    '''
+        Admin View for ProductCategory
+    '''
+    list_display = ('name', 'category_relation', 'parent_category')
+    list_filter = ('category_relation',)
+    search_fields = ('name',)
+
+admin.site.register(ProductCategory, ProductCategoryAdmin)

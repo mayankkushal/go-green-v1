@@ -102,4 +102,11 @@
   " - " + $( "#slider-range" ).slider( "values", 1 ) );
   } );
   </script>
+  <script type="text/javascript">
+    $(document).ready(function(){
+     $(document).bind("contextmenu",function(e){
+       return false;
+     });
+    });
+  </script>
 {% endblock extra_scripts %}

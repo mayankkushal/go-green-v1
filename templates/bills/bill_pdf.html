@@ -10,7 +10,7 @@
 			}
 			th{
 				text-align: center;
-				background-color: #76FF03;
+				background-color: #00FF8C;
 				font-size: 15px;
 				color: grey;
 			}
@@ -41,6 +41,13 @@
 		<div class="col-xs-6 text-right">
 			<address>
 				<h3><strong>Store:</strong></h3>
+				{% if not bill.store.stand_alone %}
+					<img src="{{ bill.store.franchise.picture.url }}" style="height:200px; width:200px;">
+				{% else %}
+					{% if bill.store.picture %}
+						<img src="{{ bill.store.picture.url }}" style="height:200px; width:200px;">
+					{% endif %}
+				{% endif %}
 				<pre><strong>{{ bill.store.name }}</strong>
 {{ bill.store.street }}
 {{ bill.store.city }}

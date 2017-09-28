@@ -50,7 +50,13 @@ class ItemForm(forms.ModelForm):
 					},
 				),)
 	tax = forms.DecimalField(label="Tax", widget=forms.HiddenInput(attrs={'readonly':'readonly'}))
-	price = forms.DecimalField(label="Price", disabled=True, required=False)
+	price = forms.DecimalField(label="Price", required=False, 
+						widget=forms.NumberInput(attrs={
+							'readonly':'readonly',
+							'onclick': 'changePrice(this, id)',
+							'onfocusout': "calculateTotal(this, value)",
+							'data-access': 'true'
+							}))
 	total = forms.DecimalField(label="Total", 
 						disabled=True, 
 						required=False,

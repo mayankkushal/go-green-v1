@@ -5,6 +5,7 @@ from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.hashers import check_password
 
 import simplejson as json
 
@@ -57,6 +58,11 @@ class CreateBill(CreateView):
 			for item in items:
 				try: # Doesn't save the product when the product_pk is empty
 					item.instance.product = Product.objects.get(pk=item.cleaned_data['product_pk'])
+
+					if not item.cleaned_data['price'] == item.instance.product.price:
+						item.instance.mgr_access = True
+						item.instance.price = item.cleaned_data['price']
+
 					item.instance.bill = self.object
 					item.save()
 				except KeyError:
@@ -146,7 +152,7 @@ class ReturnBill(UpdateView):
 		form_class = self.get_form_class()
 		form = self.get_form(form_class)
 		items = ItemReturnFormSet(instance = self.object)
-		return self.render_to_response(self.get_context_data(form = form, items = items))
+		return self.render_to_response(self.get_context_data(form=form, items=items))
 
 	def post(self, request, *args, **kwargs):
 		self.object = self.get_object()
@@ -165,6 +171,8 @@ class ReturnBill(UpdateView):
 		old_bill.editable = False
 		old_bill.save()
 
+		old_total = old_bill.total # Total of the previous bill
+
 		# Saves a new copy of bill with the same bill number.
 		# Bill number is assigned in the post_save signal.
 		obj = form.save(commit=False)
@@ -180,6 +188,12 @@ class ReturnBill(UpdateView):
 				item.instance.bill = obj
 				item.save()
 		obj.save()
+
+		# Finalinizing the total return amount, it'll be stored in the new bill
+		return_amount = old_total - obj.get_total()
+		obj.return_amount = return_amount
+		obj.save()
+
 		return HttpResponseRedirect(self.get_success_url())
 
 	def form_invalid(self, form, items):
@@ -190,3 +204,23 @@ class ReturnBill(UpdateView):
 			Returns the bill details page
 		"""
 		return reverse_lazy('bill_detail', kwargs={'pk': self.object.pk})
+
+
+class VerifyManagerPassword(FormView):
+
+	def password_valid(self, password):
+		saved_password = self.request.user.store.mgr_password
+		return check_password(password, saved_password)
+
+	def post(self, request, *args, **kwargs):
+		password = request.POST.get('password')
+		valid = False
+
+		if self.password_valid(password):
+			valid = True
+			
+		data = {
+				"valid":valid
+			}
+		return HttpResponse(json.dumps(data), content_type='application/json')
+

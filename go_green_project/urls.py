@@ -24,7 +24,7 @@ from client.forms import RegisterProfileForm
 from django.contrib.sitemaps.views import sitemap
 
 from django.contrib.auth import views as auth_views
-from client.views import InactiveAuthenticationForm
+import client.custom_authentication as custom_auth
 
 
 from client.sitemaps import StoreSitemap, BlogSitemap, StaticSitemap, FlatPageSitemap
@@ -42,8 +42,13 @@ urlpatterns = [
     url(r'^green_admin/', admin.site.urls),
 
     url(r'^accounts/register/$', views.MyRegistrationView.as_view(form_class=RegisterProfileForm), name='registration_register'),
-    url(r'^login$', auth_views.login, name='login', kwargs={ "authentication_form": InactiveAuthenticationForm }),
+    url(r'^login$', custom_auth.login , name='login'),
     url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^reset_otp', custom_auth.ResetOTPVerification.as_view(), name='reset_otp'),
+    url(r'^password_reset_complete', custom_auth.ResetPasswordComplete.as_view(), name='reset_password_form'),
+    url(r'^reset_password', custom_auth.ResetPasswordView.as_view(), name='reset_password'),
+
+
     
     url(r'^store/', include('store.urls')),
     url(r'^bills/', include('bills.urls')),

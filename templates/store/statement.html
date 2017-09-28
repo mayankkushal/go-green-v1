@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title_block %}
+	Statement
+{% endblock title_block %}
+
+{% block content_wrapper %}
+	<div class="container min-height">
+	<h1>Statement</h1>
+		<div class="card card-2 table-responsive" style="margin:auto; margin-top:20px;">
+			<table class="table table-bordered">
+				<tr>
+					<td></td>
+					<th scope="col">Number of Customers</th>
+					<th scope="col">Number of Bills</th>
+					<th scope="col">Bills Returned</th>
+					<th scope="col">Return Amount</th>
+					<th scope="col">Total Sale</th>
+				</tr>
+				<tr>
+					<th scope="row">Today</th>
+					<td>{{ daily_store }}</td>
+					<td>{{ daily_count }}</td>
+					<td>{{ daily_r_count }}</td>
+					<td>{{ daily_r_total }}</td>
+					<td> &#8377;{{ daily_total }}</td>
+				</tr>
+				<tr>
+					<th scope="row">This week</th>
+					<td>{{ weekly_store }}</td>
+					<td>{{ weekly_count }}</td>
+					<td>{{ weekly_r_count }}</td>
+					<td>{{ weekly_r_total }}</td>
+					<td> &#8377;{{ weekly_total }}</td>
+				</tr>
+				<tr>
+					<th scope="row">This Month</th>
+					<td>{{ monthly_store }}</td>
+					<td>{{ monthly_count }}</td>
+					<td>{{ monthly_r_count }}</td>
+					<td>{{ monthly_r_total }}</td>
+					<td> &#8377;{{ monthly_total }}</td>
+				</tr>
+				<tr>
+					<th scope="row">This Year</th>
+					<td>{{ yearly_store }}</td>
+					<td>{{ yearly_count }}</td>
+					<td>{{ yearly_r_count }}</td>
+					<td>{{ yearly_r_total }}</td>
+					<td> &#8377;{{ yearly_total }}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+{% endblock content_wrapper %}

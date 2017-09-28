@@ -21,6 +21,8 @@ urlpatterns = [
 		), name="store_list"),
 	
 	url(r'^locator', views.StoreLocator.as_view(), name='locator'),
+
+	url(r'^statement', views.StoreStatement.as_view(), name='statement'),
 	
 	url(r'^add_product', views.ProductCreate.as_view(), name="add_product"),
 	url(r'^update_product/(?P<pk>[\w\-]+)/', views.ProductUpdate.as_view(), name="update_product"),

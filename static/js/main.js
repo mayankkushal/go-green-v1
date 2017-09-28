@@ -88,9 +88,12 @@ function b_fill(sale, tot, tax) {
 
 // main jquery function
 $(function() {
+
+    // Admin js
     $('.field-franchise').addClass('hidden');
     $('.field-store').addClass('hidden');
     $('.field-store_chain').addClass('hidden');
+    $('.field-franchise_type').addClass('hidden');
 
     if ($("#id_type_of_product").val() == 'F') {
         $('.field-store').addClass('hidden');
@@ -104,9 +107,11 @@ $(function() {
         if ($(this).is(':checked')) {
             $('.field-franchise').addClass('hidden');
             $('.field-category').removeClass('hidden');
+            $('.field-franchise_type').addClass('hidden');
         } else {
             $('.field-franchise').removeClass('hidden');
             $('.field-category').addClass('hidden');
+            $('.field-franchise_type').removeClass('hidden');
         }
     });
 
@@ -121,7 +126,7 @@ $(function() {
     });
 
     setTimeout(function() {
-                $('.alert').fadeOut('slow');
+                $('.alert-fade').fadeOut('slow');
             }, 4000);
 
     // Inventory page, if infinite_quantity is checked, quantity should be disabled
@@ -237,6 +242,7 @@ $(function() {
             }, 3000);
         }
     });
+
 });
 
 //blog comment 
@@ -351,7 +357,8 @@ function calculateTotal(x, value) {
     var base = all[0];
     var priceId = "#" + base + "-" + no + "-price";
     var totalId = "#" + base + "-" + no + "-total";
-    total = $(priceId).val() * value;
+    var quantityId = "#" + base + "-" + no + "-quantity";
+    total = $(priceId).val() * $(quantityId).val();
     $(totalId).val(total);
     cal = b_total();
     b_fill(cal.sale, cal.tot, cal.tax);
@@ -364,4 +371,34 @@ function deactivateQuantity(obj) {
         $('#id_quantity').attr('readonly', true);
     } else
         $('#id_quantity').attr('readonly', false);
+}
+
+function changePrice(x, id){
+    access = x.getAttribute("data-access");
+
+    if( access=='true' ){
+        $('#priceChangeModal').modal('show');
+        $('#mgrPasswordSubmit').click(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/pos/mgr_password_check',
+                data: {
+                    password: $("#mgrPassword").val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(data) {
+                    if (data.valid){
+                        $('#'+id).removeAttr('readonly');
+                        $('#'+id).attr('data-access','false');
+                        $('#mgr_error').html("Access Granted!");
+                    }
+                    else{
+                        $('#mgr_error').html("Incorrect Password!")
+                    }
+                    $("#mgrPassword").val("");
+                },
+            });
+        });
+}
 }

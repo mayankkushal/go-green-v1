@@ -29,6 +29,14 @@
 						</address>
 					</div>
 					<div class="col-xs-6 text-right">
+						{% if not bill.store.stand_alone %}
+							<img src="{{ bill.store.franchise.picture.url }}" class="img bill-logo">
+						{% else %}
+							{% if bill.store.picture %}
+								<img src="{{ bill.store.picture.url }}" class="img bill-logo">
+							{% endif %}
+						{% endif %}
+
 						<address>
 							<strong>Store:</strong><br>
 							{{ bill.store.name }}<br>
@@ -59,7 +67,7 @@
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
-					<div class="panel-heading" style="background-color:#76FF03;">
+					<div class="panel-heading" style="background-color:#00FF8C;">
 						<h3 class="panel-title"><strong>Order summary</strong></h3>
 					</div>
 					<div class="panel-body">
@@ -121,3 +129,13 @@
 		{% endif %}
 	</div>
 {% endblock %}
+
+{% block extra_scripts %}
+	<script type="text/javascript">
+    $(document).ready(function(){
+     $(document).bind("contextmenu",function(e){
+       return false;
+     });
+    });
+  </script>
+{% endblock extra_scripts %}

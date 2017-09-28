@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="{% url "index" %}"><img src="{% static "img/GoGreen.png" %}" class="logo"></a>
+            <a class="navbar-brand" href="{% url "index" %}"><img src="{% static "img/logo.png" %}" class="logo"></a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
@@ -26,14 +26,16 @@
               
               {# Store navigations #}
               {% if user.is_authenticated and user.store %}
-                <li><a href="{% url "qr_scanner" %}"><i class="fa fa-qrcode" aria-hidden="true"></i> Billing</a></li>
-                <li><a href="{% url "qr_scanner_return" %}"><i class="fa fa-exchange" aria-hidden="true"></i> Returns</a></li>
-                <li><a href="{{ user.store.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
+                <li class="hidden-xs"><a href="{% url "qr_scanner" %}"><i class="fa fa-qrcode" aria-hidden="true"></i> Billing</a></li>
+                <li class="hidden-xs"><a href="{% url "qr_scanner_return" %}"><i class="fa fa-exchange" aria-hidden="true"></i> Returns</a></li>
+                <li class="hidden-xs"><a href="{% url "store:statement" %}"><i class="fa fa-bar-chart" aria-hidden="true"></i> Statement</a></li>
+                <li class="hidden-xs"><a href="{{ user.store.get_absolute_url }}"><i class="fa fa-user-circle" aria-hidden="true"></i>
                 Profile</a></li>
                 {% if user.store.stand_alone %}
-                  <li><a href="{% url "store:product_list" %}"><i class="fa fa-truck" aria-hidden="true"></i> Inventory</a></li>
+                  <li class="hidden-xs"><a href="{% url "store:product_list" %}"><i class="fa fa-truck" aria-hidden="true"></i> Inventory</a></li>
                 {% endif %}
               {% endif %}
+              
               {# Franchise Navigations #}
               {% if user.is_authenticated and user.franchise %}
                 <li><a href="{% url "store:product_list" %}"><i class="fa fa-truck" aria-hidden="true"></i> Inventory</a></li>

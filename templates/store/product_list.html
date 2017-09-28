@@ -17,7 +17,11 @@
 						{{ product.name }}
 					</td>
 					<td onclick="location.href='{{ product.get_absolute_url }}'" style="background-color:white">
-						{{ product.quantity }}
+						{% if product.infinite_quantity %}
+							&#x221e; {# Inifinity symbol #}
+						{% else %}
+							{{ product.quantity }}
+						{% endif %}
 					</td>
 					<td align="left" style="background-color:white"><a href="{% url "store:delete_product" product.pk %}" class="btn btn-warning">Delete</a></td>
 				</tr>

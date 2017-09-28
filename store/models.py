@@ -6,6 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.authtoken.models import Token
 from django.utils.text import slugify
 from location_field.models.plain import PlainLocationField
+from django.contrib.auth.hashers import make_password
 
 
 # Create your models here. 
@@ -19,6 +20,31 @@ class Category(models.Model):
 
 	class Meta:
 		verbose_name_plural = 'Categories'
+
+	def __str__(self):
+		return self.name
+
+
+CATEGORY_CHOICES = (
+		('P','Parent'),
+		('S','Sub'),
+	)
+class ProductCategory(models.Model):
+	"""
+	Description: Category of defferent Products. Can have multiple sub-category
+	"""
+	name = models.CharField(_('Name'), max_length=254)
+	category_relation = models.CharField(_('Category Relation'), max_length=1, choices=CATEGORY_CHOICES,
+				help_text="Whether the Category is first in line or sub of any other Category.")
+	parent_category = models.ForeignKey('ProductCategory', related_name='sub_category',
+							  null=True, blank=True)
+
+	def __str__(self):
+		return self.name
+
+
+class FranchiseType(models.Model):
+	name = models.CharField(_('Name'), max_length=254)
 
 	def __str__(self):
 		return self.name
@@ -42,12 +68,18 @@ class BaseDetails(models.Model):
 	state = models.CharField(_('State'), default="", max_length=256)
 	postal = models.PositiveIntegerField(_('Postal'), default=0)
 
+	mgr_password = models.CharField(_('Manager Password'), max_length=150, blank=True, null=True)
+
 	return_days = models.PositiveIntegerField(_('Return Days'), default=7)
 	
 	location = PlainLocationField(based_fields=['city'], zoom=7, null=True)
 
 	class Meta:
 		abstract = True
+
+	def save(self, *args, **kwargs):
+		self.mgr_password = make_password(self.mgr_password)
+		super(BaseDetails, self).save(*args, **kwargs)
 
 
 class Franchise(BaseDetails):
@@ -60,11 +92,21 @@ class Franchise(BaseDetails):
 	def __str__(self):
 		return self.name
 
+	def save(self, *args, **kwargs):
+		if not self.id: 
+			self.slug = slugify(self.name)
+			self.name = self.name.title()
+			self.city = self.city.title()
+			self.state = self.state.title()
+		super(Franchise, self).save(*args, **kwargs)
+
 
 class Store(BaseDetails):
 	user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='store')
 
 	stand_alone = models.BooleanField(_("Is a stand alone store?"), default=True)
+	franchise_type = models.ForeignKey(FranchiseType, related_name='store', null=True, blank=True)
+	
 	franchise = models.ForeignKey(Franchise, related_name='store', null=True, blank=True)
 
 	category = models.ForeignKey(Category, related_name='store', null=True, blank=True)
@@ -78,6 +120,8 @@ class Store(BaseDetails):
 		if not self.id: 
 			self.slug = slugify(self.name)
 			self.name = self.name.title()
+			self.city = self.city.title()
+			self.state = self.state.title()
 			t = Token.objects.create(user=self.user)
 			self.token = t.key
 		super(Store, self).save(*args, **kwargs)
@@ -128,12 +172,16 @@ class Product(models.Model):
 
 	type_of_product = models.CharField( max_length=1, choices=PRODUCT_CHOICES,
 				help_text="Whether the product belongs to a individual store or a Franchise?")
-	store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product', null=True, blank=True)
+	category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE, related_name='product',
+									 null=True, blank=True)
+	store = models.ForeignKey(Store, on_delete=models.CASCADE, related_name='store_product',
+								 null=True, blank=True)
 	store_chain = models.ForeignKey(Franchise, verbose_name="Franchise", related_name='franchise_product', null=True, blank=True)
 	name = models.CharField(_('Name'), max_length=256)
 	sku = models.CharField(_('SKU'), max_length=100)
 	price = models.DecimalField(_('Price'), max_digits=10, decimal_places=2)
 	quantity = models.IntegerField(_("Available Quantity"), default=0, blank=True)
+	discount = models.DecimalField(_('Discount'), max_digits=5, decimal_places=2, default=0.00)
 	tax = models.DecimalField(_("Tax"), max_digits=5, decimal_places=2, default=0.00)
 	infinite_quantity = models.BooleanField(_("Infinite Quantity"),
 					 default=False,
@@ -151,3 +199,20 @@ class Product(models.Model):
 		return reverse('store:update_product', kwargs={'pk':self.pk})
 
 
+#To be implemented in the future
+# class Staff(models.Model):
+# 	STAFF_CHOICES = (
+# 		('I','Inventory Manager'),
+# 		('B','Billing Clerk'),
+# 	)
+
+# 	user = models.OneToOneField(User, related_name="store_staff",on_delete=models.CASCADE)
+# 	store = models.OneToOneField(Store, related_name="staff", on_delete=models.CASCADE)
+# 	type_of_staff = models.CharField(max_length=1, choices=STAFF_CHOICES)
+
+# 	class Meta:
+# 		verbose_name = "Staff"
+# 		verbose_name_plural = "Staffs"
+
+# 	def __str__(self):
+# 		return self.user.first_name

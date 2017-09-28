@@ -22,6 +22,7 @@ from bills.models import Bill
 from blog.models import Article
 from store.models import Store
 from django.contrib.auth.models import User
+from .mixins import VerificationMixin, StatementMixin
 
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
@@ -82,7 +83,7 @@ class ProfileUpdate(UpdateView):
 
 class ProfileDetailView(DetailView):
 	model = Profile
-	context_object_name = 'cur_user'
+	context_object_name = 'cur_user' 
 	slug_field = 'phone_no'
 
 	def get_context_data(self, **kwargs):
@@ -303,89 +304,6 @@ def change_password(request):
 	})
 
 
-class VerificationMixin:
-	def is_customer(self):
-		return True if Profile.objects.filter(user=self.request.user).exists() else False
-
-	def is_store(self):
-		return True if Store.objects.filter(user=self.request.user).exists() else False
-
-	def store_present(self, slug):
-		"""
-			Checks if the store is present if not, raise a `404` 
-		"""
-		store = None
-		try:
-			store = Store.objects.get(phone_no=str(num))
-		except Store.DoesNotExist:
-			raise Http404()
-		return store
-
-	def customer_present(self, phone_no):
-		"""
-			Checks if the customer is present if not, raise a `404` 
-		"""
-		client = None
-		try:
-			client = User.objects.get(profile__phone_no=phone_no)
-		except User.DoesNotExist:
-			raise Http404()
-		return client
-
-	def bill_present(self, bill_pk):
-		"""
-			Checks if the bill is present if not, raise a `404` 
-		"""
-		bill = None
-		try:
-			bill = Bill.objects.get(pk=bill_pk)
-		except:
-			raise Http404()
-		return bill
-
-	def is_phone(self, val):
-		"""
-			The value from the qr is matched with `ph:` for phone number
-		"""
-		return bool(re.match(r'^ph:\d', val))
-
-	def is_bill(self, val):
-		"""
-			The value from the qr is matched with `bi:` for bill number
-		"""
-		return bool(re.match(r'^bi:\d', val))
-	
-	def extract_value(self, val):
-		"""
-			Returns all the letters after the first 3 letters, ie leaving `ph:` or `bi:`
-		"""
-		return val[3:]
-
-	def is_bill_return_valid(self, bill):
-		"""
-			Returns True if the bill is eligible to be returned.
-			Conditions:
-				a)Bill shouldn't be returned already ie. `bill.original` should be True
-				b)Bill should lie in return period of that specific store.
-		"""
-		store = bill.store
-		days_occured = datetime.date.today() - bill.date.date()
-		if days_occured < datetime.timedelta(store.return_days):
-			return True
-		else:
-			messages.error(self.request, 
-				'Bill has crossed its return period. Store allows return within '+str(store.return_days)+" days")
-			return False
-		return False
-
-	def redirect_to_billing(self, phone_no):
-		client = self.customer_present(phone_no)
-		if client:
-			self.request.session['cus_no'] = client.profile.phone_no.national_number
-			return True
-
-
-
 class QrRedirect(VerificationMixin, FormView):
 	"""
 	Redirects using the value from the qr code on `get` request and uses the
@@ -495,27 +413,6 @@ class QRRedirectReturn(UserPassesTestMixin, VerificationMixin, FormView):
 			self.request.session['bill_pk'] = bill_pk
 			return redirect(reverse('bill_list'))
 
-
-from django.contrib.auth.forms import AuthenticationForm
-from django.core.exceptions import ValidationError
-
-class InactiveAuthenticationForm(AuthenticationForm):
-
-	def confirm_login_allowed(self, user):
-		"""
-		Controls whether the given User may log in. This is a policy setting,
-		independent of end-user authentication. This default behavior is to
-		allow login by active users, and reject login by inactive users.
-
-		If the given user cannot log in, this method should raise a
-		``forms.ValidationError``.
-
-		If the given user may log in, this method should return None.
-		"""
-		if not user.is_active:
-			return None
-
-
 def newsletter(request):
 	""" Simple Newsletter.
 	Takes the email, validates it and stores it in the Newsletter model
@@ -571,56 +468,22 @@ def download_email(request):
 		return redirect(reverse('index'))
 
 
-
-class ClientStatement(TemplateView):
+class ClientStatement(StatementMixin, TemplateView):
 	template_name = "client/statement.html"
-
-	def get_bill_total(self, bills):
-		total = 0
-		for b in bills:
-			total += b.total
-		return total
-
-	def get_unique_stores(self, bills):
-		stores = []
-		for b in bills:
-			stores.append(b.store.name)
-		return len(list(set(stores)))
 
 	def get_context_data(self, **kwargs):
 		context = super(ClientStatement, self).get_context_data(**kwargs)
 
-		utc=pytz.UTC
-		
-		today_date = utc.localize(datetime.datetime.today())
+		week_start, week_end = self.get_week_dates()
+		month_start, month_end = self.get_month_dates()
+		year_start, year_end = self.get_year_dates()
 
-		week_start = today_date - datetime.timedelta(days=today_date.weekday())
-		week_end = week_start + datetime.timedelta(days=6)
-		
-		month_start = utc.localize(datetime.datetime.today().replace(day=1))
-		next_month_start = datetime.datetime.today().replace(month=today_date.month + 1, day=1)
-		month_end = utc.localize(next_month_start - datetime.timedelta(days=1))
-
-		year_start = utc.localize(datetime.datetime.today().replace(month=1, day=1)) 
-		year_end = utc.localize(datetime.datetime.today().replace(month=12, day=31))
-		
 		customer_no = self.request.user.profile.phone_no.national_number
 		
-		daily_bill = Bill.objects.filter(customer_no=customer_no,
-						date__gt=today_date - datetime.timedelta(days=1),
-						date__lt=today_date + datetime.timedelta(days=1))
-		weekly_bill = Bill.objects.filter(customer_no=customer_no, 
-						date__gte=week_start,
-						date__lte=week_end
-						)
-		monthly_bill = Bill.objects.filter(customer_no=customer_no, 
-						date__gte=month_start,
-						date__lte=month_end
-						)
-		yearly_bill = Bill.objects.filter(customer_no=customer_no, 
-						date__gte=year_start,
-						date__lte=year_end
-						)
+		daily_bill = self.get_daily_bill(customer_no)
+		weekly_bill = self.get_bill_in_range(week_start, week_end, customer_no)
+		monthly_bill = self.get_bill_in_range(month_start, month_end, customer_no)
+		yearly_bill = self.get_bill_in_range(year_start, year_end, customer_no)
 
 		context['daily_count'] = len(daily_bill)
 		context['weekly_count'] = len(weekly_bill)
