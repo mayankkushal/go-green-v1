@@ -103,6 +103,8 @@ class Item(models.Model):
 	tax = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
 	total = models.DecimalField(max_digits=10, decimal_places=2)
 
+	mgr_access = models.BooleanField(default=False)
+
 	def __str__(self):
 		return self.product.name
 
@@ -110,7 +112,7 @@ class Item(models.Model):
 		"""
 		Calculates the total price of the item without tax, and returns the result
 		"""
-		return self.quantity * self.product.price
+		return self.quantity * self.price
 
 	def get_tax_amount(self):
 		"""
@@ -133,7 +135,8 @@ class Item(models.Model):
 
 	def save(self, *args, **kwargs):
 		if not self.id:
-			self.price = self.product.price
+			if not self.mgr_access:
+				self.price = self.product.price
 			self.tax = self.product.tax
 			self.total = self.get_total()
 			self.update_quantity()

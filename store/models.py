@@ -6,6 +6,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from rest_framework.authtoken.models import Token
 from django.utils.text import slugify
 from location_field.models.plain import PlainLocationField
+from django.contrib.auth.hashers import make_password
 
 
 # Create your models here. 
@@ -67,12 +68,18 @@ class BaseDetails(models.Model):
 	state = models.CharField(_('State'), default="", max_length=256)
 	postal = models.PositiveIntegerField(_('Postal'), default=0)
 
+	mgr_password = models.CharField(_('Manager Password'), max_length=150, blank=True, null=True)
+
 	return_days = models.PositiveIntegerField(_('Return Days'), default=7)
 	
 	location = PlainLocationField(based_fields=['city'], zoom=7, null=True)
 
 	class Meta:
 		abstract = True
+
+	def save(self, *args, **kwargs):
+		self.mgr_password = make_password(self.mgr_password)
+		super(BaseDetails, self).save(*args, **kwargs)
 
 
 class Franchise(BaseDetails):
@@ -192,3 +199,20 @@ class Product(models.Model):
 		return reverse('store:update_product', kwargs={'pk':self.pk})
 
 
+#To be implemented in the future
+# class Staff(models.Model):
+# 	STAFF_CHOICES = (
+# 		('I','Inventory Manager'),
+# 		('B','Billing Clerk'),
+# 	)
+
+# 	user = models.OneToOneField(User, related_name="store_staff",on_delete=models.CASCADE)
+# 	store = models.OneToOneField(Store, related_name="staff", on_delete=models.CASCADE)
+# 	type_of_staff = models.CharField(max_length=1, choices=STAFF_CHOICES)
+
+# 	class Meta:
+# 		verbose_name = "Staff"
+# 		verbose_name_plural = "Staffs"
+
+# 	def __str__(self):
+# 		return self.user.first_name

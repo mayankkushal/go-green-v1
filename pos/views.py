@@ -5,6 +5,7 @@ from django.views.generic import FormView
 from django.urls import reverse_lazy
 from django.contrib.auth.models import User
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.hashers import check_password
 
 import simplejson as json
 
@@ -57,6 +58,11 @@ class CreateBill(CreateView):
 			for item in items:
 				try: # Doesn't save the product when the product_pk is empty
 					item.instance.product = Product.objects.get(pk=item.cleaned_data['product_pk'])
+
+					if not item.cleaned_data['price'] == item.instance.product.price:
+						item.instance.mgr_access = True
+						item.instance.price = item.cleaned_data['price']
+
 					item.instance.bill = self.object
 					item.save()
 				except KeyError:
@@ -146,7 +152,7 @@ class ReturnBill(UpdateView):
 		form_class = self.get_form_class()
 		form = self.get_form(form_class)
 		items = ItemReturnFormSet(instance = self.object)
-		return self.render_to_response(self.get_context_data(form = form, items = items))
+		return self.render_to_response(self.get_context_data(form=form, items=items))
 
 	def post(self, request, *args, **kwargs):
 		self.object = self.get_object()
@@ -198,3 +204,23 @@ class ReturnBill(UpdateView):
 			Returns the bill details page
 		"""
 		return reverse_lazy('bill_detail', kwargs={'pk': self.object.pk})
+
+
+class VerifyManagerPassword(FormView):
+
+	def password_valid(self, password):
+		saved_password = self.request.user.store.mgr_password
+		return check_password(password, saved_password)
+
+	def post(self, request, *args, **kwargs):
+		password = request.POST.get('password')
+		valid = False
+
+		if self.password_valid(password):
+			valid = True
+			
+		data = {
+				"valid":valid
+			}
+		return HttpResponse(json.dumps(data), content_type='application/json')
+

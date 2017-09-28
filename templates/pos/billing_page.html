@@ -94,6 +94,30 @@
 </div>
 <!-- Modal end -->
 
+<!-- Manager price change modal -->
+<div id="priceChangeModal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- Modal content -->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Manager Access</h4>
+      </div>
+      <div class="modal-body">
+      <p>Enter manager password</p>
+      	<input type="password" name="mgr_password" class="form-control" id='mgrPassword' autofocus>
+      	<input type="submit" name="submit" id="mgrPasswordSubmit" class="btn btn-success">
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">Done</button>
+        <strong id="mgr_error" class="pull-left"></strong>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- Modal end -->
+
 {% endblock content_wrapper %}
 
 {% block extra_scripts %}

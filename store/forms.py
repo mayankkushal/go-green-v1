@@ -20,3 +20,4 @@ class ProductForm(forms.ModelForm):
 			'infinite_quantity' : forms.CheckboxInput(attrs={'onchange': "deactivateQuantity(this)"})
 		}
 
+

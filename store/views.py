@@ -3,8 +3,10 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import TemplateView
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
 from django.views.generic import ListView
 from django.urls import reverse_lazy
+from django.contrib.auth.forms import UserCreationForm
 
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
@@ -18,6 +20,7 @@ from client.mixins import StatementMixin
 class StoreCreate(CreateView):
 	form_class = StoreForm
 	model = Store
+
 
 class StoreUpdate(UpdateView): 
 	form_class = StoreForm
@@ -90,6 +93,7 @@ class ProductListView(ListView):
 				
 		return context
 
+
 class ProductDelete(DeleteView):
 	model = Product
 	success_url = reverse_lazy('store:product_list')
@@ -159,3 +163,7 @@ class StoreStatement(StatementMixin, TemplateView):
 		context['yearly_r_total'] = self.get_return_amount(yearly_bill)
 
 		return context
+
+
+
+

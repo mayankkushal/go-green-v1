@@ -242,6 +242,7 @@ $(function() {
             }, 3000);
         }
     });
+
 });
 
 //blog comment 
@@ -356,7 +357,8 @@ function calculateTotal(x, value) {
     var base = all[0];
     var priceId = "#" + base + "-" + no + "-price";
     var totalId = "#" + base + "-" + no + "-total";
-    total = $(priceId).val() * value;
+    var quantityId = "#" + base + "-" + no + "-quantity";
+    total = $(priceId).val() * $(quantityId).val();
     $(totalId).val(total);
     cal = b_total();
     b_fill(cal.sale, cal.tot, cal.tax);
@@ -369,4 +371,34 @@ function deactivateQuantity(obj) {
         $('#id_quantity').attr('readonly', true);
     } else
         $('#id_quantity').attr('readonly', false);
+}
+
+function changePrice(x, id){
+    access = x.getAttribute("data-access");
+
+    if( access=='true' ){
+        $('#priceChangeModal').modal('show');
+        $('#mgrPasswordSubmit').click(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: '/pos/mgr_password_check',
+                data: {
+                    password: $("#mgrPassword").val(),
+                    csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val(),
+                },
+                success: function(data) {
+                    if (data.valid){
+                        $('#'+id).removeAttr('readonly');
+                        $('#'+id).attr('data-access','false');
+                        $('#mgr_error').html("Access Granted!");
+                    }
+                    else{
+                        $('#mgr_error').html("Incorrect Password!")
+                    }
+                    $("#mgrPassword").val("");
+                },
+            });
+        });
+}
 }

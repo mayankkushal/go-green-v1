@@ -22,7 +22,7 @@ class FranchiseAdmin(admin.ModelAdmin):
 			'fields': (('return_days'), 'category')
 		}),
 		('Optional', {
-			'fields': ('website', 'hours')
+			'fields': ('website', 'hours','mgr_password')
 		}),
 	)
 
@@ -43,7 +43,7 @@ class StoreAdmin(GuardedModelAdmin):
 			'fields': (('return_days', 'stand_alone',), 'franchise_type', 'franchise', 'category')
 		}),
 		('Optional', {
-			'fields': ('website', 'hours')
+			'fields': ('website', 'hours','mgr_password')
 		}),
 		('API', {
 			'fields': ('token',)
