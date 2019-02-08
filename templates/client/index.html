@@ -34,18 +34,6 @@
         {% social_widget_render 'facebook/likebox.html' href='https://www.facebook.com/mobbillspos/' %}
       </div>
       <div class="col-md-4 widget">
-      <h4 align="center">Instagram photos</h4>
-        {% instagram_user_recent_media mobbills %}
-        <div class="owl-carousel owl-theme" id="insta-carousel">
-          {% for media in recent_media %}
-            <div class="owl-slide">
-              <a href="{{ media.display_src }}" target="_blank" title="{{ media.caption }}">
-                <img src="{{ media.thumbnail_src }}" style="height:auto;" />
-                <span>{{ media.caption }}</span>
-              </a>
-            </div>
-          {% endfor %}
-        </div>
       </div>
       {% load twitter_tags %}
       <div class="col-md-4 widget">
